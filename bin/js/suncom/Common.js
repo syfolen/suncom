@@ -44,6 +44,7 @@ var suncom;
         };
         /**
           * 添加枚举值
+          * @concat: 是否用key和NAME和MODULE拼接作为key的值，默认true
           */
         Common.addEnumString = function (key, oEnum, concat) {
             if (concat === void 0) { concat = true; }
@@ -141,6 +142,7 @@ var suncom;
         /**
           * 返回四舍五入后的结果
           * 因各个平台实现的版本可能不一致，故自定义了此方法
+          * @n: 保留小数位数，默认为0
           */
         Common.round = function (value, n) {
             if (n === void 0) { n = 0; }
