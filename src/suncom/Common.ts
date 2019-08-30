@@ -8,7 +8,7 @@ module suncom {
         /**
          * Hash Id
          */
-        static $hashId: number = 0;
+        private static $hashId: number = 0;
 
         /**
           * 获取 Hash ID
@@ -47,6 +47,7 @@ module suncom {
 
         /**
           * 添加枚举值
+          * @concat: 是否用key和NAME和MODULE拼接作为key的值，默认true
           */
         static addEnumString(key: string, oEnum: { NAME, MODULE }, concat: boolean = true): void {
             if (oEnum.NAME) {
@@ -153,6 +154,7 @@ module suncom {
         /**
           * 返回四舍五入后的结果
           * 因各个平台实现的版本可能不一致，故自定义了此方法
+          * @n: 保留小数位数，默认为0
           */
         static round(value: number, n: number = 0): number {
             // 多保留一位小数点
