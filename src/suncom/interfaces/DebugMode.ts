@@ -1,5 +1,6 @@
 
 module suncom {
+
     /**
      * 调试模式
      */
@@ -35,13 +36,8 @@ module suncom {
         NETWORK_HEATBEAT = 0x20,
 
         /**
-         * H5游戏盒子
-         */
-        H5BOX = 0x40,
-
-        /**
          * 普通
          */
-        NORMAL = 0x80
+        NORMAL = 0x40
     }
 }

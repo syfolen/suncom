@@ -4,7 +4,7 @@ module suncom {
     /**
      * 线性同余发生器
      */
-    export class Random {
+    export abstract class Random {
         /**
          * 随机种子
          */

@@ -30,13 +30,9 @@ var suncom;
          */
         DebugMode[DebugMode["NETWORK_HEATBEAT"] = 32] = "NETWORK_HEATBEAT";
         /**
-         * H5游戏盒子
-         */
-        DebugMode[DebugMode["H5BOX"] = 64] = "H5BOX";
-        /**
          * 普通
          */
-        DebugMode[DebugMode["NORMAL"] = 128] = "NORMAL";
+        DebugMode[DebugMode["NORMAL"] = 64] = "NORMAL";
     })(DebugMode = suncom.DebugMode || (suncom.DebugMode = {}));
 })(suncom || (suncom = {}));
 //# sourceMappingURL=DebugMode.js.map
