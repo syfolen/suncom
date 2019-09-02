@@ -32,7 +32,7 @@ declare module suncom {
         /**
          * 网络心跳
          */
-        NETWORK_HEATBEAT = 0x20,
+        NETWORK_HEARTBEAT = 0x20,
 
         /**
          * 普通

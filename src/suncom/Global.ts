@@ -14,7 +14,7 @@ module suncom {
         /**
          * 调试模式
          */
-        static readonly debugMode: DebugMode = DebugMode.NORMAL | DebugMode.NATIVE | DebugMode.NETWORK | DebugMode.NETWORK_HEATBEAT | DebugMode.ENGINE | DebugMode.ENGINEER | DebugMode.DEBUG;
+        static readonly debugMode: DebugMode = DebugMode.NORMAL | DebugMode.NATIVE | DebugMode.NETWORK | DebugMode.NETWORK_HEARTBEAT | DebugMode.ENGINE | DebugMode.ENGINEER | DebugMode.DEBUG;
 
         /**
          * 设计分辨率

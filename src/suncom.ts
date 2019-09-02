@@ -32,7 +32,7 @@ export module suncom {
         /**
          * 网络心跳
          */
-        NETWORK_HEATBEAT = 0x20,
+        NETWORK_HEARTBEAT = 0x20,
 
         /**
          * 普通
@@ -545,7 +545,7 @@ export module suncom {
         /**
          * 调试模式
          */
-        static readonly debugMode: DebugMode = DebugMode.NORMAL | DebugMode.NATIVE | DebugMode.NETWORK | DebugMode.NETWORK_HEATBEAT | DebugMode.ENGINE | DebugMode.ENGINEER | DebugMode.DEBUG;
+        static readonly debugMode: DebugMode = DebugMode.NORMAL | DebugMode.NATIVE | DebugMode.NETWORK | DebugMode.NETWORK_HEARTBEAT | DebugMode.ENGINE | DebugMode.ENGINEER | DebugMode.DEBUG;
 
         /**
          * 设计分辨率
