@@ -36,7 +36,7 @@ module suncom {
          */
         dispatchEvent(type: string, args?: any, cancelable: boolean = false): void {
             if (type === void 0 || type === null) {
-                throw Error("禁止派发无效事件！");
+                throw Error("Invalid Event Type!!!");
             }
             const list: Array<boolean | IEventInfo> = this.$events[type] || null;
 
@@ -99,7 +99,7 @@ module suncom {
          */
         addEventListener(type: string, method: Function, caller: Object, receiveOnce: boolean = false, priority: number = 1): void {
             if (type === void 0 || type === null) {
-                throw Error("禁止注册无效事件！");
+                throw Error("Register Invalid Event Type!!!");
             }
             let list: Array<boolean | IEventInfo> = this.$events[type] || null;
 
@@ -149,7 +149,7 @@ module suncom {
          */
         removeEventListener(type: string, method: Function, caller: Object): void {
             if (type === void 0 || type === null) {
-                throw Error("移除无效事件");
+                throw Error("Remove Invalid Event Type!!!");
             }
             let list: Array<boolean | IEventInfo> = this.$events[type] || null;
 

@@ -375,7 +375,7 @@ module suncom {
           */
         static md5(str: string): string {
             // return new md5().hex_md5(str);
-            throw Error("暂未实现");
+            throw Error("Not supported!!!");
         }
 
         /**

@@ -54,6 +54,7 @@ declare module suncom {
      * 字典接口
      */
     export interface IDictionary {
+
         /**
          * 返回字典中指定key所映射的值
          * @defaultValue: 默认值
@@ -71,10 +72,68 @@ declare module suncom {
         remove(key: string): void;
     }
 
+    export interface IEventInfo {
+        /**
+         * 事件类型
+         */
+        type: string;
+
+        /**
+         * 回调方法
+         */
+        method: Function;
+
+        /**
+         * 回调对象
+         */
+        caller: Object;
+
+        /**
+         * 事件优先级
+         */
+        priority: number;
+
+        /**
+         * 是否只响应一次
+         */
+        receiveOnce: boolean;
+    }
+
+    /**
+     * 自定义事件接口
+     */
+    export interface IEventSystem {
+
+        /**
+         * 取消当前正在派发的事件
+         */
+        dispatchCancel(): void;
+
+        /**
+         * 事件派发
+         * @args[]: 参数列表，允许为任意类型的数据
+         * @cancelable: 事件是否允许被中断，默认为false
+         */
+        dispatchEvent(type: string, args?: any, cancelable?: boolean): void;
+
+        /**
+         * 事件注册
+         * @receiveOnce: 是否只响应一次，默认为false
+         * @priority: 事件优先级，优先级高的先被执行，默认为 1
+         */
+        addEventListener(type: string, method: Function, caller: Object, receiveOnce?: boolean, priority?: number): void;
+
+        /**
+         * 移除事件
+         */
+        removeEventListener(type: string, method: Function, caller: Object): void;
+    }
+
     /**
      * 事件处理器接口
      */
     export interface IHandler {
+
         /**
          * 执行处理器
          */
@@ -91,7 +150,6 @@ declare module suncom {
       * 纯 js 公共方法类
       */
     export abstract class Common {
-
         /**
           * 获取 Hash ID
           */
@@ -101,7 +159,7 @@ declare module suncom {
           * 获取类名
           * @cls: 指定类型
           */
-        static getClassName(cls: new () => any): string;
+        static getClassName(cls: any): string;
 
         /**
           * 将枚举转化成字符串 
@@ -123,7 +181,7 @@ declare module suncom {
         static isNumber(str: string | number): boolean;
 
         /**
-          * 判断这符串是否为空
+          * 判断字符串是否为空
           */
         static isStringInvalidOrEmpty(str: string | number): boolean;
 
@@ -174,9 +232,10 @@ declare module suncom {
           * 将参数转化为 Date 
           * @date: 任何格式的时间参数，可以为字符串或时间戳
           * 支持的格式说明：
-          * 1. 时间戳
-          * 2. hh:mm:ss
-          * 3. yyyy-MM-dd hh:mm:ss
+          * 1. Date对象
+          * 2. 时间戳
+          * 3. hh:mm:ss
+          * 4. yyyy-MM-dd hh:mm:ss
           */
         static convertToDate(date: string | number | Date): Date;
 
@@ -233,6 +292,79 @@ declare module suncom {
          * 将指定key从字典中移除
          */
         remove(key: string): void;
+    }
+
+    export class EventInfo implements IEventInfo {
+        /**
+         * 事件类型
+         */
+        type: string;
+
+        /**
+         * 回调方法
+         */
+        method: Function;
+
+        /**
+         * 回调对象
+         */
+        caller: Object;
+
+        /**
+         * 事件优先级
+         */
+        priority: number;
+
+        /**
+         * 是否只响应一次
+         */
+        receiveOnce: boolean;
+    }
+    /**
+     * EventSystem 自定义事件系统
+     * 为避免注册与注销对正在派发的事件列表产生干扰：
+     * NOTE: 每个列表首个元素为布尔类型，默认为 false
+     * NOTE: 若该列表的事件类型正在派发，则其值为 true
+     */
+    export class EventSystem implements IEventSystem {
+        /**
+         * 事件对象集合
+         */
+        private $events: { [type: string]: Array<boolean | IEventInfo> };
+
+        /**
+         * 己执行的一次性事件对象列表
+         */
+        private $onceList: Array<IEventInfo>;
+
+        /**
+         * 事件是否己取消
+         */
+        private $isCanceled: boolean;
+
+        /**
+         * 取消当前正在派发的事件
+         */
+        dispatchCancel(): void;
+
+        /**
+         * 事件派发
+         * @args[]: 参数列表，允许为任意类型的数据
+         * @cancelable: 事件是否允许被中断，默认为false
+         */
+        dispatchEvent(type: string, args?: any, cancelable?: boolean): void;
+
+        /**
+         * 事件注册
+         * @receiveOnce: 是否只响应一次，默认为false
+         * @priority: 事件优先级，优先级高的先被执行，默认为 1
+         */
+        addEventListener(type: string, method: Function, caller: Object, receiveOnce?: boolean, priority?: number): void;
+
+        /**
+         * 移除事件
+         */
+        removeEventListener(type: string, method: Function, caller: Object): void;
     }
 
     /**
@@ -354,17 +486,6 @@ declare module suncom {
      * 线性同余发生器
      */
     export abstract class Random {
-        /**
-         * 随机种子
-         */
-        private static $r: number;
-
-        /**
-         * 随机数参数
-         */
-        private static $A: number;
-        private static $C: number;
-        private static $M: number;
 
         /**
          * 指定随机种子
