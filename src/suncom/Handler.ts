@@ -33,7 +33,7 @@ module suncom {
             if (this.$args === void 0) {
                 return this.$method.call(this.$caller);
             }
-            else if (this.$args instanceof Array === true) {
+            else if (this.$args instanceof Array) {
                 return this.$method.apply(this.$caller, this.$args);
             }
             else {
@@ -47,7 +47,7 @@ module suncom {
          */
         runWith(args: any): any {
             if (this.$args === void 0) {
-                if (args instanceof Array === true) {
+                if (args instanceof Array) {
                     return this.$method.apply(this.$caller, args);
                 }
                 else {

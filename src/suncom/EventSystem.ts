@@ -68,7 +68,7 @@ module suncom {
                 if (args === void 0) {
                     event.method.call(event.caller);
                 }
-                else if (args instanceof Array === true) {
+                else if (args instanceof Array) {
                     event.method.apply(event.caller, args);
                 }
                 else {
