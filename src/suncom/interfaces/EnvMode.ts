@@ -1,6 +1,6 @@
 
 module suncom {
-    
+
     /**
      * 环境模式
      */
@@ -8,6 +8,6 @@ module suncom {
         /**
          * 模拟器
          */
-        SIMULATOR=0
+        SIMULATOR = 0
     }
 }

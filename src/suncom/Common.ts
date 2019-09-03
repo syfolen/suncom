@@ -22,7 +22,7 @@ module suncom {
           * 获取类名
           * @cls: 指定类型
           */
-        static getClassName(cls: new () => any): string {
+        static getClassName(cls: any): string {
             const classString: string = cls.toString().trim();
             const index: number = classString.indexOf("(");
             return classString.substring(9, index);
@@ -50,11 +50,11 @@ module suncom {
           * @concat: 是否用key和NAME和MODULE拼接作为key的值，默认true
           */
         static addEnumString(key: string, oEnum: { NAME, MODULE }, concat: boolean = true): void {
-            if (oEnum.NAME) {
-                if (oEnum[key]) {
+            if (oEnum.NAME !== void 0) {
+                if (oEnum[key] !== void 0) {
                     throw Error(`Common=> Duplicate Enum String ${oEnum.NAME}[${key}]`);
                 }
-                else if (concat == false) {
+                else if (concat === false) {
                     oEnum[key] = key;
                 }
                 else {
@@ -73,23 +73,23 @@ module suncom {
           * 判断是否为数字
           */
         static isNumber(str: string | number): boolean {
-            if (typeof str == "number") {
+            if (typeof str === "number") {
                 return true;
             }
-            if (isNaN(parseInt(str)) == false) {
+            if (typeof str === "string" && isNaN(parseFloat(str)) === false) {
                 return true;
             }
             return false;
         }
 
         /**
-          * 判断这符串是否为空
+          * 判断字符串是否为空
           */
         static isStringInvalidOrEmpty(str: string | number): boolean {
-            if (typeof str == "number") {
+            if (typeof str === "number") {
                 return false;
             }
-            if (typeof str == "string" && str != "") {
+            if (typeof str === "string" && str !== "") {
                 return false;
             }
             return true;
@@ -178,9 +178,9 @@ module suncom {
             if (floatValue > 5) {
                 intValue += 1;
             }
-            else if (floatValue == 5) {
+            else if (floatValue === 5) {
                 const modValue: number = intValue % 2;
-                if (modValue == 1 || modValue == -1) {
+                if (modValue === 1 || modValue === -1) {
                     intValue += 1;
                 }
             }
@@ -204,25 +204,26 @@ module suncom {
           * 将参数转化为 Date 
           * @date: 任何格式的时间参数，可以为字符串或时间戳
           * 支持的格式说明：
-          * 1. 时间戳
-          * 2. hh:mm:ss
-          * 3. yyyy-MM-dd hh:mm:ss
+          * 1. Date对象
+          * 2. 时间戳
+          * 3. hh:mm:ss
+          * 4. yyyy-MM-dd hh:mm:ss
           */
         static convertToDate(date: string | number | Date): Date {
             if (date instanceof Date) {
                 return date;
             }
             // 时间戳或字符串形式的时间戳
-            if (Common.isNumber(date) == true) {
+            if (Common.isNumber(date) === true) {
                 return new Date(date.toString());
             }
             // 自定义格式
-            if (typeof date == "string") {
+            if (typeof date === "string") {
                 // 自定义时间格式 yyyy-MM-dd hh:mm:ss 或 hh:mm:ss
                 const array: Array<string> = date.split(" ");
-                const dates: Array<string> = array[0].split("-");
+                const dates: Array<string> = array.length === 1 ? [] : array.shift().split("-");
                 const times: Array<string> = array[1].split(":");
-                if (dates.length == 3 && times.length == 3) {
+                if (dates.length === 3 && times.length === 3) {
                     return new Date(Number(dates[0]), Number(dates[1]) - 1, Number(dates[2]), Number(times[0]), Number(times[1]), Number(times[2]));
                 }
                 return new Date(date);
@@ -240,10 +241,10 @@ module suncom {
             const date: Date = Common.convertToDate(time);
 
             //计算增量毫秒数
-            if (datepart == "yy") {
+            if (datepart === "yy") {
                 date.setFullYear(date.getFullYear() + increment);
             }
-            else if (datepart == "MM") {
+            else if (datepart === "MM") {
                 const rem: number = increment % 12;
                 const mul: number = (increment - rem) / 12;
                 // 增加倍数的年份
@@ -265,22 +266,22 @@ module suncom {
 
             let timestamp: number = date.valueOf();
 
-            if (datepart == "ww") {
+            if (datepart === "ww") {
                 timestamp += increment * 7 * 24 * 3600 * 1000;
             }
-            else if (datepart == "dd") {
+            else if (datepart === "dd") {
                 timestamp += increment * 24 * 3600 * 1000;
             }
-            else if (datepart == "hh") {
+            else if (datepart === "hh") {
                 timestamp += increment * 3600 * 1000;
             }
-            else if (datepart == "mm") {
+            else if (datepart === "mm") {
                 timestamp += increment * 60 * 1000;
             }
-            else if (datepart == "ss") {
+            else if (datepart === "ss") {
                 timestamp += increment * 1000;
             }
-            else if (datepart == "ms") {
+            else if (datepart === "ms") {
                 timestamp += increment;
             }
 
@@ -298,48 +299,48 @@ module suncom {
             let time: number = d1.valueOf();
             let time2: number = d2.valueOf();
 
-            if (datepart == "ms") {
+            if (datepart === "ms") {
                 return time2 - time;
             }
 
             time = Math.floor(time / 1000);
             time2 = Math.floor(time2 / 1000);
 
-            if (datepart == "ss") {
+            if (datepart === "ss") {
                 return time2 - time;
             }
 
             time = Math.floor(time / 60);
             time2 = Math.floor(time2 / 60);
 
-            if (datepart == "mm") {
+            if (datepart === "mm") {
                 return time2 - time;
             }
 
             time = Math.floor(time / 60);
             time2 = Math.floor(time2 / 60);
 
-            if (datepart == "hh") {
+            if (datepart === "hh") {
                 return time2 - time;
             }
 
             time = Math.floor(time / 24);
             time2 = Math.floor(time2 / 24);
 
-            if (datepart == "dd") {
+            if (datepart === "dd") {
                 return time2 - time;
             }
 
-            if (datepart == "ww") {
+            if (datepart === "ww") {
                 //1970/1/1是星期四，故应当减去4天
                 return Math.floor(((time2 - 4) - (time - 4)) / 7);
             }
 
-            if (datepart == "MM") {
+            if (datepart === "MM") {
                 return d2.getMonth() - d1.getMonth() + (d2.getFullYear() - d1.getFullYear()) * 12;
             }
 
-            if (datepart == "yy") {
+            if (datepart === "yy") {
                 return d2.getFullYear() - d1.getFullYear();
             }
 
@@ -386,7 +387,7 @@ module suncom {
 
             for (let i: number = 0; i < keys.length; i++) {
                 const key: string = keys[i];
-                if (key != "sign") {
+                if (key !== "sign") {
                     array.push(`${key}=${params[key]}`);
                 }
             }

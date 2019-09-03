@@ -28,7 +28,7 @@ var suncom;
         /**
          * 网络心跳
          */
-        DebugMode[DebugMode["NETWORK_HEATBEAT"] = 32] = "NETWORK_HEATBEAT";
+        DebugMode[DebugMode["NETWORK_HEARTBEAT"] = 32] = "NETWORK_HEARTBEAT";
         /**
          * 普通
          */

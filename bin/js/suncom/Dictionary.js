@@ -15,7 +15,7 @@ var suncom;
          * @defaultValue: 默认值
          */
         Dictionary.prototype.get = function (key, defaultValue) {
-            if (typeof key == "string" && key.length > 0) {
+            if (typeof key === "string" && key.length > 0) {
                 if (this.$map[key] === void 0) {
                     return defaultValue;
                 }
@@ -29,7 +29,7 @@ var suncom;
          * 将指定值映射到字典中的指定key
          */
         Dictionary.prototype.put = function (key, value) {
-            if (typeof key == "string" && key.length > 0) {
+            if (typeof key === "string" && key.length > 0) {
                 this.$map[key] = value;
             }
             else {
@@ -40,7 +40,7 @@ var suncom;
          * 将指定key从字典中移除
          */
         Dictionary.prototype.remove = function (key) {
-            if (typeof key == "string" && key.length > 0) {
+            if (typeof key === "string" && key.length > 0) {
                 delete this.$map[key];
             }
             else {

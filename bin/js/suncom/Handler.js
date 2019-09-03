@@ -16,7 +16,7 @@ var suncom;
             if (this.$args === void 0) {
                 return this.$method.call(this.$caller);
             }
-            else if (this.$args instanceof Array) {
+            else if (this.$args instanceof Array === true) {
                 return this.$method.apply(this.$caller, this.$args);
             }
             else {
@@ -29,7 +29,7 @@ var suncom;
          */
         Handler.prototype.runWith = function (args) {
             if (this.$args === void 0) {
-                if (args instanceof Array) {
+                if (args instanceof Array === true) {
                     return this.$method.apply(this.$caller, args);
                 }
                 else {

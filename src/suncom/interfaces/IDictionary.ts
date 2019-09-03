@@ -5,6 +5,7 @@ module suncom {
      * 字典接口
      */
     export interface IDictionary {
+
         /**
          * 返回字典中指定key所映射的值
          * @defaultValue: 默认值

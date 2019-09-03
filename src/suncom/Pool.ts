@@ -15,7 +15,7 @@ module suncom {
          */
         static getItem(sign: string): any {
             const array: Array<any> = Pool.$pool[sign] || null;
-            if (array != null && array.length > 0) {
+            if (array !== null && array.length > 0) {
                 const item: any = array.pop();
                 item["suncore$__inPool__"] = false;
                 return item;
@@ -29,8 +29,8 @@ module suncom {
         static getItemByClass(sign: string, cls: any, args?: any): any {
             let item: any = Pool.getItem(sign);
 
-            if (item == null) {
-                if (Laya["Prefab"] && args === Laya["Prefab"]) {
+            if (item === null) {
+                if (Laya["Prefab"] !== void 0 && args === Laya["Prefab"]) {
                     item = cls.create();
                 }
                 else {
@@ -39,7 +39,7 @@ module suncom {
                     if (args === void 0) {
                         cls.call(item);
                     }
-                    else if (args instanceof Array) {
+                    else if (args instanceof Array === true) {
                         cls.apply(item, args);
                     }
                     else {
@@ -55,12 +55,12 @@ module suncom {
          * 根据标识回收对象
          */
         static recover(sign: string, item: any): void {
-            if (item["suncore$__inPool__"]) {
+            if (item["suncore$__inPool__"] === true) {
                 return;
             }
             item["suncore$__inPool__"] = true;
             const array: Array<any> = Pool.$pool[sign] || null;
-            if (array == null) {
+            if (array === null) {
                 Pool.$pool[sign] = [item];
             }
             else {
@@ -72,7 +72,7 @@ module suncom {
          * 清缓指定标识下的所有己缓存对象
          */
         static clear(sign: string): void {
-            if (Pool.$pool[sign]) {
+            if (Pool.$pool[sign] !== void 0) {
                 delete Pool.$pool[sign];
             }
         }
