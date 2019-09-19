@@ -33,7 +33,7 @@ var suncom;
                     if (args === void 0) {
                         cls.call(item);
                     }
-                    else if (args instanceof Array === true) {
+                    else if (args instanceof Array) {
                         cls.apply(item, args);
                     }
                     else {

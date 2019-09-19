@@ -13,10 +13,10 @@ module suncom {
         /**
          * 根据标识从池中获取对象，获取失败时返回null
          */
-        static getItem(sign: string): any {
-            const array: Array<any> = Pool.$pool[sign] || null;
+        static getItem<T>(sign: string): T {
+            const array: Array<T> = Pool.$pool[sign] || null;
             if (array !== null && array.length > 0) {
-                const item: any = array.pop();
+                const item = array.pop();
                 item["suncore$__inPool__"] = false;
                 return item;
             }
@@ -26,8 +26,8 @@ module suncom {
         /**
          * 根据标识从池中获取对象，获取失败时将创建新的对象
          */
-        static getItemByClass(sign: string, cls: any, args?: any): any {
-            let item: any = Pool.getItem(sign);
+        static getItemByClass<T>(sign: string, cls: any, args?: any): T {
+            let item = Pool.getItem<T>(sign) as any;
 
             if (item === null) {
                 if (Laya["Prefab"] !== void 0 && args === Laya["Prefab"]) {

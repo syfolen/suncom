@@ -1,9 +1,23 @@
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 var suncom;
 (function (suncom) {
     /**
      * 全局常量或变量
      */
-    var Global = /** @class */ (function () {
+    var Global = /** @class */ (function (_super) {
+        __extends(Global, _super);
         function Global() {
         }
         /**
@@ -37,7 +51,7 @@ var suncom;
          */
         Global.VERSION = "1.0.0";
         return Global;
-    }());
+    }(null));
     suncom.Global = Global;
 })(suncom || (suncom = {}));
 //# sourceMappingURL=Global.js.map

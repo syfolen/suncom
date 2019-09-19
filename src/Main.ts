@@ -16,7 +16,7 @@ console.log(dictionary.get("name"));
 
 // test Pool
 suncom.Pool.recover("item", {});
-console.log(suncom.Pool.getItem("item"));
+console.log(suncom.Pool.getItem<any>("item"));
 
 class A {
 	i: number;
@@ -28,7 +28,7 @@ class A {
 	}
 }
 
-const a: A = suncom.Pool.getItemByClass("A", A, 5);
+const a = suncom.Pool.getItemByClass<A>("A", A, 5);
 console.log(a.i);
 
 // test handler

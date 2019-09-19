@@ -333,7 +333,7 @@ var suncom;
           */
         Common.md5 = function (str) {
             // return new md5().hex_md5(str);
-            throw Error("暂未实现");
+            throw Error("Not supported!!!");
         };
         /**
           * 生成 HTTP 签名

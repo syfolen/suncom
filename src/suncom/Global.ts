@@ -4,7 +4,7 @@ module suncom {
     /**
      * 全局常量或变量
      */
-    export abstract class Global {
+    export abstract class Global extends null {
 
         /**
          * 运行环境
