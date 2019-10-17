@@ -4,22 +4,50 @@ module suncom {
     /**
      * 字典接口
      */
-    export interface IDictionary {
+    export interface IDictionary<T> {
+        /**
+         * 数据源（请勿直接操作其中的数据）
+         */
+        source: Array<T>;
 
         /**
-         * 返回字典中指定key所映射的值
-         * @defaultValue: 默认值
+         * 哈希表（请勿直接操作其中的数据）
          */
-        get(key: string, defaultValue?: any): any;
+        dataMap: { [key: string]: T };
 
         /**
-         * 将指定值映射到字典中的指定key
+         * 添加数据
          */
-        put(key: string, value: any): void;
+        put(data: T): T;
 
         /**
-         * 将指定key从字典中移除
+         * 移除数据
          */
-        remove(key: string): void;
+        remove(data: T): T;
+
+        /**
+         * 根据键值返回数据
+         */
+        getByValue(key: string, value: any): T;
+
+        /**
+         * 根据主键值快速返回数据
+         */
+        getByPrimaryValue(value: number | string): T;
+
+        /**
+         * 根据键值移除数据
+         */
+        removeByValue(key: string, value: any): T;
+
+        /**
+         * 根据主键值移除数据
+         */
+        removeByPrimaryValue(value: number | string): T;
+
+        /**
+         * 为每个数据执行方法（谨慎在此方法中新增或移除数据）
+         */
+        forEach(method: Function): void;
     }
 }

@@ -7,12 +7,38 @@ console.log(suncom.Random.random());
 console.log(suncom.Random.random());
 
 // test Dictionary
-const dictionary: suncom.IDictionary = new suncom.Dictionary();
-console.log(dictionary.get("name", "abc"));
-dictionary.put("name", "AAA");
-console.log(dictionary.get("name"));
-dictionary.remove("name");
-console.log(dictionary.get("name"));
+setTimeout(() => {
+	const dictionary: suncom.IDictionary = new suncom.Dictionary("id");
+
+	const x = { id: 5 };
+	const y = { id: 7 };
+	const z = { id: 9, name: "yes" };
+	const w = { id: 11, name: "no" };
+
+	dictionary.put(z);
+	dictionary.put(y);
+	dictionary.put(x);
+	dictionary.put(w);
+
+	console.log(dictionary.getByPrimaryValue(5));
+	console.log(dictionary.getByPrimaryValue(7));
+	console.log(dictionary.getByValue("id", 5));
+	console.log(dictionary.getByValue("name", "yes"));
+	console.log(dictionary.getByValue("name", "a"));
+	console.log(dictionary.getByValue("name", void 0));
+	console.log(dictionary.getByValue("name", null));
+	console.log(dictionary.getByValue("ok", void 0));
+	console.log(dictionary.getByValue("ok", null));
+	console.log(dictionary.getByValue("test", void 0));
+	console.log(dictionary.getByValue("test", null));
+
+	console.log(dictionary.remove(x));
+	console.log(dictionary.removeByPrimaryValue(7));
+	console.log(dictionary.removeByValue("name", void 0));
+	console.log(dictionary.removeByValue("name", null));
+	console.log(dictionary.removeByValue("name", "a"));
+	console.log(dictionary.removeByValue("name", "yes"));
+}, 500);
 
 // test Pool
 suncom.Pool.recover("item", {});

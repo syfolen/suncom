@@ -4,48 +4,120 @@ var suncom;
      * 字典
      */
     var Dictionary = /** @class */ (function () {
-        function Dictionary() {
+        /**
+         * @primaryKey: 指定主键字段名，字典会使用主键值来建立数据源与哈希表之间的映射关系，所以请确保主键值是恒值
+         */
+        function Dictionary(primaryKey) {
             /**
-             * 数据源
+             * 数据源（请勿直接操作其中的数据）
              */
-            this.$map = {};
+            this.source = [];
+            /**
+             * 哈希表（请勿直接操作其中的数据）
+             */
+            this.dataMap = {};
+            if (typeof primaryKey === "number") {
+                primaryKey = primaryKey.toString();
+            }
+            if (typeof primaryKey !== "string") {
+                throw Error("\u975E\u6CD5\u7684\u4E3B\u952E\u5B57\u6BB5\u540D\uFF1A" + primaryKey);
+            }
+            if (primaryKey.length == 0) {
+                throw Error("\u65E0\u6548\u7684\u4E3B\u952E\u5B57\u6BB5\u540D\u5B57\u957F\u5EA6\uFF1A" + primaryKey.length);
+            }
+            else {
+                this.$primaryKey = primaryKey;
+            }
         }
         /**
-         * 返回字典中指定key所映射的值
-         * @defaultValue: 默认值
+         * 根据数据在数据源中的索引来移除数据
          */
-        Dictionary.prototype.get = function (key, defaultValue) {
-            if (typeof key === "string" && key.length > 0) {
-                if (this.$map[key] === void 0) {
-                    return defaultValue;
+        Dictionary.prototype.$removeByIndex = function (index) {
+            if (index === -1) {
+                return null;
+            }
+            var data = this.source[index];
+            this.source.splice(index, 1);
+            var value = data[this.$primaryKey];
+            delete this.dataMap[value];
+            return data;
+        };
+        /**
+         * 获取数据在数据源中的索引
+         */
+        Dictionary.prototype.$getIndexByValue = function (key, value) {
+            if (value === void 0) {
+                return -1;
+            }
+            for (var i = 0, length_1 = this.source.length; i < length_1; i++) {
+                var data = this.source[i];
+                if (data[key] === void 0) {
+                    continue;
                 }
-                return this.$map[key];
+                if (data[key] === value) {
+                    return i;
+                }
+            }
+            return -1;
+        };
+        /**
+         * 添加数据
+         */
+        Dictionary.prototype.put = function (data) {
+            var value = data[this.$primaryKey];
+            if (typeof value === "number") {
+                value = value.toString();
+            }
+            if (typeof value !== "string") {
+                throw Error("\u4E3B\u952E\u7684\u503C\u7C7B\u578B\u9519\u8BEF\uFF1A" + typeof value + "\uFF0C\u53EA\u5141\u8BB8\u4F7F\u7528Number\u6216String\u7C7B\u578B");
+            }
+            if (this.getByPrimaryValue(value) === null) {
+                this.source.push(data);
+                this.dataMap[value] = data;
             }
             else {
-                throw Error("Invalid Key:" + key);
+                throw Error("\u91CD\u590D\u7684\u4E3B\u952E\u503C\uFF1A[" + this.$primaryKey + "]" + value);
             }
         };
         /**
-         * 将指定值映射到字典中的指定key
+         * 移除数据
          */
-        Dictionary.prototype.put = function (key, value) {
-            if (typeof key === "string" && key.length > 0) {
-                this.$map[key] = value;
-            }
-            else {
-                throw Error("Invalid Key:" + key);
-            }
+        Dictionary.prototype.remove = function (data) {
+            var index = this.source.indexOf(data);
+            return this.$removeByIndex(index);
         };
         /**
-         * 将指定key从字典中移除
+         * 根据键值返回数据
          */
-        Dictionary.prototype.remove = function (key) {
-            if (typeof key === "string" && key.length > 0) {
-                delete this.$map[key];
+        Dictionary.prototype.getByValue = function (key, value) {
+            if (key === this.$primaryKey) {
+                return this.getByPrimaryValue(value);
             }
-            else {
-                throw Error("Invalid Key:" + key);
+            var index = this.$getIndexByValue(key, value);
+            if (index === -1) {
+                return null;
             }
+            return this.source[index];
+        };
+        /**
+         * 根据主键值快速返回数据
+         */
+        Dictionary.prototype.getByPrimaryValue = function (value) {
+            return this.dataMap[value] || null;
+        };
+        /**
+         * 根据键值移除数据
+         */
+        Dictionary.prototype.removeByValue = function (key, value) {
+            var index = this.$getIndexByValue(key, value);
+            return this.$removeByIndex(index);
+        };
+        /**
+         * 根据主键值移除数据
+         */
+        Dictionary.prototype.removeByPrimaryValue = function (value) {
+            var data = this.getByPrimaryValue(value);
+            return this.remove(data);
         };
         return Dictionary;
     }());
