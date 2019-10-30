@@ -29,16 +29,6 @@ module suncom {
         static height: number = 720;
 
         /**
-         * 服务端地址
-         */
-        static readonly TCP_IP: string = "127.0.0.1";
-
-        /**
-         * 服务端端口
-         */
-        static readonly TCP_PORT: number = 0;
-
-        /**
          * 游戏版本
          */
         static readonly VERSION: string = "1.0.0";

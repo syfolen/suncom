@@ -47,7 +47,8 @@ module suncom {
 
         /**
          * 为每个数据执行方法（谨慎在此方法中新增或移除数据）
+         * 若method返回true，则会中断遍历
          */
-        forEach(method: Function): void;
+        forEach(method: (data: T) => any): void;
     }
 }

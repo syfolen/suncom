@@ -29,6 +29,24 @@ module suncom {
         }
 
         /**
+         * 返回对象的类名
+         */
+        static getQualifiedClassName(obj: any): string {
+            if (obj === null) {
+                return null;
+            }
+            const type = typeof obj;
+            if (type !== "object") {
+                return type;
+            }
+            const prototype = obj.prototype || Object.getPrototypeOf(obj) || null;
+            if (prototype === null) {
+                return type;
+            }
+            return Common.getClassName(prototype.constructor);
+        }
+
+        /**
           * 将枚举转化成字符串 
           */
         static convertEnumToString(value: number, oEnum: any): string {
@@ -348,7 +366,7 @@ module suncom {
         }
 
         /**
-          * 格式化时间，支持：yy-MM-dd hh:mm:ss
+          * 格式化时间，支持：yy-MM-dd hh:mm:ss ms
           */
         static formatDate(str: string, time: string | number | Date): string {
             const date: Date = Common.convertToDate(time);
@@ -364,6 +382,7 @@ module suncom {
             str = str.replace("h", (date.getHours()).toString());
             str = str.replace("m", (date.getMinutes()).toString());
             str = str.replace("s", (date.getSeconds()).toString());
+            str = str.replace("ms", (date.getMilliseconds()).toString());
             return str;
         }
 
