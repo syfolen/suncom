@@ -3,6 +3,7 @@ module suncom {
 
     /**
      * 字典
+     * export
      */
     export class Dictionary<T> implements IDictionary<T> {
         /**
@@ -12,6 +13,7 @@ module suncom {
 
         /**
          * 数据源（请勿直接操作其中的数据）
+         * export
          */
         source: Array<T> = [];
 
@@ -22,6 +24,7 @@ module suncom {
 
         /**
          * @primaryKey: 指定主键字段名，字典会使用主键值来建立数据源与哈希表之间的映射关系，所以请确保主键值是恒值
+         * export
          */
         constructor(primaryKey: number | string) {
             if (typeof primaryKey === "number") {
@@ -40,6 +43,7 @@ module suncom {
 
         /**
          * 根据数据在数据源中的索引来移除数据
+         * export
          */
         private $removeByIndex(index: number): T {
             if (index === -1) {
@@ -54,6 +58,7 @@ module suncom {
 
         /**
          * 获取数据在数据源中的索引
+         * export
          */
         private $getIndexByValue(key: string, value: any): number {
             if (value === void 0) {
@@ -73,6 +78,7 @@ module suncom {
 
         /**
          * 添加数据
+         * export
          */
         put(data: T): T {
             let value = data[this.$primaryKey];
@@ -94,6 +100,7 @@ module suncom {
 
         /**
          * 移除数据
+         * export
          */
         remove(data: T): T {
             const index = this.source.indexOf(data);
@@ -102,6 +109,7 @@ module suncom {
 
         /**
          * 根据键值返回数据
+         * export
          */
         getByValue(key: string, value: any): T {
             if (key === this.$primaryKey) {
@@ -118,6 +126,7 @@ module suncom {
 
         /**
          * 根据主键值快速返回数据
+         * export
          */
         getByPrimaryValue(value: number | string): T {
             return this.dataMap[value] || null;
@@ -125,6 +134,7 @@ module suncom {
 
         /**
          * 根据键值移除数据
+         * export
          */
         removeByValue(key: string, value: any): T {
             const index = this.$getIndexByValue(key, value);
@@ -133,6 +143,7 @@ module suncom {
 
         /**
          * 根据主键值移除数据
+         * export
          */
         removeByPrimaryValue(value: number | string): T {
             const data = this.getByPrimaryValue(value);
@@ -142,10 +153,12 @@ module suncom {
         /**
          * 为每个数据执行方法（谨慎在此方法中新增或移除数据）
          * 若method返回true，则会中断遍历
+         * export
          */
         forEach(method: (data: T) => any): void {
-            for (let i = 0, length = this.source.length; i < length; i++) {
-                if (method(this.source[i]) === true) {
+            const source = this.source.slice(0);
+            for (let i = 0, length = source.length; i < length; i++) {
+                if (method(source[i]) === true) {
                     break;
                 }
             }

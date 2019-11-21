@@ -5,6 +5,7 @@ module suncom {
      * 为避免注册与注销对正在派发的事件列表产生干扰：
      * NOTE: 每个列表首个元素为布尔类型，默认为 false
      * NOTE: 若该列表的事件类型正在派发，则其值为 true
+     * export
      */
     export class EventSystem implements IEventSystem {
         /**
@@ -24,6 +25,7 @@ module suncom {
 
         /**
          * 取消当前正在派发的事件
+         * export
          */
         dispatchCancel(): void {
             this.$isCanceled = true;
@@ -33,6 +35,7 @@ module suncom {
          * 事件派发
          * @args[]: 参数列表，允许为任意类型的数据
          * @cancelable: 事件是否允许被中断，默认为false
+         * export
          */
         dispatchEvent(type: string, args?: any, cancelable: boolean = false): void {
             if (type === void 0 || type === null) {
@@ -96,6 +99,7 @@ module suncom {
          * 事件注册
          * @receiveOnce: 是否只响应一次，默认为false
          * @priority: 事件优先级，优先级高的先被执行，默认为 1
+         * export
          */
         addEventListener(type: string, method: Function, caller: Object, receiveOnce: boolean = false, priority: number = 1): void {
             if (type === void 0 || type === null) {
@@ -146,6 +150,7 @@ module suncom {
 
         /**
          * 移除事件
+         * export
          */
         removeEventListener(type: string, method: Function, caller: Object): void {
             if (type === void 0 || type === null) {

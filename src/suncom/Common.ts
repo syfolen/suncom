@@ -1,9 +1,13 @@
-
+/**
+ * 常用库
+ * export
+ */
 module suncom {
 
     /**
-      * 纯 js 公共方法类
-      */
+     * 纯 js 公共方法类
+     * export
+     */
     export abstract class Common {
         /**
          * Hash Id
@@ -11,17 +15,19 @@ module suncom {
         private static $hashId: number = 0;
 
         /**
-          * 获取 Hash ID
-          */
+         * 获取 Hash ID
+         * export
+         */
         static get hashId(): number {
             Common.$hashId++;
             return Common.$hashId;
         }
 
         /**
-          * 获取类名
-          * @cls: 指定类型
-          */
+         * 获取类名
+         * @cls: 指定类型
+         * export
+         */
         static getClassName(cls: any): string {
             const classString: string = cls.toString().trim();
             const index: number = classString.indexOf("(");
@@ -30,6 +36,7 @@ module suncom {
 
         /**
          * 返回对象的类名
+         * export
          */
         static getQualifiedClassName(obj: any): string {
             if (obj === null) {
@@ -47,8 +54,9 @@ module suncom {
         }
 
         /**
-          * 将枚举转化成字符串 
-          */
+         * 将枚举转化成字符串
+         * export
+         */
         static convertEnumToString(value: number, oEnum: any): string {
             if (value === void 0) {
                 return null;
@@ -64,9 +72,9 @@ module suncom {
         }
 
         /**
-          * 添加枚举值
-          * @concat: 是否用key和NAME和MODULE拼接作为key的值，默认true
-          */
+         * 将枚举转化成字符串
+         * export
+         */
         static addEnumString(key: string, oEnum: { NAME, MODULE }, concat: boolean = true): void {
             if (oEnum.NAME !== void 0) {
                 if (oEnum[key] !== void 0) {
@@ -88,8 +96,9 @@ module suncom {
         // 字符串相关
 
         /**
-          * 判断是否为数字
-          */
+         * 判断是否为数字
+         * export
+         */
         static isNumber(str: string | number): boolean {
             if (typeof str === "number") {
                 return true;
@@ -101,8 +110,9 @@ module suncom {
         }
 
         /**
-          * 判断字符串是否为空
-          */
+         * 判断字符串是否为空
+         * export
+         */
         static isStringInvalidOrEmpty(str: string | number): boolean {
             if (typeof str === "number") {
                 return false;
@@ -114,9 +124,10 @@ module suncom {
         }
 
         /**
-          * 格式化字符串
-          */
-        static formatString(str: string, args: Array<string>): string {
+         * 格式化字符串
+         * export
+         */
+        static formatString(str: string, args: Array<any>): string {
             for (let i: number = 0; i < args.length; i++) {
                 str = str.replace("{$}", args[i]);
             }
@@ -128,6 +139,7 @@ module suncom {
 
         /**
          * 返回绝对值
+         * export
          */
         static abs(a: number): number {
             if (a < 0) {
@@ -138,6 +150,7 @@ module suncom {
 
         /**
          * 返回a与b中的较小值
+         * export
          */
         static min(a: number, b: number): number {
             if (b < a) {
@@ -148,6 +161,7 @@ module suncom {
 
         /**
          * 返回a与b中的较大值
+         * export
          */
         static max(a: number, b: number): number {
             if (a < b) {
@@ -157,8 +171,9 @@ module suncom {
         }
 
         /**
-          * 将 value 限制制于 min 和 max 之间
-          */
+         * 将 value 限制制于 min 和 max 之间
+         * export
+         */
         static clamp(value: number, min: number, max: number): number {
             if (value < min) {
                 return min;
@@ -170,10 +185,11 @@ module suncom {
         }
 
         /**
-          * 返回四舍五入后的结果
-          * 因各个平台实现的版本可能不一致，故自定义了此方法
-          * @n: 保留小数位数，默认为0
-          */
+         * 返回四舍五入后的结果
+         * 因各个平台实现的版本可能不一致，故自定义了此方法
+         * @n: 保留小数位数，默认为0
+         * export
+         */
         static round(value: number, n: number = 0): number {
             // 多保留一位小数点
             let multiples: number = Math.pow(10, n + 1);
@@ -208,8 +224,9 @@ module suncom {
         }
 
         /**
-          * 返回 >= min 且 < max 的随机整数
-          */
+         * 返回 >= min 且 < max 的随机整数
+         * export
+         */
         static random(min: number, max: number): number {
             const value: number = Random.random() * (max - min);
             return Math.floor(value) + min;
@@ -219,14 +236,15 @@ module suncom {
         // 时间相关
 
         /**
-          * 将参数转化为 Date 
-          * @date: 任何格式的时间参数，可以为字符串或时间戳
-          * 支持的格式说明：
-          * 1. Date对象
-          * 2. 时间戳
-          * 3. hh:mm:ss
-          * 4. yyyy-MM-dd hh:mm:ss
-          */
+         * 将参数转化为 Date
+         * @date: 任何格式的时间参数，可以为字符串或时间戳
+         * 支持的格式说明：
+         * 1. Date对象
+         * 2. 时间戳
+         * 3. hh:mm:ss
+         * 4. yyyy-MM-dd hh:mm:ss
+         * export
+         */
         static convertToDate(date: string | number | Date): Date {
             if (date instanceof Date) {
                 return date;
@@ -250,11 +268,12 @@ module suncom {
         }
 
         /**
-          * 时间累加
-          * @datepart: yy, MM, ww, dd, hh, mm, ss, ms
-          * @increment： 增量，可为负
-          * @arg2: 时间参数
-          */
+         * 时间累加
+         * @datepart: yy, MM, ww, dd, hh, mm, ss, ms
+         * @increment： 增量，可为负
+         * @arg2: 时间参数
+         * export
+         */
         static dateAdd(datepart: string, increment: number, time: string | number | Date): number {
             const date: Date = Common.convertToDate(time);
 
@@ -307,9 +326,10 @@ module suncom {
         }
 
         /**
-          * 计算时间差
-          * @datepart: yy, MM, ww, dd, hh, mm, ss, ms
-          */
+         * 计算时间差
+         * @datepart: yy, MM, ww, dd, hh, mm, ss, ms
+         * export
+         */
         static dateDiff(datepart: string, date: string | number | Date, date2: string | number | Date): number {
             const d1: Date = Common.convertToDate(date);
             const d2: Date = Common.convertToDate(date2);
@@ -366,8 +386,9 @@ module suncom {
         }
 
         /**
-          * 格式化时间，支持：yy-MM-dd hh:mm:ss ms
-          */
+         * 格式化时间，支持：yy-MM-dd hh:mm:ss ms
+         * export
+         */
         static formatDate(str: string, time: string | number | Date): string {
             const date: Date = Common.convertToDate(time);
             str = str.replace("yyyy", date.getFullYear().toString());
@@ -390,16 +411,18 @@ module suncom {
         // 其它
 
         /**
-          * 返回 MD5 加密后的串
-          */
+         * 返回 MD5 加密后的串
+         * export
+         */
         static md5(str: string): string {
             // return new md5().hex_md5(str);
             throw Error("Not supported!!!");
         }
 
         /**
-          * 生成 HTTP 签名
-          */
+         * 生成 HTTP 签名
+         * export
+         */
         static createSign(params: Object): string {
             const keys: Array<string> = Object.keys(params).sort();
             const array: Array<string> = [];

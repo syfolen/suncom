@@ -2,8 +2,9 @@
 module suncom {
 
     /**
-      * 对象池
-      */
+     * 对象池
+     * export
+     */
     export abstract class Pool {
         /**
          * 对象集合
@@ -12,6 +13,7 @@ module suncom {
 
         /**
          * 根据标识从池中获取对象，获取失败时返回null
+         * export
          */
         static getItem<T>(sign: string): T {
             const array: Array<T> = Pool.$pool[sign] || null;
@@ -25,6 +27,7 @@ module suncom {
 
         /**
          * 根据标识从池中获取对象，获取失败时将创建新的对象
+         * export
          */
         static getItemByClass<T>(sign: string, cls: any, args?: any): T {
             let item = Pool.getItem<T>(sign) as any;
@@ -53,6 +56,7 @@ module suncom {
 
         /**
          * 根据标识回收对象
+         * export
          */
         static recover(sign: string, item: any): void {
             if (item["suncore$__inPool__"] === true) {
@@ -70,6 +74,7 @@ module suncom {
 
         /**
          * 清缓指定标识下的所有己缓存对象
+         * export
          */
         static clear(sign: string): void {
             if (Pool.$pool[sign] !== void 0) {

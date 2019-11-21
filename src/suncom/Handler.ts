@@ -2,8 +2,9 @@
 module suncom {
 
     /**
-      * 事件处理器
-      */
+     * 事件处理器
+     * export
+     */
     export class Handler implements IHandler {
         /**
          * 参数列表
@@ -20,6 +21,9 @@ module suncom {
          */
         private $method: Function;
 
+        /**
+         * export
+         */
         constructor(caller: Object, method: Function, args?: any, once?: boolean) {
             this.$args = args;
             this.$caller = caller;
@@ -28,6 +32,7 @@ module suncom {
 
         /**
          * 执行处理器
+         * export
          */
         run(): any {
             if (this.$args === void 0) {
@@ -44,6 +49,7 @@ module suncom {
         /**
          * 执行处理器，携带额外的参数
          * @param args 参数列表，允许为任意类型的数据
+         * export
          */
         runWith(args: any): any {
             if (this.$args === void 0) {
@@ -62,6 +68,7 @@ module suncom {
         /**
          * 创建Handler的简单工厂方法
          * @once: 己弃用
+         * export
          */
         static create(caller: Object, method: Function, args?: Array<any>, once?: boolean): IHandler {
             return new Handler(caller, method, args, once);
