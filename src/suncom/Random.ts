@@ -3,6 +3,7 @@ module suncom {
 
     /**
      * 线性同余发生器
+     * export
      */
     export abstract class Random {
         /**
@@ -19,6 +20,7 @@ module suncom {
 
         /**
          * 指定随机种子
+         * export
          */
         static seed(value: number): void {
             Random.$r = value;
@@ -26,6 +28,7 @@ module suncom {
 
         /**
          * 返回一个随机数
+         * export
          */
         static random(): number {
             const r: dcodeIO.Long = dcodeIO.Long.fromNumber(Random.$r);

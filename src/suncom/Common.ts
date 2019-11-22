@@ -437,5 +437,48 @@ module suncom {
 
             return Common.md5(array.join("&"));
         }
+
+        /**
+         * 从数组中查找数据
+         * @array: 数据源
+         * @method: 查询规则，返回true表示与规则匹配
+         * @out: 若为null，则只返回查询到的第一条数据，否则将以数组的形式返回查询到的所有数据
+         * export
+         */
+        static findFromArray<T>(array: T[], method: (data: T) => boolean, out: T[] = null): T | T[] {
+            for (let i = 0, length = array.length; i < length; i++) {
+                const item = array[i];
+                if (method(item) === true) {
+                    if (out === null) {
+                        return item;
+                    }
+                    out.push(item);
+                }
+            }
+            return out;
+        }
+
+        /**
+         * 将数据从数组中移除
+         * export
+         */
+        static removeItemFromArray<T>(item: T, array: T[]): void {
+            for (let i = 0, length = array.length; i < length; i++) {
+                if (array[i] === item) {
+                    array.splice(i, 1);
+                    break;
+                }
+            }
+        }
+
+        /**
+         * 将数据从数组中移除
+         * export
+         */
+        static removeItemsFromArray<T>(items: T[], array: T[]): void {
+            for (let i = 0, length = items.length; i < length; i++) {
+                Common.removeItemFromArray(items[i], array);
+            }
+        }
     }
 }

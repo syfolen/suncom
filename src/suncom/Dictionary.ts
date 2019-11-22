@@ -43,7 +43,6 @@ module suncom {
 
         /**
          * 根据数据在数据源中的索引来移除数据
-         * export
          */
         private $removeByIndex(index: number): T {
             if (index === -1) {
@@ -58,7 +57,6 @@ module suncom {
 
         /**
          * 获取数据在数据源中的索引
-         * export
          */
         private $getIndexByValue(key: string, value: any): number {
             if (value === void 0) {
