@@ -5,6 +5,7 @@ var suncom;
      * 为避免注册与注销对正在派发的事件列表产生干扰：
      * NOTE: 每个列表首个元素为布尔类型，默认为 false
      * NOTE: 若该列表的事件类型正在派发，则其值为 true
+     * export
      */
     var EventSystem = /** @class */ (function () {
         function EventSystem() {
@@ -23,6 +24,7 @@ var suncom;
         }
         /**
          * 取消当前正在派发的事件
+         * export
          */
         EventSystem.prototype.dispatchCancel = function () {
             this.$isCanceled = true;
@@ -31,6 +33,7 @@ var suncom;
          * 事件派发
          * @args[]: 参数列表，允许为任意类型的数据
          * @cancelable: 事件是否允许被中断，默认为false
+         * export
          */
         EventSystem.prototype.dispatchEvent = function (type, args, cancelable) {
             if (cancelable === void 0) { cancelable = false; }
@@ -87,6 +90,7 @@ var suncom;
          * 事件注册
          * @receiveOnce: 是否只响应一次，默认为false
          * @priority: 事件优先级，优先级高的先被执行，默认为 1
+         * export
          */
         EventSystem.prototype.addEventListener = function (type, method, caller, receiveOnce, priority) {
             if (receiveOnce === void 0) { receiveOnce = false; }
@@ -134,6 +138,7 @@ var suncom;
         };
         /**
          * 移除事件
+         * export
          */
         EventSystem.prototype.removeEventListener = function (type, method, caller) {
             if (type === void 0 || type === null) {

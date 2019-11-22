@@ -128,8 +128,33 @@ module suncom {
          * export
          */
         static formatString(str: string, args: Array<any>): string {
-            for (let i: number = 0; i < args.length; i++) {
-                str = str.replace("{$}", args[i]);
+            const s0 = str;
+            const s1 = `[${args.join(", ")}]`;
+            const a = ["%d", "%s", "{$}"];
+
+            let reg2 = 0;
+            while (args.length > 0) {
+                const arg = args.shift() as any;
+                let reg0: number = -1;
+                for (const s2 of a) {
+                    const reg1 = str.indexOf(s2);
+                    if (reg1 === -1) {
+                        continue;
+                    }
+                    if (reg0 === -1) {
+                        reg0 = reg1;
+                        reg2 = s2.length;
+                    }
+                    else if (reg1 < reg0) {
+                        reg0 = reg1;
+                        reg2 = s2.length;
+                    }
+                }
+                if (reg0 === -1) {
+                    console.log(`字符串未完成 str:${str}, array:${s1}`);
+                    break;
+                }
+                str = str.substr(0, reg0) + arg + str.substr(reg0 + reg2);
             }
             return str;
         }

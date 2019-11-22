@@ -2,18 +2,21 @@ var suncom;
 (function (suncom) {
     /**
      * 线性同余发生器
+     * export
      */
     var Random = /** @class */ (function () {
         function Random() {
         }
         /**
          * 指定随机种子
+         * export
          */
         Random.seed = function (value) {
             Random.$r = value;
         };
         /**
          * 返回一个随机数
+         * export
          */
         Random.random = function () {
             var r = dcodeIO.Long.fromNumber(Random.$r);

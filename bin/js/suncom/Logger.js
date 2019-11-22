@@ -2,12 +2,14 @@ var suncom;
 (function (suncom) {
     /**
      * 日志接口
+     * export
      */
     var Logger = /** @class */ (function () {
         function Logger() {
         }
         /**
          * 普通日志
+         * export
          */
         Logger.log = function () {
             var args = [];
@@ -18,6 +20,7 @@ var suncom;
         };
         /**
          * 警告日志
+         * export
          */
         Logger.warn = function () {
             var args = [];
@@ -28,6 +31,7 @@ var suncom;
         };
         /**
          * 错误日志
+         * export
          */
         Logger.error = function () {
             var args = [];

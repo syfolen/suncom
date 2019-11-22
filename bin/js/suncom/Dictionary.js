@@ -2,14 +2,17 @@ var suncom;
 (function (suncom) {
     /**
      * 字典
+     * export
      */
     var Dictionary = /** @class */ (function () {
         /**
          * @primaryKey: 指定主键字段名，字典会使用主键值来建立数据源与哈希表之间的映射关系，所以请确保主键值是恒值
+         * export
          */
         function Dictionary(primaryKey) {
             /**
              * 数据源（请勿直接操作其中的数据）
+             * export
              */
             this.source = [];
             /**
@@ -62,6 +65,7 @@ var suncom;
         };
         /**
          * 添加数据
+         * export
          */
         Dictionary.prototype.put = function (data) {
             var value = data[this.$primaryKey];
@@ -78,9 +82,11 @@ var suncom;
             else {
                 throw Error("\u91CD\u590D\u7684\u4E3B\u952E\u503C\uFF1A[" + this.$primaryKey + "]" + value);
             }
+            return data;
         };
         /**
          * 移除数据
+         * export
          */
         Dictionary.prototype.remove = function (data) {
             var index = this.source.indexOf(data);
@@ -88,6 +94,7 @@ var suncom;
         };
         /**
          * 根据键值返回数据
+         * export
          */
         Dictionary.prototype.getByValue = function (key, value) {
             if (key === this.$primaryKey) {
@@ -101,12 +108,14 @@ var suncom;
         };
         /**
          * 根据主键值快速返回数据
+         * export
          */
         Dictionary.prototype.getByPrimaryValue = function (value) {
             return this.dataMap[value] || null;
         };
         /**
          * 根据键值移除数据
+         * export
          */
         Dictionary.prototype.removeByValue = function (key, value) {
             var index = this.$getIndexByValue(key, value);
@@ -114,10 +123,24 @@ var suncom;
         };
         /**
          * 根据主键值移除数据
+         * export
          */
         Dictionary.prototype.removeByPrimaryValue = function (value) {
             var data = this.getByPrimaryValue(value);
             return this.remove(data);
+        };
+        /**
+         * 为每个数据执行方法（谨慎在此方法中新增或移除数据）
+         * 若method返回true，则会中断遍历
+         * export
+         */
+        Dictionary.prototype.forEach = function (method) {
+            var source = this.source.slice(0);
+            for (var i = 0, length_2 = source.length; i < length_2; i++) {
+                if (method(source[i]) === true) {
+                    break;
+                }
+            }
         };
         return Dictionary;
     }());

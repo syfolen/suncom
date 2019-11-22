@@ -32,7 +32,7 @@ setTimeout(function () {
     console.log(dictionary.removeByValue("name", null));
     console.log(dictionary.removeByValue("name", "a"));
     console.log(dictionary.removeByValue("name", "yes"));
-    dictionary.put({});
+    console.log(suncom.Common.formatString("%s{$}%d", ["a", 2, 3]));
 }, 500);
 // test Pool
 suncom.Pool.recover("item", {});

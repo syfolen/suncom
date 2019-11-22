@@ -1,15 +1,21 @@
+/**
+ * 常用库
+ * export
+ */
 var suncom;
 (function (suncom) {
     /**
-      * 纯 js 公共方法类
-      */
+     * 纯 js 公共方法类
+     * export
+     */
     var Common = /** @class */ (function () {
         function Common() {
         }
         Object.defineProperty(Common, "hashId", {
             /**
-              * 获取 Hash ID
-              */
+             * 获取 Hash ID
+             * export
+             */
             get: function () {
                 Common.$hashId++;
                 return Common.$hashId;
@@ -18,17 +24,37 @@ var suncom;
             configurable: true
         });
         /**
-          * 获取类名
-          * @cls: 指定类型
-          */
+         * 获取类名
+         * @cls: 指定类型
+         * export
+         */
         Common.getClassName = function (cls) {
             var classString = cls.toString().trim();
             var index = classString.indexOf("(");
             return classString.substring(9, index);
         };
         /**
-          * 将枚举转化成字符串
-          */
+         * 返回对象的类名
+         * export
+         */
+        Common.getQualifiedClassName = function (obj) {
+            if (obj === null) {
+                return null;
+            }
+            var type = typeof obj;
+            if (type !== "object") {
+                return type;
+            }
+            var prototype = obj.prototype || Object.getPrototypeOf(obj) || null;
+            if (prototype === null) {
+                return type;
+            }
+            return Common.getClassName(prototype.constructor);
+        };
+        /**
+         * 将枚举转化成字符串
+         * export
+         */
         Common.convertEnumToString = function (value, oEnum) {
             if (value === void 0) {
                 return null;
@@ -43,9 +69,9 @@ var suncom;
             return null;
         };
         /**
-          * 添加枚举值
-          * @concat: 是否用key和NAME和MODULE拼接作为key的值，默认true
-          */
+         * 将枚举转化成字符串
+         * export
+         */
         Common.addEnumString = function (key, oEnum, concat) {
             if (concat === void 0) { concat = true; }
             if (oEnum.NAME !== void 0) {
@@ -66,8 +92,9 @@ var suncom;
         //=================================================
         // 字符串相关
         /**
-          * 判断是否为数字
-          */
+         * 判断是否为数字
+         * export
+         */
         Common.isNumber = function (str) {
             if (typeof str === "number") {
                 return true;
@@ -78,8 +105,9 @@ var suncom;
             return false;
         };
         /**
-          * 判断字符串是否为空
-          */
+         * 判断字符串是否为空
+         * export
+         */
         Common.isStringInvalidOrEmpty = function (str) {
             if (typeof str === "number") {
                 return false;
@@ -90,11 +118,37 @@ var suncom;
             return true;
         };
         /**
-          * 格式化字符串
-          */
+         * 格式化字符串
+         * export
+         */
         Common.formatString = function (str, args) {
-            for (var i = 0; i < args.length; i++) {
-                str = str.replace("{$}", args[i]);
+            var s0 = str;
+            var s1 = "[" + args.join(", ") + "]";
+            var a = ["%d", "%s", "{$}"];
+            var reg2 = 0;
+            while (args.length > 0) {
+                var arg = args.shift();
+                var reg0 = -1;
+                for (var _i = 0, a_1 = a; _i < a_1.length; _i++) {
+                    var s2 = a_1[_i];
+                    var reg1 = str.indexOf(s2);
+                    if (reg1 === -1) {
+                        continue;
+                    }
+                    if (reg0 === -1) {
+                        reg0 = reg1;
+                        reg2 = s2.length;
+                    }
+                    else if (reg1 < reg0) {
+                        reg0 = reg1;
+                        reg2 = s2.length;
+                    }
+                }
+                if (reg0 === -1) {
+                    console.log("\u5B57\u7B26\u4E32\u672A\u5B8C\u6210 str:" + str + ", array:" + s1);
+                    break;
+                }
+                str = str.substr(0, reg0) + arg + str.substr(reg0 + reg2);
             }
             return str;
         };
@@ -102,6 +156,7 @@ var suncom;
         // 数学相关
         /**
          * 返回绝对值
+         * export
          */
         Common.abs = function (a) {
             if (a < 0) {
@@ -111,6 +166,7 @@ var suncom;
         };
         /**
          * 返回a与b中的较小值
+         * export
          */
         Common.min = function (a, b) {
             if (b < a) {
@@ -120,6 +176,7 @@ var suncom;
         };
         /**
          * 返回a与b中的较大值
+         * export
          */
         Common.max = function (a, b) {
             if (a < b) {
@@ -128,8 +185,9 @@ var suncom;
             return a;
         };
         /**
-          * 将 value 限制制于 min 和 max 之间
-          */
+         * 将 value 限制制于 min 和 max 之间
+         * export
+         */
         Common.clamp = function (value, min, max) {
             if (value < min) {
                 return min;
@@ -140,10 +198,11 @@ var suncom;
             return value;
         };
         /**
-          * 返回四舍五入后的结果
-          * 因各个平台实现的版本可能不一致，故自定义了此方法
-          * @n: 保留小数位数，默认为0
-          */
+         * 返回四舍五入后的结果
+         * 因各个平台实现的版本可能不一致，故自定义了此方法
+         * @n: 保留小数位数，默认为0
+         * export
+         */
         Common.round = function (value, n) {
             if (n === void 0) { n = 0; }
             // 多保留一位小数点
@@ -173,8 +232,9 @@ var suncom;
             return intValue / Math.pow(10, n);
         };
         /**
-          * 返回 >= min 且 < max 的随机整数
-          */
+         * 返回 >= min 且 < max 的随机整数
+         * export
+         */
         Common.random = function (min, max) {
             var value = suncom.Random.random() * (max - min);
             return Math.floor(value) + min;
@@ -182,14 +242,15 @@ var suncom;
         //=================================================
         // 时间相关
         /**
-          * 将参数转化为 Date
-          * @date: 任何格式的时间参数，可以为字符串或时间戳
-          * 支持的格式说明：
-          * 1. Date对象
-          * 2. 时间戳
-          * 3. hh:mm:ss
-          * 4. yyyy-MM-dd hh:mm:ss
-          */
+         * 将参数转化为 Date
+         * @date: 任何格式的时间参数，可以为字符串或时间戳
+         * 支持的格式说明：
+         * 1. Date对象
+         * 2. 时间戳
+         * 3. hh:mm:ss
+         * 4. yyyy-MM-dd hh:mm:ss
+         * export
+         */
         Common.convertToDate = function (date) {
             if (date instanceof Date) {
                 return date;
@@ -212,11 +273,12 @@ var suncom;
             throw Error("Convert Date Error:" + date);
         };
         /**
-          * 时间累加
-          * @datepart: yy, MM, ww, dd, hh, mm, ss, ms
-          * @increment： 增量，可为负
-          * @arg2: 时间参数
-          */
+         * 时间累加
+         * @datepart: yy, MM, ww, dd, hh, mm, ss, ms
+         * @increment： 增量，可为负
+         * @arg2: 时间参数
+         * export
+         */
         Common.dateAdd = function (datepart, increment, time) {
             var date = Common.convertToDate(time);
             //计算增量毫秒数
@@ -264,9 +326,10 @@ var suncom;
             return timestamp;
         };
         /**
-          * 计算时间差
-          * @datepart: yy, MM, ww, dd, hh, mm, ss, ms
-          */
+         * 计算时间差
+         * @datepart: yy, MM, ww, dd, hh, mm, ss, ms
+         * export
+         */
         Common.dateDiff = function (datepart, date, date2) {
             var d1 = Common.convertToDate(date);
             var d2 = Common.convertToDate(date2);
@@ -308,8 +371,9 @@ var suncom;
             return 0;
         };
         /**
-          * 格式化时间，支持：yy-MM-dd hh:mm:ss
-          */
+         * 格式化时间，支持：yy-MM-dd hh:mm:ss ms
+         * export
+         */
         Common.formatDate = function (str, time) {
             var date = Common.convertToDate(time);
             str = str.replace("yyyy", date.getFullYear().toString());
@@ -324,20 +388,23 @@ var suncom;
             str = str.replace("h", (date.getHours()).toString());
             str = str.replace("m", (date.getMinutes()).toString());
             str = str.replace("s", (date.getSeconds()).toString());
+            str = str.replace("ms", (date.getMilliseconds()).toString());
             return str;
         };
         //=================================================
         // 其它
         /**
-          * 返回 MD5 加密后的串
-          */
+         * 返回 MD5 加密后的串
+         * export
+         */
         Common.md5 = function (str) {
             // return new md5().hex_md5(str);
             throw Error("Not supported!!!");
         };
         /**
-          * 生成 HTTP 签名
-          */
+         * 生成 HTTP 签名
+         * export
+         */
         Common.createSign = function (params) {
             var keys = Object.keys(params).sort();
             var array = [];
@@ -349,6 +416,47 @@ var suncom;
             }
             array.push("key=123456789012345678");
             return Common.md5(array.join("&"));
+        };
+        /**
+         * 从数组中查找数据
+         * @array: 数据源
+         * @method: 查询规则，返回true表示与规则匹配
+         * @out: 若为null，则只返回查询到的第一条数据，否则将以数组的形式返回查询到的所有数据
+         * export
+         */
+        Common.findFromArray = function (array, method, out) {
+            if (out === void 0) { out = null; }
+            for (var i = 0, length_1 = array.length; i < length_1; i++) {
+                var item = array[i];
+                if (method(item) === true) {
+                    if (out === null) {
+                        return item;
+                    }
+                    out.push(item);
+                }
+            }
+            return out;
+        };
+        /**
+         * 将数据从数组中移除
+         * export
+         */
+        Common.removeItemFromArray = function (item, array) {
+            for (var i = 0, length_2 = array.length; i < length_2; i++) {
+                if (array[i] === item) {
+                    array.splice(i, 1);
+                    break;
+                }
+            }
+        };
+        /**
+         * 将数据从数组中移除
+         * export
+         */
+        Common.removeItemsFromArray = function (items, array) {
+            for (var i = 0, length_3 = items.length; i < length_3; i++) {
+                Common.removeItemFromArray(items[i], array);
+            }
         };
         /**
          * Hash Id

@@ -1,13 +1,15 @@
 var suncom;
 (function (suncom) {
     /**
-      * 对象池
-      */
+     * 对象池
+     * export
+     */
     var Pool = /** @class */ (function () {
         function Pool() {
         }
         /**
          * 根据标识从池中获取对象，获取失败时返回null
+         * export
          */
         Pool.getItem = function (sign) {
             var array = Pool.$pool[sign] || null;
@@ -20,6 +22,7 @@ var suncom;
         };
         /**
          * 根据标识从池中获取对象，获取失败时将创建新的对象
+         * export
          */
         Pool.getItemByClass = function (sign, cls, args) {
             var item = Pool.getItem(sign);
@@ -45,6 +48,7 @@ var suncom;
         };
         /**
          * 根据标识回收对象
+         * export
          */
         Pool.recover = function (sign, item) {
             if (item["suncore$__inPool__"] === true) {
@@ -61,6 +65,7 @@ var suncom;
         };
         /**
          * 清缓指定标识下的所有己缓存对象
+         * export
          */
         Pool.clear = function (sign) {
             if (Pool.$pool[sign] !== void 0) {
