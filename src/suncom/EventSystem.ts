@@ -2,14 +2,14 @@
 module suncom {
     /**
      * EventSystem 自定义事件系统
-     * 为避免注册与注销对正在派发的事件列表产生干扰：
-     * NOTE: 每个列表首个元素为布尔类型，默认为 false
-     * NOTE: 若该列表的事件类型正在派发，则其值为 true
      * export
      */
     export class EventSystem implements IEventSystem {
         /**
          * 事件对象集合
+         * 为避免注册与注销对正在派发的事件列表产生干扰：
+         * NOTE: 每个列表首个元素为布尔类型，默认为 false
+         * NOTE: 若该列表的事件类型正在派发，则其值为 true
          */
         private $events: { [type: string]: Array<boolean | IEventInfo> } = {};
 

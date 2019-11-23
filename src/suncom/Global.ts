@@ -1,12 +1,10 @@
 
 module suncom {
-
     /**
      * 全局常量或变量
      * export
      */
     export abstract class Global {
-
         /**
          * 运行环境
          * export

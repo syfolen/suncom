@@ -1,6 +1,5 @@
 
 module suncom {
-
     /**
      * 环境模式
      * export

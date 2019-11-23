@@ -1,6 +1,5 @@
 
 module suncom {
-
     /**
      * 字典接口
      * export

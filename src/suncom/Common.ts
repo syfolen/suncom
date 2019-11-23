@@ -3,7 +3,6 @@
  * export
  */
 module suncom {
-
     /**
      * 纯 js 公共方法类
      * export

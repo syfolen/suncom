@@ -1,6 +1,5 @@
 
 module suncom {
-
     /**
      * 线性同余发生器
      * export

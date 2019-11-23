@@ -1,6 +1,5 @@
 
 module suncom {
-
     /**
      * 自定义事件接口
      * export

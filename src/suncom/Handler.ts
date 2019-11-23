@@ -1,6 +1,5 @@
 
 module suncom {
-
     /**
      * 事件处理器
      * export
@@ -9,7 +8,7 @@ module suncom {
         /**
          * 参数列表
          */
-        private $args: any;
+        private $args: any[];
 
         /**
          * 回调对象
@@ -24,7 +23,7 @@ module suncom {
         /**
          * export
          */
-        constructor(caller: Object, method: Function, args?: any, once?: boolean) {
+        constructor(caller: Object, method: Function, args?: any[], once?: boolean) {
             this.$args = args;
             this.$caller = caller;
             this.$method = method;
@@ -38,11 +37,8 @@ module suncom {
             if (this.$args === void 0) {
                 return this.$method.call(this.$caller);
             }
-            else if (this.$args instanceof Array) {
-                return this.$method.apply(this.$caller, this.$args);
-            }
             else {
-                return this.$method.call(this.$caller, this.$args);
+                return this.$method.apply(this.$caller, this.$args);
             }
         }
 

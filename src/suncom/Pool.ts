@@ -1,6 +1,5 @@
 
 module suncom {
-
     /**
      * 对象池
      * export

@@ -1,6 +1,5 @@
 
 module suncom {
-
     /**
      * 事件处理器接口
      * export

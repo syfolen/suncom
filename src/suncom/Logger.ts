@@ -1,6 +1,5 @@
 
 module suncom {
-
     /**
      * 日志接口
      * export

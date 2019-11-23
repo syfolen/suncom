@@ -1,6 +1,5 @@
 
 module suncom {
-
     /**
      * 调试模式
      * export
