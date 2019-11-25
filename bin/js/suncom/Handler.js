@@ -21,11 +21,8 @@ var suncom;
             if (this.$args === void 0) {
                 return this.$method.call(this.$caller);
             }
-            else if (this.$args instanceof Array) {
-                return this.$method.apply(this.$caller, this.$args);
-            }
             else {
-                return this.$method.call(this.$caller, this.$args);
+                return this.$method.apply(this.$caller, this.$args);
             }
         };
         /**

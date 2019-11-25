@@ -8,7 +8,7 @@ console.log(suncom.Random.random());
 
 // test Dictionary
 setTimeout(() => {
-	const dictionary: suncom.IDictionary = new suncom.Dictionary("id");
+	const dictionary: suncom.IDictionary<any> = new suncom.Dictionary("id");
 
 	const x = { id: 5 };
 	const y = { id: 7 };
@@ -40,40 +40,41 @@ setTimeout(() => {
 	console.log(dictionary.removeByValue("name", "yes"));
 
 	console.log(suncom.Common.formatString("%s{$}%d", ["a", 2, 3]))
+
+	// test Pool
+	suncom.Pool.recover("item", {});
+	console.log(suncom.Pool.getItem("item"));
+
+	class A {
+		i: number;
+		constructor(i: number) {
+			this.i = i;
+		}
+		print(x: number, y: number): void {
+			console.log("print i:" + this.i, ", x:" + x, ", y:" + y);
+		}
+	}
+
+	const a = suncom.Pool.getItemByClass("A", A, 5) as A;
+	console.log(a.i);
+
+	// test handler
+	const handler: suncom.IHandler = new suncom.Handler(a, a.print, [6]);
+	handler.run();
+	handler.runWith(1);
+
+	// test common
+	console.log(suncom.Common.hashId);
+	console.log(suncom.Common.hashId);
+	console.log(suncom.Common.hashId);
+	console.log(suncom.Common.hashId);
+	console.log(suncom.Common.hashId);
+
+	console.log(suncom.Common.getClassName(A as any));
+
+	enum TestEnum {
+		A_0 = 1
+	}
+	console.log(suncom.Common.convertEnumToString(1, TestEnum));
+
 }, 500);
-
-// test Pool
-suncom.Pool.recover("item", {});
-console.log(suncom.Pool.getItem<any>("item"));
-
-class A {
-	i: number;
-	constructor(i: number) {
-		this.i = i;
-	}
-	print(x: number, y: number): void {
-		console.log("print i:" + this.i, ", x:" + x, ", y:" + y);
-	}
-}
-
-const a = suncom.Pool.getItemByClass<A>("A", A, 5);
-console.log(a.i);
-
-// test handler
-const handler: suncom.IHandler = new suncom.Handler(a, a.print, [6]);
-handler.run();
-handler.runWith(1);
-
-// test common
-console.log(suncom.Common.hashId);
-console.log(suncom.Common.hashId);
-console.log(suncom.Common.hashId);
-console.log(suncom.Common.hashId);
-console.log(suncom.Common.hashId);
-
-console.log(suncom.Common.getClassName(A as any));
-
-enum TestEnum {
-	A_0 = 1
-}
-console.log(suncom.Common.convertEnumToString(1, TestEnum));
