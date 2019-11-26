@@ -1,6 +1,8 @@
 
 module suncom {
-
+    /**
+     * 自定义事件系统中的事件信息
+     */
     export interface IEventInfo {
         /**
          * 事件类型

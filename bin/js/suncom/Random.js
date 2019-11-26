@@ -4,39 +4,38 @@ var suncom;
      * 线性同余发生器
      * export
      */
-    var Random = /** @class */ (function () {
-        function Random() {
-        }
+    var Random;
+    (function (Random) {
+        /**
+         * 随机种子
+         */
+        var $r = 1;
+        /**
+         * 随机数参数
+         */
+        var $A = 1103515245;
+        var $C = 12345;
+        var $M = 32767;
         /**
          * 指定随机种子
          * export
          */
-        Random.seed = function (value) {
-            Random.$r = value;
-        };
+        function seed(value) {
+            $r = value;
+        }
+        Random.seed = seed;
         /**
          * 返回一个随机数
          * export
          */
-        Random.random = function () {
-            var r = dcodeIO.Long.fromNumber(Random.$r);
-            var A = dcodeIO.Long.fromNumber(Random.$A);
-            var C = dcodeIO.Long.fromNumber(Random.$C);
-            Random.$r = Math.floor(r.mul(A).add(C).low / Random.$M);
-            return (Random.$r % Random.$M + Random.$M) / (Random.$M * 2);
-        };
-        /**
-         * 随机种子
-         */
-        Random.$r = 1;
-        /**
-         * 随机数参数
-         */
-        Random.$A = 1103515245;
-        Random.$C = 12345;
-        Random.$M = 32767;
-        return Random;
-    }());
-    suncom.Random = Random;
+        function random() {
+            var r = dcodeIO.Long.fromNumber($r);
+            var A = dcodeIO.Long.fromNumber($A);
+            var C = dcodeIO.Long.fromNumber($C);
+            $r = Math.floor(r.mul(A).add(C).low / $M);
+            return ($r % $M + $M) / ($M * 2);
+        }
+        Random.random = random;
+    })(Random = suncom.Random || (suncom.Random = {}));
 })(suncom || (suncom = {}));
 //# sourceMappingURL=Random.js.map

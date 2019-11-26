@@ -1,25 +1,22 @@
-/**
- * 常用库
- * export
- */
+
 module suncom {
     /**
-     * 纯 js 公共方法类
+     * 常用库（纯JS方法）
      * export
      */
-    export abstract class Common {
+    export namespace Common {
         /**
-         * Hash Id
+         * 哈希种子
          */
-        private static $hashId: number = 0;
+        let $hashId: number = 0;
 
         /**
-         * 获取 Hash ID
+         * 获取全局唯一的哈希值
          * export
          */
-        static get hashId(): number {
-            Common.$hashId++;
-            return Common.$hashId;
+        export function createHashId(): number {
+            $hashId++;
+            return $hashId;
         }
 
         /**
@@ -27,7 +24,7 @@ module suncom {
          * @cls: 指定类型
          * export
          */
-        static getClassName(cls: any): string {
+        export function getClassName(cls: any): string {
             const classString: string = cls.toString().trim();
             const index: number = classString.indexOf("(");
             return classString.substring(9, index);
@@ -37,15 +34,12 @@ module suncom {
          * 返回对象的类名
          * export
          */
-        static getQualifiedClassName(obj: any): string {
-            if (obj === null) {
-                return null;
-            }
-            const type = typeof obj;
+        export function getQualifiedClassName(obj: any): string {
+            const type: string = typeof obj;
             if (type !== "object") {
                 return type;
             }
-            const prototype = obj.prototype || Object.getPrototypeOf(obj) || null;
+            const prototype: any = obj.prototype || Object.getPrototypeOf(obj) || null;
             if (prototype === null) {
                 return type;
             }
@@ -56,10 +50,7 @@ module suncom {
          * 将枚举转化成字符串
          * export
          */
-        static convertEnumToString(value: number, oEnum: any): string {
-            if (value === void 0) {
-                return null;
-            }
+        export function convertEnumToString(value: number, oEnum: any): string {
             const keys: Array<string> = Object.keys(oEnum);
             for (let i: number = 0; i < keys.length; i++) {
                 const key: string = keys[i];
@@ -74,31 +65,30 @@ module suncom {
          * 将枚举转化成字符串
          * export
          */
-        static addEnumString(key: string, oEnum: { NAME, MODULE }, concat: boolean = true): void {
-            if (oEnum.NAME !== void 0) {
-                if (oEnum[key] !== void 0) {
-                    throw Error(`Common=> Duplicate Enum String ${oEnum.NAME}[${key}]`);
-                }
-                else if (concat === false) {
-                    oEnum[key] = key;
-                }
-                else {
-                    oEnum[key] = `${oEnum.NAME}.${oEnum.MODULE}.${key}`;
-                }
-            }
-            else {
+        export function addEnumString(key: string, oEnum: { NAME, MODULE }, concat: boolean = true): void {
+            if (oEnum.NAME === void 0) {
                 throw Error(`Common=> Invalid Enum Object`);
             }
+            else {
+                if (oEnum[key] === void 0) {
+                    if (concat === false) {
+                        oEnum[key] = key;
+                    }
+                    else {
+                        oEnum[key] = `${oEnum.NAME}.${oEnum.MODULE}.${key}`;
+                    }
+                }
+                else {
+                    throw Error(`Common=> Duplicate Enum String ${oEnum.NAME}[${key}]`);
+                }
+            }
         }
-
-        //=================================================
-        // 字符串相关
 
         /**
          * 判断是否为数字
          * export
          */
-        static isNumber(str: string | number): boolean {
+        export function isNumber(str: string | number): boolean {
             if (typeof str === "number") {
                 return true;
             }
@@ -112,7 +102,7 @@ module suncom {
          * 判断字符串是否为空
          * export
          */
-        static isStringInvalidOrEmpty(str: string | number): boolean {
+        export function isStringInvalidOrEmpty(str: string | number): boolean {
             if (typeof str === "number") {
                 return false;
             }
@@ -126,46 +116,50 @@ module suncom {
          * 格式化字符串
          * export
          */
-        static formatString(str: string, args: Array<any>): string {
-            const s0 = str;
-            const s1 = `[${args.join(", ")}]`;
-            const a = ["%d", "%s", "{$}"];
-
-            let reg2 = 0;
+        export function formatString(str: string, args: Array<any>): string {
+            const signs: string[] = ["%d", "%s"];
             while (args.length > 0) {
-                const arg = args.shift() as any;
-                let reg0: number = -1;
-                for (const s2 of a) {
-                    const reg1 = str.indexOf(s2);
-                    if (reg1 === -1) {
+                let key: string = null;
+                let index: number = -1;
+                for (let i: number = 0; i < signs.length; i++) {
+                    const sign: string = signs[i];
+                    const indexOfSign: number = str.indexOf(sign);
+                    if (indexOfSign === -1) {
                         continue;
                     }
-                    if (reg0 === -1) {
-                        reg0 = reg1;
-                        reg2 = s2.length;
-                    }
-                    else if (reg1 < reg0) {
-                        reg0 = reg1;
-                        reg2 = s2.length;
+                    if (index === -1 || indexOfSign < index) {
+                        key = sign;
+                        index = indexOfSign;
                     }
                 }
-                if (reg0 === -1) {
-                    console.log(`字符串未完成 str:${str}, array:${s1}`);
-                    break;
+                if (index === -1) {
+                    throw Error(`字符串替换未完成 str:${str}`);
                 }
-                str = str.substr(0, reg0) + arg + str.substr(reg0 + reg2);
+                str = str.replace(key, args.shift());
             }
             return str;
         }
 
-        //=================================================
-        // 数学相关
+        /**
+         * 格式化字符串
+         */
+        export function formatString$(str: string, args: Array<any>): string {
+            while (args.length > 0) {
+                if (str.indexOf("{$}") === -1) {
+                    throw Error(`字符串替换未完成 str:${str}`);
+                }
+                else {
+                    str = str.replace("{$}", args.shift());
+                }
+            }
+            return str;
+        }
 
         /**
          * 返回绝对值
          * export
          */
-        static abs(a: number): number {
+        export function abs(a: number): number {
             if (a < 0) {
                 return -a;
             }
@@ -176,7 +170,7 @@ module suncom {
          * 返回a与b中的较小值
          * export
          */
-        static min(a: number, b: number): number {
+        export function min(a: number, b: number): number {
             if (b < a) {
                 return b;
             }
@@ -187,7 +181,7 @@ module suncom {
          * 返回a与b中的较大值
          * export
          */
-        static max(a: number, b: number): number {
+        export function max(a: number, b: number): number {
             if (a < b) {
                 return b;
             }
@@ -195,10 +189,10 @@ module suncom {
         }
 
         /**
-         * 将 value 限制制于 min 和 max 之间
+         * 将value限制于min和max之间
          * export
          */
-        static clamp(value: number, min: number, max: number): number {
+        export function clamp(value: number, min: number, max: number): number {
             if (value < min) {
                 return min;
             }
@@ -209,16 +203,22 @@ module suncom {
         }
 
         /**
-         * 返回四舍五入后的结果
+         * 返回近似值
          * 因各个平台实现的版本可能不一致，故自定义了此方法
-         * @n: 保留小数位数，默认为0
+         * @n: 需要保留小数位数，默认为0
+         * NOTE: 此方法采用了四舍六入五成双的规则来取近似值
          * export
          */
-        static round(value: number, n: number = 0): number {
-            // 多保留一位小数点
-            let multiples: number = Math.pow(10, n + 1);
+        export function round(value: number, n: number = 0): number {
+            // 多保留两位小数点
+            let multiples: number = Math.pow(10, n + 2);
             // 临时值（去小数点）
             let tmpValue: number = Math.floor(value * multiples);
+
+            // 获取修约参考位的值
+            let reg0: number = tmpValue % 10;
+            // 修正临时值，以便获取浮点值和整数值
+            tmpValue = (tmpValue - reg0) / 10;
 
             // 浮点值
             let floatValue: number = tmpValue % 10;
@@ -237,9 +237,15 @@ module suncom {
                 intValue += 1;
             }
             else if (floatValue === 5) {
-                const modValue: number = intValue % 2;
-                if (modValue === 1 || modValue === -1) {
+                // 若参考位值大于0，则始终进一位
+                if (reg0 !== 0) {
                     intValue += 1;
+                }
+                else {
+                    const modValue: number = intValue % 2;
+                    if (modValue === 1 || modValue === -1) {
+                        intValue += 1;
+                    }
                 }
             }
 
@@ -248,16 +254,13 @@ module suncom {
         }
 
         /**
-         * 返回 >= min 且 < max 的随机整数
+         * 返回>=min且<max的随机整数
          * export
          */
-        static random(min: number, max: number): number {
+        export function random(min: number, max: number): number {
             const value: number = Random.random() * (max - min);
             return Math.floor(value) + min;
         }
-
-        //=================================================
-        // 时间相关
 
         /**
          * 将参数转化为 Date
@@ -269,7 +272,7 @@ module suncom {
          * 4. yyyy-MM-dd hh:mm:ss
          * export
          */
-        static convertToDate(date: string | number | Date): Date {
+        export function convertToDate(date: string | number | Date): Date {
             if (date instanceof Date) {
                 return date;
             }
@@ -282,7 +285,7 @@ module suncom {
                 // 自定义时间格式 yyyy-MM-dd hh:mm:ss 或 hh:mm:ss
                 const array: Array<string> = date.split(" ");
                 const dates: Array<string> = array.length === 1 ? [] : array.shift().split("-");
-                const times: Array<string> = array[1].split(":");
+                const times: Array<string> = array[0].split(":");
                 if (dates.length === 3 && times.length === 3) {
                     return new Date(Number(dates[0]), Number(dates[1]) - 1, Number(dates[2]), Number(times[0]), Number(times[1]), Number(times[2]));
                 }
@@ -298,7 +301,7 @@ module suncom {
          * @arg2: 时间参数
          * export
          */
-        static dateAdd(datepart: string, increment: number, time: string | number | Date): number {
+        export function dateAdd(datepart: string, increment: number, time: string | number | Date): number {
             const date: Date = Common.convertToDate(time);
 
             //计算增量毫秒数
@@ -354,7 +357,7 @@ module suncom {
          * @datepart: yy, MM, ww, dd, hh, mm, ss, ms
          * export
          */
-        static dateDiff(datepart: string, date: string | number | Date, date2: string | number | Date): number {
+        export function dateDiff(datepart: string, date: string | number | Date, date2: string | number | Date): number {
             const d1: Date = Common.convertToDate(date);
             const d2: Date = Common.convertToDate(date2);
 
@@ -413,7 +416,7 @@ module suncom {
          * 格式化时间，支持：yy-MM-dd hh:mm:ss ms
          * export
          */
-        static formatDate(str: string, time: string | number | Date): string {
+        export function formatDate(str: string, time: string | number | Date): string {
             const date: Date = Common.convertToDate(time);
             str = str.replace("yyyy", date.getFullYear().toString());
             str = str.replace("yy", date.getFullYear().toString().substr(2, 2));
@@ -431,23 +434,18 @@ module suncom {
             return str;
         }
 
-        //=================================================
-        // 其它
-
         /**
-         * 返回 MD5 加密后的串
-         * export
+         * 返回MD5加密后的串
          */
-        static md5(str: string): string {
+        export function md5(str: string): string {
             // return new md5().hex_md5(str);
             throw Error("Not supported!!!");
         }
 
         /**
-         * 生成 HTTP 签名
-         * export
+         * 生成HTTP签名
          */
-        static createSign(params: Object): string {
+        export function createHttpSign(params: Object): string {
             const keys: Array<string> = Object.keys(params).sort();
             const array: Array<string> = [];
 
@@ -469,9 +467,9 @@ module suncom {
          * @out: 若为null，则只返回查询到的第一条数据，否则将以数组的形式返回查询到的所有数据
          * export
          */
-        static findFromArray<T>(array: T[], method: (data: T) => boolean, out: T[] = null): T | T[] {
-            for (let i = 0, length = array.length; i < length; i++) {
-                const item = array[i];
+        export function findFromArray<T>(array: T[], method: (data: T) => boolean, out: T[] = null): T | T[] {
+            for (let i: number = 0; i < array.length; i++) {
+                const item: T = array[i];
                 if (method(item) === true) {
                     if (out === null) {
                         return item;
@@ -486,8 +484,8 @@ module suncom {
          * 将数据从数组中移除
          * export
          */
-        static removeItemFromArray<T>(item: T, array: T[]): void {
-            for (let i = 0, length = array.length; i < length; i++) {
+        export function removeItemFromArray<T>(item: T, array: T[]): void {
+            for (let i: number = 0; i < array.length; i++) {
                 if (array[i] === item) {
                     array.splice(i, 1);
                     break;
@@ -499,8 +497,8 @@ module suncom {
          * 将数据从数组中移除
          * export
          */
-        static removeItemsFromArray<T>(items: T[], array: T[]): void {
-            for (let i = 0, length = items.length; i < length; i++) {
+        export function removeItemsFromArray<T>(items: T[], array: T[]): void {
+            for (let i: number = 0; i < items.length; i++) {
                 Common.removeItemFromArray(items[i], array);
             }
         }

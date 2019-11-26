@@ -1,12 +1,12 @@
 var suncom;
 (function (suncom) {
     /**
-     * 字典
+     * 字典接口，通常用于作为一个大量数据的集合，用于快速获取数据集中的某条数据
      * export
      */
     var Dictionary = /** @class */ (function () {
         /**
-         * @primaryKey: 指定主键字段名，字典会使用主键值来建立数据源与哈希表之间的映射关系，所以请确保主键值是恒值
+         * @primaryKey: 指定主键字段名，字典会使用主键值来作为数据索引，所以请确保主键值是恒值
          * export
          */
         function Dictionary(primaryKey) {
@@ -36,9 +36,6 @@ var suncom;
          * 根据数据在数据源中的索引来移除数据
          */
         Dictionary.prototype.$removeByIndex = function (index) {
-            if (index === -1) {
-                return null;
-            }
             var data = this.source[index];
             this.source.splice(index, 1);
             var value = data[this.$primaryKey];
@@ -52,11 +49,8 @@ var suncom;
             if (value === void 0) {
                 return -1;
             }
-            for (var i = 0, length_1 = this.source.length; i < length_1; i++) {
+            for (var i = 0; i < this.source.length; i++) {
                 var data = this.source[i];
-                if (data[key] === void 0) {
-                    continue;
-                }
                 if (data[key] === value) {
                     return i;
                 }
@@ -90,7 +84,12 @@ var suncom;
          */
         Dictionary.prototype.remove = function (data) {
             var index = this.source.indexOf(data);
-            return this.$removeByIndex(index);
+            if (index === -1) {
+                return data;
+            }
+            else {
+                return this.$removeByIndex(index);
+            }
         };
         /**
          * 根据键值返回数据
@@ -119,7 +118,12 @@ var suncom;
          */
         Dictionary.prototype.removeByValue = function (key, value) {
             var index = this.$getIndexByValue(key, value);
-            return this.$removeByIndex(index);
+            if (index === -1) {
+                return null;
+            }
+            else {
+                return this.$removeByIndex(index);
+            }
         };
         /**
          * 根据主键值移除数据
@@ -127,6 +131,9 @@ var suncom;
          */
         Dictionary.prototype.removeByPrimaryValue = function (value) {
             var data = this.getByPrimaryValue(value);
+            if (data === null) {
+                return null;
+            }
             return this.remove(data);
         };
         /**
@@ -136,7 +143,7 @@ var suncom;
          */
         Dictionary.prototype.forEach = function (method) {
             var source = this.source.slice(0);
-            for (var i = 0, length_2 = source.length; i < length_2; i++) {
+            for (var i = 0; i < source.length; i++) {
                 if (method(source[i]) === true) {
                     break;
                 }

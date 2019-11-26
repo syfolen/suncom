@@ -4,37 +4,37 @@ module suncom {
      * 线性同余发生器
      * export
      */
-    export abstract class Random {
+    export namespace Random {
         /**
          * 随机种子
          */
-        private static $r: number = 1;
+        let $r: number = 1;
 
         /**
          * 随机数参数
          */
-        private static $A: number = 1103515245;
-        private static $C: number = 12345;
-        private static $M: number = 32767;
+        let $A: number = 1103515245;
+        let $C: number = 12345;
+        let $M: number = 32767;
 
         /**
          * 指定随机种子
          * export
          */
-        static seed(value: number): void {
-            Random.$r = value;
+        export function seed(value: number): void {
+            $r = value;
         }
 
         /**
          * 返回一个随机数
          * export
          */
-        static random(): number {
-            const r: dcodeIO.Long = dcodeIO.Long.fromNumber(Random.$r);
-            const A: dcodeIO.Long = dcodeIO.Long.fromNumber(Random.$A);
-            const C: dcodeIO.Long = dcodeIO.Long.fromNumber(Random.$C);
-            Random.$r = Math.floor(r.mul(A).add(C).low / Random.$M);
-            return (Random.$r % Random.$M + Random.$M) / (Random.$M * 2);
+        export function random(): number {
+            const r: dcodeIO.Long = dcodeIO.Long.fromNumber($r);
+            const A: dcodeIO.Long = dcodeIO.Long.fromNumber($A);
+            const C: dcodeIO.Long = dcodeIO.Long.fromNumber($C);
+            $r = Math.floor(r.mul(A).add(C).low / $M);
+            return ($r % $M + $M) / ($M * 2);
         }
     }
 }

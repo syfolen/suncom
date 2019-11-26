@@ -1,46 +1,40 @@
-/**
- * 常用库
- * export
- */
 var suncom;
 (function (suncom) {
     /**
-     * 纯 js 公共方法类
+     * 常用库（纯JS方法）
      * export
      */
-    var Common = /** @class */ (function () {
-        function Common() {
+    var Common;
+    (function (Common) {
+        /**
+         * 哈希种子
+         */
+        var $hashId = 0;
+        /**
+         * 获取全局唯一的哈希值
+         * export
+         */
+        function createHashId() {
+            $hashId++;
+            return $hashId;
         }
-        Object.defineProperty(Common, "hashId", {
-            /**
-             * 获取 Hash ID
-             * export
-             */
-            get: function () {
-                Common.$hashId++;
-                return Common.$hashId;
-            },
-            enumerable: true,
-            configurable: true
-        });
+        Common.createHashId = createHashId;
         /**
          * 获取类名
          * @cls: 指定类型
          * export
          */
-        Common.getClassName = function (cls) {
+        function getClassName(cls) {
             var classString = cls.toString().trim();
             var index = classString.indexOf("(");
             return classString.substring(9, index);
-        };
+        }
+        Common.getClassName = getClassName;
         /**
          * 返回对象的类名
          * export
          */
-        Common.getQualifiedClassName = function (obj) {
-            if (obj === null) {
-                return null;
-            }
+        function getQualifiedClassName(obj) {
             var type = typeof obj;
             if (type !== "object") {
                 return type;
@@ -50,15 +44,13 @@ var suncom;
                 return type;
             }
             return Common.getClassName(prototype.constructor);
-        };
+        }
+        Common.getQualifiedClassName = getQualifiedClassName;
         /**
          * 将枚举转化成字符串
          * export
          */
-        Common.convertEnumToString = function (value, oEnum) {
-            if (value === void 0) {
-                return null;
-            }
+        function convertEnumToString(value, oEnum) {
             var keys = Object.keys(oEnum);
             for (var i = 0; i < keys.length; i++) {
                 var key = keys[i];
@@ -67,35 +59,37 @@ var suncom;
                 }
             }
             return null;
-        };
+        }
+        Common.convertEnumToString = convertEnumToString;
         /**
          * 将枚举转化成字符串
          * export
          */
-        Common.addEnumString = function (key, oEnum, concat) {
+        function addEnumString(key, oEnum, concat) {
             if (concat === void 0) { concat = true; }
-            if (oEnum.NAME !== void 0) {
-                if (oEnum[key] !== void 0) {
-                    throw Error("Common=> Duplicate Enum String " + oEnum.NAME + "[" + key + "]");
-                }
-                else if (concat === false) {
-                    oEnum[key] = key;
-                }
-                else {
-                    oEnum[key] = oEnum.NAME + "." + oEnum.MODULE + "." + key;
-                }
-            }
-            else {
+            if (oEnum.NAME === void 0) {
                 throw Error("Common=> Invalid Enum Object");
             }
-        };
-        //=================================================
-        // 字符串相关
+            else {
+                if (oEnum[key] === void 0) {
+                    if (concat === false) {
+                        oEnum[key] = key;
+                    }
+                    else {
+                        oEnum[key] = oEnum.NAME + "." + oEnum.MODULE + "." + key;
+                    }
+                }
+                else {
+                    throw Error("Common=> Duplicate Enum String " + oEnum.NAME + "[" + key + "]");
+                }
+            }
+        }
+        Common.addEnumString = addEnumString;
         /**
          * 判断是否为数字
          * export
          */
-        Common.isNumber = function (str) {
+        function isNumber(str) {
             if (typeof str === "number") {
                 return true;
             }
@@ -103,12 +97,13 @@ var suncom;
                 return true;
             }
             return false;
-        };
+        }
+        Common.isNumber = isNumber;
         /**
          * 判断字符串是否为空
          * export
          */
-        Common.isStringInvalidOrEmpty = function (str) {
+        function isStringInvalidOrEmpty(str) {
             if (typeof str === "number") {
                 return false;
             }
@@ -116,79 +111,89 @@ var suncom;
                 return false;
             }
             return true;
-        };
+        }
+        Common.isStringInvalidOrEmpty = isStringInvalidOrEmpty;
         /**
          * 格式化字符串
          * export
          */
-        Common.formatString = function (str, args) {
-            var s0 = str;
-            var s1 = "[" + args.join(", ") + "]";
-            var a = ["%d", "%s", "{$}"];
-            var reg2 = 0;
+        function formatString(str, args) {
+            var signs = ["%d", "%s"];
             while (args.length > 0) {
-                var arg = args.shift();
-                var reg0 = -1;
-                for (var _i = 0, a_1 = a; _i < a_1.length; _i++) {
-                    var s2 = a_1[_i];
-                    var reg1 = str.indexOf(s2);
-                    if (reg1 === -1) {
+                var key = null;
+                var index = -1;
+                for (var i = 0; i < signs.length; i++) {
+                    var sign = signs[i];
+                    var indexOfSign = str.indexOf(sign);
+                    if (indexOfSign === -1) {
                         continue;
                     }
-                    if (reg0 === -1) {
-                        reg0 = reg1;
-                        reg2 = s2.length;
-                    }
-                    else if (reg1 < reg0) {
-                        reg0 = reg1;
-                        reg2 = s2.length;
+                    if (index === -1 || indexOfSign < index) {
+                        key = sign;
+                        index = indexOfSign;
                     }
                 }
-                if (reg0 === -1) {
-                    console.log("\u5B57\u7B26\u4E32\u672A\u5B8C\u6210 str:" + str + ", array:" + s1);
-                    break;
+                if (index === -1) {
+                    throw Error("\u5B57\u7B26\u4E32\u66FF\u6362\u672A\u5B8C\u6210 str:" + str);
                 }
-                str = str.substr(0, reg0) + arg + str.substr(reg0 + reg2);
+                str = str.replace(key, args.shift());
             }
             return str;
-        };
-        //=================================================
-        // 数学相关
+        }
+        Common.formatString = formatString;
+        /**
+         * 格式化字符串
+         */
+        function formatString$(str, args) {
+            while (args.length > 0) {
+                if (str.indexOf("{$}") === -1) {
+                    throw Error("\u5B57\u7B26\u4E32\u66FF\u6362\u672A\u5B8C\u6210 str:" + str);
+                }
+                else {
+                    str = str.replace("{$}", args.shift());
+                }
+            }
+            return str;
+        }
+        Common.formatString$ = formatString$;
         /**
          * 返回绝对值
          * export
          */
-        Common.abs = function (a) {
+        function abs(a) {
             if (a < 0) {
                 return -a;
             }
             return a;
-        };
+        }
+        Common.abs = abs;
         /**
          * 返回a与b中的较小值
          * export
          */
-        Common.min = function (a, b) {
+        function min(a, b) {
             if (b < a) {
                 return b;
             }
             return a;
-        };
+        }
+        Common.min = min;
         /**
          * 返回a与b中的较大值
          * export
          */
-        Common.max = function (a, b) {
+        function max(a, b) {
             if (a < b) {
                 return b;
             }
             return a;
-        };
+        }
+        Common.max = max;
         /**
-         * 将 value 限制制于 min 和 max 之间
+         * 将value限制于min和max之间
          * export
          */
-        Common.clamp = function (value, min, max) {
+        function clamp(value, min, max) {
             if (value < min) {
                 return min;
             }
@@ -196,19 +201,25 @@ var suncom;
                 return max;
             }
             return value;
-        };
+        }
+        Common.clamp = clamp;
         /**
-         * 返回四舍五入后的结果
+         * 返回近似值
          * 因各个平台实现的版本可能不一致，故自定义了此方法
-         * @n: 保留小数位数，默认为0
+         * @n: 需要保留小数位数，默认为0
+         * NOTE: 此方法采用了四舍六入五成双的规则来取近似值
          * export
          */
-        Common.round = function (value, n) {
+        function round(value, n) {
             if (n === void 0) { n = 0; }
-            // 多保留一位小数点
-            var multiples = Math.pow(10, n + 1);
+            // 多保留两位小数点
+            var multiples = Math.pow(10, n + 2);
             // 临时值（去小数点）
             var tmpValue = Math.floor(value * multiples);
+            // 获取修约参考位的值
+            var reg0 = tmpValue % 10;
+            // 修正临时值，以便获取浮点值和整数值
+            tmpValue = (tmpValue - reg0) / 10;
             // 浮点值
             var floatValue = tmpValue % 10;
             // 整数值
@@ -223,24 +234,30 @@ var suncom;
                 intValue += 1;
             }
             else if (floatValue === 5) {
-                var modValue = intValue % 2;
-                if (modValue === 1 || modValue === -1) {
+                // 若参考位值大于0，则始终进一位
+                if (reg0 !== 0) {
                     intValue += 1;
+                }
+                else {
+                    var modValue = intValue % 2;
+                    if (modValue === 1 || modValue === -1) {
+                        intValue += 1;
+                    }
                 }
             }
             // 还原小数点，并返回
             return intValue / Math.pow(10, n);
-        };
+        }
+        Common.round = round;
         /**
-         * 返回 >= min 且 < max 的随机整数
+         * 返回>=min且<max的随机整数
          * export
          */
-        Common.random = function (min, max) {
+        function random(min, max) {
             var value = suncom.Random.random() * (max - min);
             return Math.floor(value) + min;
-        };
-        //=================================================
-        // 时间相关
+        }
+        Common.random = random;
         /**
          * 将参数转化为 Date
          * @date: 任何格式的时间参数，可以为字符串或时间戳
@@ -251,7 +268,7 @@ var suncom;
          * 4. yyyy-MM-dd hh:mm:ss
          * export
          */
-        Common.convertToDate = function (date) {
+        function convertToDate(date) {
             if (date instanceof Date) {
                 return date;
             }
@@ -264,14 +281,15 @@ var suncom;
                 // 自定义时间格式 yyyy-MM-dd hh:mm:ss 或 hh:mm:ss
                 var array = date.split(" ");
                 var dates = array.length === 1 ? [] : array.shift().split("-");
-                var times = array[1].split(":");
+                var times = array[0].split(":");
                 if (dates.length === 3 && times.length === 3) {
                     return new Date(Number(dates[0]), Number(dates[1]) - 1, Number(dates[2]), Number(times[0]), Number(times[1]), Number(times[2]));
                 }
                 return new Date(date);
             }
             throw Error("Convert Date Error:" + date);
-        };
+        }
+        Common.convertToDate = convertToDate;
         /**
          * 时间累加
          * @datepart: yy, MM, ww, dd, hh, mm, ss, ms
@@ -279,7 +297,7 @@ var suncom;
          * @arg2: 时间参数
          * export
          */
-        Common.dateAdd = function (datepart, increment, time) {
+        function dateAdd(datepart, increment, time) {
             var date = Common.convertToDate(time);
             //计算增量毫秒数
             if (datepart === "yy") {
@@ -324,13 +342,14 @@ var suncom;
                 timestamp += increment;
             }
             return timestamp;
-        };
+        }
+        Common.dateAdd = dateAdd;
         /**
          * 计算时间差
          * @datepart: yy, MM, ww, dd, hh, mm, ss, ms
          * export
          */
-        Common.dateDiff = function (datepart, date, date2) {
+        function dateDiff(datepart, date, date2) {
             var d1 = Common.convertToDate(date);
             var d2 = Common.convertToDate(date2);
             var time = d1.valueOf();
@@ -369,12 +388,13 @@ var suncom;
                 return d2.getFullYear() - d1.getFullYear();
             }
             return 0;
-        };
+        }
+        Common.dateDiff = dateDiff;
         /**
          * 格式化时间，支持：yy-MM-dd hh:mm:ss ms
          * export
          */
-        Common.formatDate = function (str, time) {
+        function formatDate(str, time) {
             var date = Common.convertToDate(time);
             str = str.replace("yyyy", date.getFullYear().toString());
             str = str.replace("yy", date.getFullYear().toString().substr(2, 2));
@@ -390,22 +410,20 @@ var suncom;
             str = str.replace("s", (date.getSeconds()).toString());
             str = str.replace("ms", (date.getMilliseconds()).toString());
             return str;
-        };
-        //=================================================
-        // 其它
+        }
+        Common.formatDate = formatDate;
         /**
-         * 返回 MD5 加密后的串
-         * export
+         * 返回MD5加密后的串
          */
-        Common.md5 = function (str) {
+        function md5(str) {
             // return new md5().hex_md5(str);
             throw Error("Not supported!!!");
-        };
+        }
+        Common.md5 = md5;
         /**
-         * 生成 HTTP 签名
-         * export
+         * 生成HTTP签名
          */
-        Common.createSign = function (params) {
+        function createHttpSign(params) {
             var keys = Object.keys(params).sort();
             var array = [];
             for (var i = 0; i < keys.length; i++) {
@@ -416,7 +434,8 @@ var suncom;
             }
             array.push("key=123456789012345678");
             return Common.md5(array.join("&"));
-        };
+        }
+        Common.createHttpSign = createHttpSign;
         /**
          * 从数组中查找数据
          * @array: 数据源
@@ -424,9 +443,9 @@ var suncom;
          * @out: 若为null，则只返回查询到的第一条数据，否则将以数组的形式返回查询到的所有数据
          * export
          */
-        Common.findFromArray = function (array, method, out) {
+        function findFromArray(array, method, out) {
             if (out === void 0) { out = null; }
-            for (var i = 0, length_1 = array.length; i < length_1; i++) {
+            for (var i = 0; i < array.length; i++) {
                 var item = array[i];
                 if (method(item) === true) {
                     if (out === null) {
@@ -436,34 +455,31 @@ var suncom;
                 }
             }
             return out;
-        };
+        }
+        Common.findFromArray = findFromArray;
         /**
          * 将数据从数组中移除
          * export
          */
-        Common.removeItemFromArray = function (item, array) {
-            for (var i = 0, length_2 = array.length; i < length_2; i++) {
+        function removeItemFromArray(item, array) {
+            for (var i = 0; i < array.length; i++) {
                 if (array[i] === item) {
                     array.splice(i, 1);
                     break;
                 }
             }
-        };
+        }
+        Common.removeItemFromArray = removeItemFromArray;
         /**
          * 将数据从数组中移除
          * export
          */
-        Common.removeItemsFromArray = function (items, array) {
-            for (var i = 0, length_3 = items.length; i < length_3; i++) {
+        function removeItemsFromArray(items, array) {
+            for (var i = 0; i < items.length; i++) {
                 Common.removeItemFromArray(items[i], array);
             }
-        };
-        /**
-         * Hash Id
-         */
-        Common.$hashId = 0;
-        return Common;
-    }());
-    suncom.Common = Common;
+        }
+        Common.removeItemsFromArray = removeItemsFromArray;
+    })(Common = suncom.Common || (suncom.Common = {}));
 })(suncom || (suncom = {}));
 //# sourceMappingURL=Common.js.map

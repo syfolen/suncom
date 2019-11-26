@@ -1,12 +1,12 @@
 
 module suncom {
     /**
-     * 字典
+     * 字典接口，通常用于作为一个大量数据的集合，用于快速获取数据集中的某条数据
      * export
      */
     export class Dictionary<T> implements IDictionary<T> {
         /**
-         * 主键字段名
+         * 主键字段名，通过主键值来查询数据是最快的
          */
         private $primaryKey: number | string;
 
@@ -22,7 +22,7 @@ module suncom {
         dataMap: { [key: string]: T } = {};
 
         /**
-         * @primaryKey: 指定主键字段名，字典会使用主键值来建立数据源与哈希表之间的映射关系，所以请确保主键值是恒值
+         * @primaryKey: 指定主键字段名，字典会使用主键值来作为数据索引，所以请确保主键值是恒值
          * export
          */
         constructor(primaryKey: number | string) {
@@ -44,12 +44,9 @@ module suncom {
          * 根据数据在数据源中的索引来移除数据
          */
         private $removeByIndex(index: number): T {
-            if (index === -1) {
-                return null;
-            }
-            const data = this.source[index];
+            const data: T = this.source[index];
             this.source.splice(index, 1);
-            const value = data[this.$primaryKey];
+            const value: string = data[this.$primaryKey];
             delete this.dataMap[value];
             return data;
         }
@@ -61,11 +58,8 @@ module suncom {
             if (value === void 0) {
                 return -1;
             }
-            for (let i = 0, length = this.source.length; i < length; i++) {
-                const data = this.source[i];
-                if (data[key] === void 0) {
-                    continue;
-                }
+            for (let i: number = 0; i < this.source.length; i++) {
+                const data: T = this.source[i];
                 if (data[key] === value) {
                     return i;
                 }
@@ -78,7 +72,7 @@ module suncom {
          * export
          */
         put(data: T): T {
-            let value = data[this.$primaryKey];
+            let value: any = data[this.$primaryKey];
             if (typeof value === "number") {
                 value = value.toString();
             }
@@ -100,8 +94,13 @@ module suncom {
          * export
          */
         remove(data: T): T {
-            const index = this.source.indexOf(data);
-            return this.$removeByIndex(index);
+            const index: number = this.source.indexOf(data);
+            if (index === -1) {
+                return data;
+            }
+            else {
+                return this.$removeByIndex(index);
+            }
         }
 
         /**
@@ -112,12 +111,10 @@ module suncom {
             if (key === this.$primaryKey) {
                 return this.getByPrimaryValue(value);
             }
-
-            const index = this.$getIndexByValue(key, value);
+            const index: number = this.$getIndexByValue(key, value);
             if (index === -1) {
                 return null;
             }
-
             return this.source[index];
         }
 
@@ -134,8 +131,13 @@ module suncom {
          * export
          */
         removeByValue(key: string, value: any): T {
-            const index = this.$getIndexByValue(key, value);
-            return this.$removeByIndex(index);
+            const index: number = this.$getIndexByValue(key, value);
+            if (index === -1) {
+                return null;
+            }
+            else {
+                return this.$removeByIndex(index);
+            }
         }
 
         /**
@@ -143,7 +145,10 @@ module suncom {
          * export
          */
         removeByPrimaryValue(value: number | string): T {
-            const data = this.getByPrimaryValue(value);
+            const data: T = this.getByPrimaryValue(value);
+            if (data === null) {
+                return null;
+            }
             return this.remove(data);
         }
 
@@ -153,8 +158,8 @@ module suncom {
          * export
          */
         forEach(method: (data: T) => any): void {
-            const source = this.source.slice(0);
-            for (let i = 0, length = source.length; i < length; i++) {
+            const source: T[] = this.source.slice(0);
+            for (let i: number = 0; i < source.length; i++) {
                 if (method(source[i]) === true) {
                     break;
                 }

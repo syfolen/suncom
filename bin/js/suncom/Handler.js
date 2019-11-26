@@ -27,7 +27,7 @@ var suncom;
         };
         /**
          * 执行处理器，携带额外的参数
-         * @param args 参数列表，允许为任意类型的数据
+         * @args 参数列表，允许为任意类型的数据
          * export
          */
         Handler.prototype.runWith = function (args) {

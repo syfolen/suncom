@@ -1,7 +1,7 @@
 var suncom;
 (function (suncom) {
     /**
-     * 环境模式
+     * 环境模式，主要用于代码的版本控制
      * export
      */
     var EnvMode;

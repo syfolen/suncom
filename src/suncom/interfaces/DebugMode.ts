@@ -1,7 +1,7 @@
 
 module suncom {
     /**
-     * 调试模式
+     * 调试模式，主要用于控制LOG的打印
      * export
      */
     export enum DebugMode {

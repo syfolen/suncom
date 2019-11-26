@@ -37,8 +37,8 @@ var suncom;
          */
         EventSystem.prototype.dispatchEvent = function (type, args, cancelable) {
             if (cancelable === void 0) { cancelable = false; }
-            if (type === void 0 || type === null) {
-                throw Error("Invalid Event Type!!!");
+            if (suncom.Common.isStringInvalidOrEmpty(type) === true) {
+                throw Error("派发无效事件！！！");
             }
             var list = this.$events[type] || null;
             // 无此类事件
@@ -95,8 +95,8 @@ var suncom;
         EventSystem.prototype.addEventListener = function (type, method, caller, receiveOnce, priority) {
             if (receiveOnce === void 0) { receiveOnce = false; }
             if (priority === void 0) { priority = 1; }
-            if (type === void 0 || type === null) {
-                throw Error("Register Invalid Event Type!!!");
+            if (suncom.Common.isStringInvalidOrEmpty(type) === true) {
+                throw Error("注册无效事件！！！");
             }
             var list = this.$events[type] || null;
             // 若事件列表不存在，则新建
@@ -141,8 +141,8 @@ var suncom;
          * export
          */
         EventSystem.prototype.removeEventListener = function (type, method, caller) {
-            if (type === void 0 || type === null) {
-                throw Error("Remove Invalid Event Type!!!");
+            if (suncom.Common.isStringInvalidOrEmpty(type) === true) {
+                throw Error("移除无效事件！！！");
             }
             var list = this.$events[type] || null;
             // 无此类事件
