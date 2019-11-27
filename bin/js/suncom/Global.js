@@ -4,19 +4,13 @@ var suncom;
      * 全局常量或变量
      * export
      */
-    var Global = /** @class */ (function () {
-        function Global() {
-        }
-        /**
-         * 运行环境
-         * export
-         */
-        Global.envMode = suncom.EnvMode.SIMULATOR;
+    var Global;
+    (function (Global) {
         /**
          * 调试模式
          * export
          */
-        Global.debugMode = suncom.DebugMode.NORMAL | suncom.DebugMode.NATIVE | suncom.DebugMode.NETWORK | suncom.DebugMode.NETWORK_HEARTBEAT | suncom.DebugMode.ENGINE | suncom.DebugMode.ENGINEER | suncom.DebugMode.DEBUG;
+        Global.debugMode = 0;
         /**
          * 设计分辨率
          * export
@@ -42,8 +36,6 @@ var suncom;
          * export
          */
         Global.VERSION = "1.0.0";
-        return Global;
-    }());
-    suncom.Global = Global;
+    })(Global = suncom.Global || (suncom.Global = {}));
 })(suncom || (suncom = {}));
 //# sourceMappingURL=Global.js.map
