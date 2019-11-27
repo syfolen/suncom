@@ -20,9 +20,6 @@ module suncom {
          */
         private $method: Function;
 
-        /**
-         * export
-         */
         constructor(caller: Object, method: Function, args?: any[], once?: boolean) {
             this.$args = args;
             this.$caller = caller;
