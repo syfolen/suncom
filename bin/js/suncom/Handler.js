@@ -5,9 +5,6 @@ var suncom;
      * export
      */
     var Handler = /** @class */ (function () {
-        /**
-         * export
-         */
         function Handler(caller, method, args, once) {
             this.$args = args;
             this.$caller = caller;
