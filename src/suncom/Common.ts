@@ -92,7 +92,7 @@ module suncom {
             if (typeof str === "number") {
                 return true;
             }
-            if (typeof str === "string" && isNaN(parseFloat(str)) === false) {
+            if (typeof str === "string" && isNaN(Number(str)) === false) {
                 return true;
             }
             return false;
@@ -210,37 +210,52 @@ module suncom {
          * export
          */
         export function round(value: number, n: number = 0): number {
-            // 多保留两位小数点
-            let multiples: number = Math.pow(10, n + 2);
-            // 临时值（去小数点）
-            let tmpValue: number = Math.floor(value * multiples);
+            let str: string = value.toString();
 
-            // 获取修约参考位的值
-            let reg0: number = tmpValue % 10;
-            // 修正临时值，以便获取浮点值和整数值
-            tmpValue = (tmpValue - reg0) / 10;
-
-            // 浮点值
-            let floatValue: number = tmpValue % 10;
-            // 整数值
-            let intValue: number = (tmpValue - floatValue) / 10;
-
-            // 若浮点值小于 0 ，则进行修正
-            if (floatValue < 0) {
-                intValue -= 1;
-                floatValue += 10;
+            const reg0: number = str.indexOf(".");
+            if (reg0 === -1) {
+                return value;
             }
 
-            // 四舍六入五成双
+            const reg1: number = reg0 + 1;
+            if (str.length - reg1 <= n) {
+                return value;
+            }
 
-            if (floatValue > 5) {
+            const s0: string = str.substr(0, reg0);
+            const s1: string = str.substr(reg1, n);
+            const s2: string = str.substr(reg1 + n, 2);
+
+            const a: string = s2.length === 1 ? s2 : s2.charAt(0);
+            const b: string = s2.length === 1 ? "0" : s2.charAt(1);
+
+            // 整数值
+            let intValue: number = parseInt(s0 + s1);
+            // 小数值
+            let floatValue: number = parseInt(a + b);
+
+            // 若整数值为负，且小数值有效，则需要修正小数值
+            if (intValue < 0 && floatValue > 0) {
+                intValue--;
+                floatValue = 100 - floatValue;
+            }
+
+            const s3: string = floatValue.toString();
+            // 被修约值
+            const reg2: number = parseInt(s3.charAt(0));
+            // 被修约参考值
+            const reg3: number = parseInt(s3.charAt(1));
+
+            // 四舍六入
+            if (reg2 > 5) {
                 intValue += 1;
             }
-            else if (floatValue === 5) {
-                // 若参考位值大于0，则始终进一位
-                if (reg0 !== 0) {
-                    intValue += 1;
+            else if (reg2 === 5) {
+                // 当五后面有数时进一
+                if (reg3 > 0) {
+                    intValue++;
                 }
+                // 当五后面无有效数字时，若五前为奇数，则进一
                 else {
                     const modValue: number = intValue % 2;
                     if (modValue === 1 || modValue === -1) {
@@ -249,6 +264,45 @@ module suncom {
                 }
             }
 
+            // 还原小数点，并返回
+            const s4: string = intValue.toString();
+            const reg4: number = s4.length - n;
+
+            const s5: string = `${s4.substr(0, reg4)}.${s4.substr(reg4)}`;
+            const reg5: number = parseFloat(s5);
+
+            return reg5;
+        }
+
+        /**
+         * 返回四舍五入后的结果
+         * 因各个平台实现的版本可能不一致，故自定义了此方法
+         * @n: 保留小数位数，默认为0
+         */
+        export function $round(value: number, n: number = 0): number {
+            // 多保留一位小数点
+            let multiples: number = Math.pow(10, n + 1);
+            // 临时值（去小数点）
+            let tmpValue: number = Math.floor(value * multiples);
+            // 浮点值
+            let floatValue: number = tmpValue % 10;
+            // 整数值
+            let intValue: number = (tmpValue - floatValue) / 10;
+            // 若浮点值小于 0 ，则进行修正
+            if (floatValue < 0) {
+                intValue -= 1;
+                floatValue += 10;
+            }
+            // 四舍六入五成双
+            if (floatValue > 5) {
+                intValue += 1;
+            }
+            else if (floatValue === 5) {
+                const modValue: number = intValue % 2;
+                if (modValue === 1 || modValue === -1) {
+                    intValue += 1;
+                }
+            }
             // 还原小数点，并返回
             return intValue / Math.pow(10, n);
         }
@@ -278,7 +332,7 @@ module suncom {
             }
             // 时间戳或字符串形式的时间戳
             if (Common.isNumber(date) === true) {
-                return new Date(date.toString());
+                return new Date(date);
             }
             // 自定义格式
             if (typeof date === "string") {
@@ -286,7 +340,13 @@ module suncom {
                 const array: Array<string> = date.split(" ");
                 const dates: Array<string> = array.length === 1 ? [] : array.shift().split("-");
                 const times: Array<string> = array[0].split(":");
-                if (dates.length === 3 && times.length === 3) {
+                if (times.length === 3) {
+                    if (dates.length === 0) {
+                        const a = new Date();
+                        dates[0] = a.getFullYear().toString();
+                        dates[1] = (a.getMonth() + 1).toString();
+                        dates[2] = a.getDate().toString();
+                    }
                     return new Date(Number(dates[0]), Number(dates[1]) - 1, Number(dates[2]), Number(times[0]), Number(times[1]), Number(times[2]));
                 }
                 return new Date(date);
@@ -418,6 +478,7 @@ module suncom {
          */
         export function formatDate(str: string, time: string | number | Date): string {
             const date: Date = Common.convertToDate(time);
+            str = str.replace("ms", (date.getMilliseconds()).toString());
             str = str.replace("yyyy", date.getFullYear().toString());
             str = str.replace("yy", date.getFullYear().toString().substr(2, 2));
             str = str.replace("MM", ("0" + (date.getMonth() + 1).toString()).substr(-2));
@@ -430,7 +491,6 @@ module suncom {
             str = str.replace("h", (date.getHours()).toString());
             str = str.replace("m", (date.getMinutes()).toString());
             str = str.replace("s", (date.getSeconds()).toString());
-            str = str.replace("ms", (date.getMilliseconds()).toString());
             return str;
         }
 

@@ -93,7 +93,7 @@ var suncom;
             if (typeof str === "number") {
                 return true;
             }
-            if (typeof str === "string" && isNaN(parseFloat(str)) === false) {
+            if (typeof str === "string" && isNaN(Number(str)) === false) {
                 return true;
             }
             return false;
@@ -212,14 +212,70 @@ var suncom;
          */
         function round(value, n) {
             if (n === void 0) { n = 0; }
-            // 多保留两位小数点
-            var multiples = Math.pow(10, n + 2);
+            var str = value.toString();
+            var reg0 = str.indexOf(".");
+            if (reg0 === -1) {
+                return value;
+            }
+            var reg1 = reg0 + 1;
+            if (str.length - reg1 <= n) {
+                return value;
+            }
+            var s0 = str.substr(0, reg0);
+            var s1 = str.substr(reg1, n);
+            var s2 = str.substr(reg1 + n, 2);
+            var a = s2.length === 1 ? s2 : s2.charAt(0);
+            var b = s2.length === 1 ? "0" : s2.charAt(1);
+            // 整数值
+            var intValue = parseInt(s0 + s1);
+            // 小数值
+            var floatValue = parseInt(a + b);
+            // 若整数值为负，且小数值有效，则需要修正小数值
+            if (intValue < 0 && floatValue > 0) {
+                intValue--;
+                floatValue = 100 - floatValue;
+            }
+            var s3 = floatValue.toString();
+            // 被修约值
+            var reg2 = parseInt(s3.charAt(0));
+            // 被修约参考值
+            var reg3 = parseInt(s3.charAt(1));
+            // 四舍六入
+            if (reg2 > 5) {
+                intValue += 1;
+            }
+            else if (reg2 === 5) {
+                // 当五后面有数时进一
+                if (reg3 > 0) {
+                    intValue++;
+                }
+                // 当五后面无有效数字时，若五前为奇数，则进一
+                else {
+                    var modValue = intValue % 2;
+                    if (modValue === 1 || modValue === -1) {
+                        intValue += 1;
+                    }
+                }
+            }
+            // 还原小数点，并返回
+            var s4 = intValue.toString();
+            var reg4 = s4.length - n;
+            var s5 = s4.substr(0, reg4) + "." + s4.substr(reg4);
+            var reg5 = parseFloat(s5);
+            return reg5;
+        }
+        Common.round = round;
+        /**
+         * 返回四舍五入后的结果
+         * 因各个平台实现的版本可能不一致，故自定义了此方法
+         * @n: 保留小数位数，默认为0
+         */
+        function $round(value, n) {
+            if (n === void 0) { n = 0; }
+            // 多保留一位小数点
+            var multiples = Math.pow(10, n + 1);
             // 临时值（去小数点）
             var tmpValue = Math.floor(value * multiples);
-            // 获取修约参考位的值
-            var reg0 = tmpValue % 10;
-            // 修正临时值，以便获取浮点值和整数值
-            tmpValue = (tmpValue - reg0) / 10;
             // 浮点值
             var floatValue = tmpValue % 10;
             // 整数值
@@ -234,21 +290,15 @@ var suncom;
                 intValue += 1;
             }
             else if (floatValue === 5) {
-                // 若参考位值大于0，则始终进一位
-                if (reg0 !== 0) {
+                var modValue = intValue % 2;
+                if (modValue === 1 || modValue === -1) {
                     intValue += 1;
-                }
-                else {
-                    var modValue = intValue % 2;
-                    if (modValue === 1 || modValue === -1) {
-                        intValue += 1;
-                    }
                 }
             }
             // 还原小数点，并返回
             return intValue / Math.pow(10, n);
         }
-        Common.round = round;
+        Common.$round = $round;
         /**
          * 返回>=min且<max的随机整数
          * export
@@ -274,7 +324,7 @@ var suncom;
             }
             // 时间戳或字符串形式的时间戳
             if (Common.isNumber(date) === true) {
-                return new Date(date.toString());
+                return new Date(date);
             }
             // 自定义格式
             if (typeof date === "string") {
@@ -282,7 +332,13 @@ var suncom;
                 var array = date.split(" ");
                 var dates = array.length === 1 ? [] : array.shift().split("-");
                 var times = array[0].split(":");
-                if (dates.length === 3 && times.length === 3) {
+                if (times.length === 3) {
+                    if (dates.length === 0) {
+                        var a = new Date();
+                        dates[0] = a.getFullYear().toString();
+                        dates[1] = (a.getMonth() + 1).toString();
+                        dates[2] = a.getDate().toString();
+                    }
                     return new Date(Number(dates[0]), Number(dates[1]) - 1, Number(dates[2]), Number(times[0]), Number(times[1]), Number(times[2]));
                 }
                 return new Date(date);
@@ -396,6 +452,7 @@ var suncom;
          */
         function formatDate(str, time) {
             var date = Common.convertToDate(time);
+            str = str.replace("ms", (date.getMilliseconds()).toString());
             str = str.replace("yyyy", date.getFullYear().toString());
             str = str.replace("yy", date.getFullYear().toString().substr(2, 2));
             str = str.replace("MM", ("0" + (date.getMonth() + 1).toString()).substr(-2));
@@ -408,7 +465,6 @@ var suncom;
             str = str.replace("h", (date.getHours()).toString());
             str = str.replace("m", (date.getMinutes()).toString());
             str = str.replace("s", (date.getSeconds()).toString());
-            str = str.replace("ms", (date.getMilliseconds()).toString());
             return str;
         }
         Common.formatDate = formatDate;

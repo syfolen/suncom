@@ -61,6 +61,27 @@ setTimeout(function () {
     console.log(suncom.Common.round(3.155, 2));
     console.log(suncom.Common.round(3.1451, 2));
     console.log(suncom.Common.round(3.1551, 2));
+    var yes = false;
+    var time = new Date();
+    for (var i = 0; i < 1000000; i++) {
+        if (suncom.Common.round(-3.1451) !== 100) {
+            yes = true;
+        }
+    }
+    console.log(new Date().valueOf() - time.valueOf());
+    var time2 = new Date();
+    for (var i = 0; i < 1000000; i++) {
+        if (suncom.Common.$round(-3.1451) !== 100) {
+            yes = true;
+        }
+    }
+    console.log(new Date().valueOf() - time2.valueOf());
+    console.log((1 / 3).toString());
+    console.log((0.3333333 * 10).toString());
+    console.log(3.145.toString());
+    console.log(3.155.toString());
+    console.log(3.1451.toString());
+    console.log(3.1452.toString());
     console.log(suncom.Common.random(0, 2));
     console.log(suncom.Common.random(0, 2));
     console.log(suncom.Common.random(0, 2));
@@ -80,7 +101,7 @@ setTimeout(function () {
     console.log(suncom.Common.formatDate("yyyy-MM-dd hh:mm:ss ms", suncom.Common.dateAdd("mm", 31, "1993-12-10 12:11:15")));
     console.log(suncom.Common.formatDate("yyyy-MM-dd hh:mm:ss ms", suncom.Common.dateAdd("ss", 31, "1993-12-10 12:11:15")));
     console.log(suncom.Common.formatDate("yyyy-MM-dd hh:mm:ss ms", suncom.Common.dateAdd("ms", 31, "1993-12-10 12:11:15")));
-    console.log(suncom.Common.createHttpSign({ a: 1, b: "yes" }));
+    // console.log(suncom.Common.createHttpSign({ a: 1, b: "yes" }));
     // test Random
     console.log(suncom.Random.random());
     console.log(suncom.Random.random());
