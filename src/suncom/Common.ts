@@ -342,7 +342,7 @@ module suncom {
                 const times: Array<string> = array[0].split(":");
                 if (times.length === 3) {
                     if (dates.length === 0) {
-                        const a = new Date();
+                        const a: Date = new Date();
                         dates[0] = a.getFullYear().toString();
                         dates[1] = (a.getMonth() + 1).toString();
                         dates[2] = a.getDate().toString();

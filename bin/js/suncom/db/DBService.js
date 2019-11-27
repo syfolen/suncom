@@ -2,6 +2,7 @@ var suncom;
 (function (suncom) {
     /**
      * 伪数据库服务
+     * export
      */
     var DBService;
     (function (DBService) {
@@ -11,6 +12,7 @@ var suncom;
         var $table = {};
         /**
          * 获取数据
+         * export
          */
         function get(name) {
             return $table[name];
@@ -18,6 +20,7 @@ var suncom;
         DBService.get = get;
         /**
          * 存储数据
+         * export
          */
         function put(name, data) {
             $table[name] = data;
@@ -25,6 +28,7 @@ var suncom;
         DBService.put = put;
         /**
          * 删除数据
+         * export
          */
         function drop(name) {
             delete $table[name];
