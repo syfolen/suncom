@@ -9,6 +9,12 @@ module suncom {
          * 模拟器
          * export
          */
-        SIMULATOR = 0
+        SIMULATOR = 0,
+
+        /**
+         * 网页版
+         * export
+         */
+        WEB
     }
 }
