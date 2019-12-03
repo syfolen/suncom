@@ -6,10 +6,16 @@ module suncom {
      */
     export enum EnvMode {
         /**
-         * 模拟器
+         * 开发环境
          * export
          */
-        SIMULATOR = 0,
+        DEVELOP = 0,
+
+        /**
+         * 调试模式
+         * export
+         */
+        DEBUG,
 
         /**
          * 网页版

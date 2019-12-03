@@ -9,7 +9,7 @@ module suncom {
          * 运行环境
          * export
          */
-        export let envMode: EnvMode;
+        export let envMode: EnvMode = EnvMode.DEVELOP;
 
         /**
          * 调试模式
