@@ -562,5 +562,80 @@ module suncom {
                 Common.removeItemFromArray(items[i], array);
             }
         }
+
+        /**
+         * 版本比较
+         */
+
+        /**
+         * 比较版本号
+         * 若当前版本低于参数版本，返回 -1
+         * 若当前版本高于参数版本，返回 1
+         * 否则返回 0
+         * export
+         */
+        export function compareVersion(ver: string): number {
+            if (typeof ver !== "string") {
+                console.error(`参数版本号无效`);
+                return 0;
+            }
+            if (typeof Global.VERSION !== "string") {
+                console.error(`版本号未设置`);
+                return 0;
+            }
+            const array: string[] = ver.split(".");
+            const array2: string[] = Global.VERSION.split(".");
+
+            let length: number = array.length > array2.length ? array.length : array2.length;
+
+            while (array.length < length) {
+                array.push("0");
+            }
+            while (array2.length < length) {
+                array2.push("0");
+            }
+
+            let a: boolean = false;
+            let b: boolean = false;
+
+            for (let i: number = 0; i < length; i++) {
+                const s0: string = array[i];
+                const s1: string = array2[i];
+                if (Common.isNumber(s0) === false) {
+                    a = true;
+                    array[i] = "0";
+                }
+                if (Common.isNumber(s1) === false) {
+                    b = true;
+                    array2[i] = "0";
+                }
+            }
+
+            if (a === true) {
+                console.error(`参数版本号无效 ver:${ver}`);
+            }
+            if (b === true) {
+                console.error(`当前版本号无效 ver:${Global.VERSION}`);
+            }
+
+            if (a === true || b === true) {
+                return 0;
+            }
+
+            for (let i: number = 0; i < length; i++) {
+                const s0: string = array[i];
+                const s1: string = array2[i];
+                const reg0: number = Number(s0);
+                const reg1: number = Number(s1);
+                if (reg0 < reg1) {
+                    return 1;
+                }
+                else if (reg0 > reg1) {
+                    return -1;
+                }
+            }
+
+            return 0;
+        }
     }
 }

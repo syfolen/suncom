@@ -184,4 +184,14 @@ setTimeout(() => {
 
 	console.log(suncom.Common.getClassName(A as any));
 
+	suncom.Global.VERSION = "1.0.1";
+
+	console.log(suncom.Common.compareVersion("1.0"));
+	console.log(suncom.Common.compareVersion("1.0.0"));
+	console.log(suncom.Common.compareVersion("1.0.1"));
+	console.log(suncom.Common.compareVersion("1.0.2"));
+	console.log(suncom.Common.compareVersion("1.1"));
+	console.log(suncom.Common.compareVersion(void 0));
+	console.log(suncom.Common.compareVersion("{"));
+
 }, 500);
