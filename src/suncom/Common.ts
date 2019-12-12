@@ -473,11 +473,12 @@ module suncom {
         }
 
         /**
-         * 格式化时间，支持：yy-MM-dd hh:mm:ss ms
+         * 格式化时间，支持：yy-MM-dd hh:mm:ss MS|ms
          * export
          */
         export function formatDate(str: string, time: string | number | Date): string {
             const date: Date = Common.convertToDate(time);
+            str = str.replace("MS", ("00" + (date.getMilliseconds()).toString()).substr(-3));
             str = str.replace("ms", (date.getMilliseconds()).toString());
             str = str.replace("yyyy", date.getFullYear().toString());
             str = str.replace("yy", date.getFullYear().toString().substr(2, 2));
