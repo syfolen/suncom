@@ -27,6 +27,14 @@ module suncom {
 		}
 
 		/**
+		 * 是否存在
+		 * export
+		 */
+		export function exist(name: number): boolean {
+			return $table[name] !== void 0;
+		}
+
+		/**
 		 * 删除数据
 		 * export
 		 */
