@@ -18,5 +18,17 @@ module suncom {
          * export
          */
         runWith(args: any): any;
+
+        /**
+         * 回调对象
+         * export
+         */
+        readonly caller: Object;
+
+        /**
+         * 回调方法
+         * export
+         */
+        readonly method: Function;
     }
 }

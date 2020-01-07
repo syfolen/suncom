@@ -59,6 +59,22 @@ module suncom {
         }
 
         /**
+         * 回调对象
+         * export
+         */
+        get caller(): Object {
+            return this.$caller;
+        }
+
+        /**
+         * 回调方法
+         * export
+         */
+        get method(): Function {
+            return this.$method;
+        }
+
+        /**
          * 创建Handler的简单工厂方法
          * @once: 己弃用
          * export
