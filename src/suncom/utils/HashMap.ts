@@ -1,10 +1,10 @@
 
 module suncom {
     /**
-     * 字典接口，通常用于作为一个大量数据的集合，用于快速获取数据集中的某条数据
+     * 哈希表接口，通常用于作为一个大量数据的集合，用于快速获取数据集中的某条数据
      * export
      */
-    export class Dictionary<T> implements IDictionary<T> {
+    export class HashMap<T> implements IHashMap<T> {
         /**
          * 主键字段名，通过主键值来查询数据是最快的
          */
@@ -22,7 +22,7 @@ module suncom {
         dataMap: { [key: string]: T } = {};
 
         /**
-         * @primaryKey: 指定主键字段名，字典会使用主键值来作为数据索引，所以请确保主键值是恒值
+         * @primaryKey: 指定主键字段名，哈希表会使用主键值来作为数据索引，所以请确保主键值是恒值
          * export
          */
         constructor(primaryKey: number | string) {

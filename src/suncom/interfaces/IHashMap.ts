@@ -1,10 +1,10 @@
 
 module suncom {
     /**
-     * 字典接口，通常用于作为一个大量数据的集合，用于快速获取数据集中的某条数据
+     * 哈希表接口，通常用于作为一个大量数据的集合，用于快速获取数据集中的某条数据
      * export
      */
-    export interface IDictionary<T> {
+    export interface IHashMap<T> {
         /**
          * 数据源（请勿直接操作其中的数据）
          * export
@@ -12,7 +12,7 @@ module suncom {
         source: Array<T>;
 
         /**
-         * 哈希表（请勿直接操作其中的数据）
+         * 数据映射表（请勿直接操作其中的数据）
          */
         dataMap: { [key: string]: T };
 

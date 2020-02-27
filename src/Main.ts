@@ -128,37 +128,37 @@ setTimeout(() => {
 	console.log(suncom.Random.random());
 	console.log(suncom.Random.random());
 
-	// test Dictionary
-	const dictionary: suncom.IDictionary<any> = new suncom.Dictionary("id");
+	// test HashMap
+	const hashMap: suncom.HashMap<any> = new suncom.HashMap("id");
 
 	const x = { id: 5 };
 	const y = { id: 7 };
 	const z = { id: 9, name: "yes" };
 	const w = { id: 11, name: "no" };
 
-	dictionary.put(z);
-	dictionary.put(y);
-	dictionary.put(x);
-	dictionary.put(w);
+	hashMap.put(z);
+	hashMap.put(y);
+	hashMap.put(x);
+	hashMap.put(w);
 
-	console.log(dictionary.getByPrimaryValue(5));
-	console.log(dictionary.getByPrimaryValue(7));
-	console.log(dictionary.getByValue("id", 5));
-	console.log(dictionary.getByValue("name", "yes"));
-	console.log(dictionary.getByValue("name", "a"));
-	console.log(dictionary.getByValue("name", void 0));
-	console.log(dictionary.getByValue("name", null));
-	console.log(dictionary.getByValue("ok", void 0));
-	console.log(dictionary.getByValue("ok", null));
-	console.log(dictionary.getByValue("test", void 0));
-	console.log(dictionary.getByValue("test", null));
+	console.log(hashMap.getByPrimaryValue(5));
+	console.log(hashMap.getByPrimaryValue(7));
+	console.log(hashMap.getByValue("id", 5));
+	console.log(hashMap.getByValue("name", "yes"));
+	console.log(hashMap.getByValue("name", "a"));
+	console.log(hashMap.getByValue("name", void 0));
+	console.log(hashMap.getByValue("name", null));
+	console.log(hashMap.getByValue("ok", void 0));
+	console.log(hashMap.getByValue("ok", null));
+	console.log(hashMap.getByValue("test", void 0));
+	console.log(hashMap.getByValue("test", null));
 
-	console.log(dictionary.remove(x));
-	console.log(dictionary.removeByPrimaryValue(7));
-	console.log(dictionary.removeByValue("name", void 0));
-	console.log(dictionary.removeByValue("name", null));
-	console.log(dictionary.removeByValue("name", "a"));
-	console.log(dictionary.removeByValue("name", "yes"));
+	console.log(hashMap.remove(x));
+	console.log(hashMap.removeByPrimaryValue(7));
+	console.log(hashMap.removeByValue("name", void 0));
+	console.log(hashMap.removeByValue("name", null));
+	console.log(hashMap.removeByValue("name", "a"));
+	console.log(hashMap.removeByValue("name", "yes"));
 
 	// test Pool
 	suncom.Pool.recover("item", {});
