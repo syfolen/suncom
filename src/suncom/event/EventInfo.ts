@@ -3,7 +3,7 @@ module suncom {
     /**
      * 自定义事件系统中的事件信息
      */
-    export class EventInfo implements IEventInfo {
+    export class EventInfo {
         /**
          * 事件类型
          */

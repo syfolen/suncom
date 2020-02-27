@@ -29,5 +29,13 @@ module suncom {
         export function error(...args: Array<any>): void {
             console.error(args.join(" "));
         }
+
+        /**
+         * 文件日志
+         * export
+         */
+        export function log2f(name: number | string, sign: number | string, text: string): void {
+
+        }
     }
 }
