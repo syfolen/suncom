@@ -62,29 +62,6 @@ module suncom {
         }
 
         /**
-         * 将枚举转化成字符串
-         * export
-         */
-        export function addEnumString(key: string, oEnum: { NAME, MODULE }, concat: boolean = true): void {
-            if (oEnum.NAME === void 0) {
-                throw Error(`Common=> Invalid Enum Object`);
-            }
-            else {
-                if (oEnum[key] === void 0) {
-                    if (concat === false) {
-                        oEnum[key] = key;
-                    }
-                    else {
-                        oEnum[key] = `${oEnum.NAME}.${oEnum.MODULE}.${key}`;
-                    }
-                }
-                else {
-                    throw Error(`Common=> Duplicate Enum String ${oEnum.NAME}[${key}]`);
-                }
-            }
-        }
-
-        /**
          * 判断是否为数字
          * export
          */
@@ -500,7 +477,7 @@ module suncom {
          */
         export function md5(str: string): string {
             // return new md5().hex_md5(str);
-            throw Error("Not supported!!!");
+            throw Error("未实现的接口！！！");
         }
 
         /**
