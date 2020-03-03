@@ -47,6 +47,23 @@ module suncom {
         }
 
         /**
+         * 返回某对象上的方法名
+         * @caller: 默认为：null
+         * export
+         */
+        export function getMethodName(method: Function, caller: Object = null): string {
+            if (caller === null) {
+                return Common.getClassName(method);
+            }
+            for (let key in caller) {
+                if (caller[key] === method) {
+                    return key;
+                }
+            }
+            return null;
+        }
+
+        /**
          * 将枚举转化成字符串
          * export
          */

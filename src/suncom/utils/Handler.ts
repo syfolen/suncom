@@ -20,7 +20,7 @@ module suncom {
          */
         private $method: Function;
 
-        constructor(caller: Object, method: Function, args?: any[], once?: boolean) {
+        constructor(caller: Object, method: Function, args?: any[]) {
             this.$args = args;
             this.$caller = caller;
             this.$method = method;
@@ -76,11 +76,10 @@ module suncom {
 
         /**
          * 创建Handler的简单工厂方法
-         * @once: 己弃用
          * export
          */
-        static create(caller: Object, method: Function, args?: Array<any>, once?: boolean): IHandler {
-            return new Handler(caller, method, args, once);
+        static create(caller: Object, method: Function, args?: Array<any>): IHandler {
+            return new Handler(caller, method, args);
         }
     }
 }
