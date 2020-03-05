@@ -6,20 +6,23 @@ module suncom {
      */
     export class EventSystem implements IEventSystem {
         /**
-         * 事件对象集合
+         * 事件对象集合（内置属性，请勿操作）
          * 为避免注册与注销对正在派发的事件列表产生干扰：
          * NOTE: 每个列表首个元素为布尔类型，默认为 false
          * NOTE: 若该列表的事件类型正在派发，则其值为 true
+         * export
          */
         private $events: { [type: string]: Array<boolean | EventInfo> } = {};
 
         /**
-         * 己执行的一次性事件对象列表
+         * 己执行的一次性事件对象列表（内置属性，请勿操作）
+         * export
          */
         private $onceList: Array<EventInfo> = [];
 
         /**
-         * 事件是否己取消
+         * 事件是否己取消（内置属性，请勿操作）
+         * export
          */
         private $isCanceled: boolean = false;
 
