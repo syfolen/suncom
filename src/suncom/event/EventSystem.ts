@@ -12,13 +12,13 @@ module suncom {
          * NOTE: 若该列表的事件类型正在派发，则其值为 true
          * export
          */
-        private $events: { [type: string]: Array<boolean | EventInfo> } = {};
+        private $events: { [type: string]: Array<boolean | IEventInfo> } = {};
 
         /**
          * 己执行的一次性事件对象列表（内置属性，请勿操作）
          * export
          */
-        private $onceList: Array<EventInfo> = [];
+        private $onceList: Array<IEventInfo> = [];
 
         /**
          * 事件是否己取消（内置属性，请勿操作）
@@ -44,7 +44,7 @@ module suncom {
             if (Common.isStringInvalidOrEmpty(type) === true) {
                 throw Error("派发无效事件！！！");
             }
-            const list: Array<boolean | EventInfo> = this.$events[type] || null;
+            const list: Array<boolean | IEventInfo> = this.$events[type] || null;
 
             // 无此类事件
             if (list === null) {
@@ -66,7 +66,7 @@ module suncom {
 
             // 响应回调
             for (let i: number = 1; i < list.length; i++) {
-                const event: EventInfo = list[i] as EventInfo;
+                const event: IEventInfo = list[i] as IEventInfo;
                 // 一次性事件入栈
                 if (event.receiveOnce === true) {
                     this.$onceList.push(event);
@@ -93,7 +93,7 @@ module suncom {
 
             // 注销一次性事件
             while (this.$onceList.length) {
-                const event: EventInfo = this.$onceList.pop();
+                const event: IEventInfo = this.$onceList.pop();
                 this.removeEventListener(event.type, event.method, event.caller);
             }
         }
@@ -108,7 +108,7 @@ module suncom {
             if (Common.isStringInvalidOrEmpty(type) === true) {
                 throw Error("注册无效事件！！！");
             }
-            let list: Array<boolean | EventInfo> = this.$events[type] || null;
+            let list: Array<boolean | IEventInfo> = this.$events[type] || null;
 
             // 若事件列表不存在，则新建
             if (list === null) {
@@ -124,7 +124,7 @@ module suncom {
             // 插入索引
             let index: number = -1;
             for (let i: number = 1; i < list.length; i++) {
-                const item: EventInfo = list[i] as EventInfo;
+                const item: IEventInfo = list[i] as IEventInfo;
                 // 事件不允许重复注册
                 if (item.method === method && item.caller === caller) {
                     return;
@@ -136,12 +136,13 @@ module suncom {
             }
 
             // 生成事件对象
-            const event: EventInfo = new EventInfo();
-            event.type = type;
-            event.method = method;
-            event.caller = caller;
-            event.priority = priority;
-            event.receiveOnce = receiveOnce;
+            const event: IEventInfo = {
+                type: type,
+                method: method,
+                caller: caller,
+                priority: priority,
+                receiveOnce: receiveOnce
+            };
 
             if (index < 0) {
                 list.push(event);
@@ -159,7 +160,7 @@ module suncom {
             if (Common.isStringInvalidOrEmpty(type) === true) {
                 throw Error("移除无效事件！！！");
             }
-            let list: Array<boolean | EventInfo> = this.$events[type] || null;
+            let list: Array<boolean | IEventInfo> = this.$events[type] || null;
 
             // 无此类事件
             if (list === null) {
@@ -179,7 +180,7 @@ module suncom {
             }
 
             for (let i: number = 0; i < list.length; i++) {
-                const event: EventInfo = list[i] as EventInfo;
+                const event: IEventInfo = list[i] as IEventInfo;
                 if (event.method === method && event.caller === caller) {
                     list.splice(i, 1);
                     break;
