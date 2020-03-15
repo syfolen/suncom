@@ -571,11 +571,11 @@ module suncom {
          */
         export function compareVersion(ver: string): number {
             if (typeof ver !== "string") {
-                console.error(`参数版本号无效`);
+                Logger.error(`参数版本号无效`);
                 return 0;
             }
             if (typeof Global.VERSION !== "string") {
-                console.error(`版本号未设置`);
+                Logger.error(`版本号未设置`);
                 return 0;
             }
             const array: string[] = ver.split(".");
@@ -607,10 +607,10 @@ module suncom {
             }
 
             if (a === true) {
-                console.error(`参数版本号无效 ver:${ver}`);
+                Logger.error(`参数版本号无效 ver:${ver}`);
             }
             if (b === true) {
-                console.error(`当前版本号无效 ver:${Global.VERSION}`);
+                Logger.error(`当前版本号无效 ver:${Global.VERSION}`);
             }
 
             if (a === true || b === true) {

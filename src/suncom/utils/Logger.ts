@@ -11,7 +11,9 @@ module suncom {
          * export
          */
         export function log(...args: Array<any>): void {
-            console.log(args.join(" "));
+            const str: string = args.join(" ");
+            console.log(str);
+            puremvc.Facade.getInstance().sendNotification(NotifyKey.DEBUG_PRINT, [LogTypeEnum.VERBOSE, str]);
         }
 
         /**
@@ -19,7 +21,9 @@ module suncom {
          * export
          */
         export function warn(...args: Array<any>): void {
-            console.warn(args.join(" "));
+            const str: string = args.join(" ");
+            console.warn(str);
+            puremvc.Facade.getInstance().sendNotification(NotifyKey.DEBUG_PRINT, [LogTypeEnum.WARN, str]);
         }
 
         /**
@@ -27,15 +31,19 @@ module suncom {
          * export
          */
         export function error(...args: Array<any>): void {
-            console.error(args.join(" "));
+            const str: string = args.join(" ");
+            console.error(str);
+            puremvc.Facade.getInstance().sendNotification(NotifyKey.DEBUG_PRINT, [LogTypeEnum.ERROR, str]);
         }
 
         /**
          * 文件日志
          * export
          */
-        export function log2f(name: number | string, sign: number | string, text: string): void {
-
+        export function log2f(args: any[]): void {
+            const str: string = args.join(" ");
+            console.info(str);
+            puremvc.Facade.getInstance().sendNotification(NotifyKey.DEBUG_PRINT, [LogTypeEnum.LOG2F, str]);
         }
     }
 }
