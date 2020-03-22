@@ -498,6 +498,18 @@ module suncom {
         }
 
         /**
+         * 获取文件的扩展名
+         * export
+         */
+        export function getFileExtension(path: string): string {
+            const index: number = path.lastIndexOf(".");
+            if (index === -1) {
+                return null;
+            }
+            return path.substr(index + 1).toLowerCase();
+        }
+
+        /**
          * 生成HTTP签名
          */
         export function createHttpSign(params: Object): string {
