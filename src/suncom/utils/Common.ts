@@ -498,6 +498,20 @@ module suncom {
         }
 
         /**
+         * 获取文件名（不包括后缀名）
+         * export
+         */
+        export function getFileName(path: string): string {
+            const index: number = path.lastIndexOf("/");
+            if (index > -1) {
+                path = path.substr(index + 1);
+            }
+
+            const suffix: string = Common.getFileExtension(path);
+            return path.substr(0, path.length - suffix.length - 1);
+        }
+
+        /**
          * 获取文件的扩展名
          * export
          */

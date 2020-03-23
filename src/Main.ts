@@ -24,8 +24,8 @@ setTimeout(() => {
 		NAME: "TestEnumObject",
 		MODULE: "TestModule"
 	}
-	suncom.Common.addEnumString("TEST_0", TestEnumObject, true);
-	suncom.Common.addEnumString("TEST_1", TestEnumObject, true);
+	// suncom.Common.addEnumString("TEST_0", TestEnumObject, true);
+	// suncom.Common.addEnumString("TEST_1", TestEnumObject, true);
 
 	console.log(suncom.Common.isNumber("a"));
 	console.log(suncom.Common.isNumber("0x01"));
@@ -186,12 +186,15 @@ setTimeout(() => {
 
 	suncom.Global.VERSION = "1.0.1";
 
-	console.log(suncom.Common.compareVersion("1.0"));
-	console.log(suncom.Common.compareVersion("1.0.0"));
-	console.log(suncom.Common.compareVersion("1.0.1"));
-	console.log(suncom.Common.compareVersion("1.0.2"));
-	console.log(suncom.Common.compareVersion("1.1"));
-	console.log(suncom.Common.compareVersion(void 0));
-	console.log(suncom.Common.compareVersion("{"));
+	// console.log(suncom.Common.compareVersion("1.0"));
+	// console.log(suncom.Common.compareVersion("1.0.0"));
+	// console.log(suncom.Common.compareVersion("1.0.1"));
+	// console.log(suncom.Common.compareVersion("1.0.2"));
+	// console.log(suncom.Common.compareVersion("1.1"));
+	// console.log(suncom.Common.compareVersion(void 0));
+	// console.log(suncom.Common.compareVersion("{"));
+
+	console.log(suncom.Common.getFileName("http://url.xx"));
+	console.log(suncom.Common.getFileExtension("http://url.xx"));
 
 }, 500);
