@@ -6,9 +6,14 @@ module suncom {
 	 */
 	export namespace DBService {
 		/**
+		 * 自动负增长id
+		 */
+		let $id: number = 0;
+
+		/**
 		 * 数据表
 		 */
-		const $table: { [id: string]: any } = {};
+		export const $table: { [id: string]: any } = {};
 
 		/**
 		 * 获取数据
@@ -20,10 +25,18 @@ module suncom {
 
 		/**
 		 * 存储数据
+		 * @name: 若为负一，则自动生成键值
 		 * export
 		 */
-		export function put(name: number, data: any): void {
-			$table[name] = data;
+		export function put(name: number, data: any): any {
+			if (name > -1) {
+				$table[name] = data;
+			}
+			else {
+				$id++;
+				$table["auto_" + $id] = data;
+			}
+			return data;
 		}
 
 		/**
