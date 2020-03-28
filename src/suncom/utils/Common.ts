@@ -506,7 +506,6 @@ module suncom {
             if (index > -1) {
                 path = path.substr(index + 1);
             }
-
             const suffix: string = Common.getFileExtension(path);
             return path.substr(0, path.length - suffix.length - 1);
         }
@@ -520,7 +519,23 @@ module suncom {
             if (index === -1) {
                 return null;
             }
-            return path.substr(index + 1).toLowerCase();
+            else {
+                return path.substr(index + 1).toLowerCase();
+            }
+        }
+
+        /**
+         * 替换扩展名，并返回新的路径
+         * export
+         */
+        export function replacePathExtension(path: string, newExt: string): string {
+            const index: number = path.lastIndexOf(".");
+            if (index === -1) {
+                return path;
+            }
+            else {
+                return path.substr(0, index + 1) + newExt;
+            }
         }
 
         /**
