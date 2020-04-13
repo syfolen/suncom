@@ -26,7 +26,7 @@ module suncom {
          * @priority: 事件优先级，优先级高的先被执行，默认为 1
          * export
          */
-        addEventListener(type: string, method: Function, caller: Object, receiveOnce?: boolean, priority?: number): void;
+        addEventListener(type: string, method: Function, caller: Object, receiveOnce?: boolean, priority?: EventPriorityEnum): void;
 
         /**
          * 移除事件
