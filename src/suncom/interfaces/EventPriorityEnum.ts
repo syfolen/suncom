@@ -21,7 +21,7 @@ module suncom {
          * 中
          * export
          */
-        NOR,
+        MID,
 
         /**
          * 高
