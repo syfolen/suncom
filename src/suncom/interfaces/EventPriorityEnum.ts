@@ -6,13 +6,19 @@ module suncom {
      */
     export enum EventPriorityEnum {
         /**
-         * 低
+         * 最低
          * export
          */
-        LOW = 0,
+        LAZY = 0,
 
         /**
-         * 中（默认）
+         * 低（默认）
+         * export
+         */
+        LOW,
+
+        /**
+         * 中
          * export
          */
         NOR,
