@@ -241,7 +241,7 @@ module suncom {
          * 1. tmpValue值的计算会因精度问题存在误差
          */
         export function $round(value: number, n: number = 0): number {
-            console.warn(`此接口己弃用：suncom.Common.$round(value: number, n: number = 0);`);
+            Logger.warn(DebugMode.ANY, `此接口己弃用：suncom.Common.$round(value: number, n: number = 0);`);
             let tmpValue: number = Math.floor(value * Math.pow(10, n + 2));
 
             let floatValue: number = tmpValue % 100;
@@ -573,11 +573,11 @@ module suncom {
          */
         export function compareVersion(ver: string): number {
             if (typeof ver !== "string") {
-                console.error(`参数版本号无效`);
+                Logger.error(DebugMode.ANY, `参数版本号无效`);
                 return 0;
             }
             if (typeof Global.VERSION !== "string") {
-                console.error(`版本号未设置`);
+                Logger.error(DebugMode.ANY, `版本号未设置`);
                 return 0;
             }
             const array: string[] = ver.split(".");
@@ -608,10 +608,10 @@ module suncom {
             }
 
             if (error & 1) {
-                console.error(`参数版本号无效 ver:${ver}`);
+                Logger.error(DebugMode.ANY, `参数版本号无效 ver:${ver}`);
             }
             if (error & 2) {
-                console.error(`当前版本号无效 ver:${Global.VERSION}`);
+                Logger.error(DebugMode.ANY, `当前版本号无效 ver:${Global.VERSION}`);
             }
             if (error > 0) {
                 return 0;

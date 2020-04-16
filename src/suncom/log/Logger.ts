@@ -11,7 +11,7 @@ module suncom {
          * export
          */
         export function log(mod: DebugMode, ...args: any[]): void {
-            if (Global.debugMode & mod) {
+            if (Global.debugMode > 0 && (mod === DebugMode.ANY || (Global.debugMode & mod) === mod)) {
                 const str: string = args.join(" ");
                 console.log(str);
                 if (Global.debugMode === DebugMode.DEBUG) {
@@ -25,7 +25,7 @@ module suncom {
          * export
          */
         export function warn(mod: DebugMode, ...args: any[]): void {
-            if (Global.debugMode & mod) {
+            if (Global.debugMode > 0 && (mod === DebugMode.ANY || (Global.debugMode & mod) === mod)) {
                 const str: string = args.join(" ");
                 console.warn(str);
                 if (Global.debugMode === DebugMode.DEBUG) {
@@ -39,7 +39,7 @@ module suncom {
          * export
          */
         export function error(mod: DebugMode, ...args: any[]): void {
-            if (Global.debugMode & mod) {
+            if (Global.debugMode > 0 && (mod === DebugMode.ANY || (Global.debugMode & mod) === mod)) {
                 const str: string = args.join(" ");
                 console.error(str);
                 if (Global.debugMode === DebugMode.DEBUG) {
@@ -53,7 +53,7 @@ module suncom {
          * export
          */
         export function log2f(mod: DebugMode, ...args: any[]): void {
-            if (Global.debugMode & mod) {
+            if (Global.debugMode > 0 && (mod === DebugMode.ANY || (Global.debugMode & mod) === mod)) {
                 const str: string = args.join(" ");
                 console.info(str);
                 if (Global.debugMode === DebugMode.DEBUG) {

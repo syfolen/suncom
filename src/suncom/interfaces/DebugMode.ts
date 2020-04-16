@@ -6,45 +6,51 @@ module suncom {
      */
     export enum DebugMode {
         /**
+         * 任意
+         * export
+         */
+        ANY = 0x01,
+
+        /**
          * 调试信息
          * export
          */
-        DEBUG = 0x1,
+        DEBUG = 0x02,
 
         /**
          * 工程模式
          * export
          */
-        ENGINEER = 0x02,
+        ENGINEER = 0x04,
 
         /**
          * 框架
          * export
          */
-        ENGINE = 0x4,
+        ENGINE = 0x08,
 
         /**
          * 原生
          * export
          */
-        NATIVE = 0x8,
+        NATIVE = 0x10,
 
         /**
          * 网络
          * export
          */
-        NETWORK = 0x10,
+        NETWORK = 0x20,
 
         /**
          * 网络心跳
          * export
          */
-        NETWORK_HEARTBEAT = 0x20,
+        NETWORK_HEARTBEAT = 0x40,
 
         /**
          * 普通
          * export
          */
-        NORMAL = 0x40
+        NORMAL = 0x80
     }
 }
