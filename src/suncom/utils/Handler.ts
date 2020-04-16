@@ -78,7 +78,7 @@ module suncom {
          * 创建Handler的简单工厂方法
          * export
          */
-        static create(caller: Object, method: Function, args?: Array<any>): IHandler {
+        static create(caller: Object, method: Function, args?: any[]): IHandler {
             return new Handler(caller, method, args);
         }
     }

@@ -9,7 +9,7 @@ module suncom {
          * 数据源（请勿直接操作其中的数据）
          * export
          */
-        source: Array<T>;
+        source: T[];
 
         /**
          * 数据映射表（请勿直接操作其中的数据）

@@ -8,7 +8,7 @@ module suncom {
         /**
          * 对象集合
          */
-        const $pool: { [sign: string]: Array<any> } = {};
+        const $pool: { [sign: string]: any[] } = {};
 
         /**
          * 根据标识从池中获取对象，获取失败时返回null
@@ -16,7 +16,7 @@ module suncom {
          * export
          */
         export function getItem(sign: string): any {
-            const array: Array<any> = $pool[sign] || null;
+            const array: any[] = $pool[sign] || null;
             if (array !== null && array.length > 0) {
                 const item: any = array.pop();
                 delete item["__suncom__$__inPool__"];
@@ -66,7 +66,7 @@ module suncom {
                 return;
             }
             item["__suncom__$__inPool__"] = true;
-            const array: Array<any> = $pool[sign] || null;
+            const array: any[] = $pool[sign] || null;
             if (array === null) {
                 $pool[sign] = [item];
             }

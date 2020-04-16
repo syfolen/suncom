@@ -18,7 +18,7 @@ module suncom {
          * 己执行的一次性事件对象列表（内置属性，请勿操作）
          * export
          */
-        private $onceList: Array<IEventInfo> = [];
+        private $onceList: IEventInfo[] = [];
 
         /**
          * 事件是否己取消（内置属性，请勿操作）
@@ -36,7 +36,7 @@ module suncom {
 
         /**
          * 事件派发
-         * @args[]: 参数列表，允许为任意类型的数据
+         * @args: 参数列表，允许为任意类型的数据
          * @cancelable: 事件是否允许被中断，默认为false
          * export
          */
@@ -46,16 +46,9 @@ module suncom {
             }
             const list: Array<boolean | IEventInfo> = this.$events[type] || null;
 
-            // 无此类事件
-            if (list === null) {
+            if (list === null || list.length === 1) {
                 return;
             }
-
-            // 无回调函数被注册
-            if (list.length === 1) {
-                return;
-            }
-
             // 标记禁止直接更新
             list[0] = true;
 
@@ -64,7 +57,6 @@ module suncom {
             // 标记当前事件未取消
             this.$isCanceled = false;
 
-            // 响应回调
             for (let i: number = 1; i < list.length; i++) {
                 const event: IEventInfo = list[i] as IEventInfo;
                 // 一次性事件入栈
@@ -92,7 +84,7 @@ module suncom {
             list[0] = false;
 
             // 注销一次性事件
-            while (this.$onceList.length) {
+            while (this.$onceList.length > 0) {
                 const event: IEventInfo = this.$onceList.pop();
                 this.removeEventListener(event.type, event.method, event.caller);
             }
@@ -110,22 +102,19 @@ module suncom {
             }
             let list: Array<boolean | IEventInfo> = this.$events[type] || null;
 
-            // 若事件列表不存在，则新建
             if (list === null) {
                 list = this.$events[type] = [false];
             }
-            // 若当前禁止直接更新，则复制列表
+            // 复制数组以避免干扰
             else if (list[0] === true) {
-                list = this.$events[type] = list.concat();
-                // 新生成的列表允许被更新
+                list = this.$events[type] = list.slice(0);
+                // 重置标记
                 list[0] = false;
             }
 
-            // 插入索引
             let index: number = -1;
             for (let i: number = 1; i < list.length; i++) {
                 const item: IEventInfo = list[i] as IEventInfo;
-                // 事件不允许重复注册
                 if (item.method === method && item.caller === caller) {
                     return;
                 }
@@ -135,7 +124,6 @@ module suncom {
                 }
             }
 
-            // 生成事件对象
             const event: IEventInfo = {
                 type: type,
                 method: method,
@@ -162,20 +150,14 @@ module suncom {
             }
             let list: Array<boolean | IEventInfo> = this.$events[type] || null;
 
-            // 无此类事件
-            if (list === null) {
+            if (list === null || list.length === 1) {
                 return;
             }
 
-            // 无回调函数被注册
-            if (list.length === 1) {
-                return;
-            }
-
-            // 若当前禁止直接更新，则复制列表
+            // 复制数组以避免干扰
             if (list[0] === true) {
                 list = this.$events[type] = list.slice(0);
-                // 新生成的列表允许被更新
+                // 重置标记
                 list[0] = false;
             }
 

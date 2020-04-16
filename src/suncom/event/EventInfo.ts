@@ -23,7 +23,7 @@ module suncom {
         /**
          * 事件优先级
          */
-        priority: number;
+        priority: EventPriorityEnum;
 
         /**
          * 是否只响应一次

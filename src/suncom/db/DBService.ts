@@ -2,6 +2,8 @@
 module suncom {
 	/**
 	 * 伪数据库服务
+	 * 说明：
+	 * 1. 用于快速存储或读取数据，数据仅保存在内存中
 	 * export
 	 */
 	export namespace DBService {
@@ -25,12 +27,12 @@ module suncom {
 
 		/**
 		 * 存储数据
-		 * @name: 若为负一，则自动生成键值
+		 * @name: 若小于0，则存储的数据不可通过get方法获取
 		 * export
 		 */
 		export function put(name: number, data: any): any {
 			if (name > -1) {
-				$table[name] = data;
+				$table[name.toString()] = data;
 			}
 			else {
 				$id++;
@@ -44,7 +46,7 @@ module suncom {
 		 * export
 		 */
 		export function exist(name: number): boolean {
-			return $table[name] !== void 0;
+			return $table[name.toString()] !== void 0;
 		}
 
 		/**
@@ -52,7 +54,7 @@ module suncom {
 		 * export
 		 */
 		export function drop(name: number): void {
-			delete $table[name];
+			delete $table[name.toString()];
 		}
 	}
 }

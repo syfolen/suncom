@@ -68,7 +68,7 @@ module suncom {
          * export
          */
         export function convertEnumToString(value: number, oEnum: any): string {
-            const keys: Array<string> = Object.keys(oEnum);
+            const keys: string[] = Object.keys(oEnum);
             for (let i: number = 0; i < keys.length; i++) {
                 const key: string = keys[i];
                 if (oEnum[key] === value) {
@@ -110,7 +110,7 @@ module suncom {
          * 格式化字符串
          * export
          */
-        export function formatString(str: string, args: Array<any>): string {
+        export function formatString(str: string, args: any[]): string {
             const signs: string[] = ["%d", "%s"];
             while (args.length > 0) {
                 let key: string = null;
@@ -137,7 +137,7 @@ module suncom {
         /**
          * 格式化字符串
          */
-        export function formatString$(str: string, args: Array<any>): string {
+        export function formatString$(str: string, args: any[]): string {
             while (args.length > 0) {
                 if (str.indexOf("{$}") === -1) {
                     throw Error(`字符串替换未完成 str:${str}`);
@@ -147,39 +147,6 @@ module suncom {
                 }
             }
             return str;
-        }
-
-        /**
-         * 返回绝对值
-         * export
-         */
-        export function abs(a: number): number {
-            if (a < 0) {
-                return -a;
-            }
-            return a;
-        }
-
-        /**
-         * 返回a与b中的较小值
-         * export
-         */
-        export function min(a: number, b: number): number {
-            if (b < a) {
-                return b;
-            }
-            return a;
-        }
-
-        /**
-         * 返回a与b中的较大值
-         * export
-         */
-        export function max(a: number, b: number): number {
-            if (a < b) {
-                return b;
-            }
-            return a;
         }
 
         /**
@@ -198,55 +165,52 @@ module suncom {
 
         /**
          * 返回近似值
-         * 因各个平台实现的版本可能不一致，故自定义了此方法
          * @n: 需要保留小数位数，默认为0
-         * NOTE: 此方法采用了四舍六入五成双的规则来取近似值
+         * 1. 因各个平台实现的版本可能不一致，故自定义了此方法
          * export
          */
         export function round(value: number, n: number = 0): number {
             let str: string = value.toString();
 
-            const reg0: number = str.indexOf(".");
-            if (reg0 === -1) {
+            const dotIndex: number = str.indexOf(".");
+            if (dotIndex === -1) {
                 return value;
             }
 
-            const reg1: number = reg0 + 1;
-            if (str.length - reg1 <= n) {
+            const integerDotLength: number = dotIndex + 1;
+            if (str.length - integerDotLength <= n) {
                 return value;
             }
 
-            const s0: string = str.substr(0, reg0);
-            const s1: string = str.substr(reg1, n);
-            const s2: string = str.substr(reg1 + n, 2);
+            const s0: string = str.substr(0, dotIndex);
+            const s1: string = str.substr(integerDotLength, n);
+            const s2: string = str.substr(integerDotLength + n, 2);
 
             const a: string = s2.length === 1 ? s2 : s2.charAt(0);
             const b: string = s2.length === 1 ? "0" : s2.charAt(1);
 
-            // 整数值
             let intValue: number = parseInt(s0 + s1);
-            // 小数值
             let floatValue: number = parseInt(a + b);
 
             // 若整数值为负，且小数值有效，则需要修正小数值
             if (intValue < 0 && floatValue > 0) {
-                intValue--;
+                intValue -= 1;
                 floatValue = 100 - floatValue;
             }
 
             const s3: string = floatValue.toString();
             // 被修约值
-            const reg2: number = parseInt(s3.charAt(0));
+            const reg0: number = parseInt(s3.charAt(0));
             // 被修约参考值
-            const reg3: number = parseInt(s3.charAt(1));
+            const reg1: number = parseInt(s3.charAt(1));
 
             // 四舍六入
-            if (reg2 > 5) {
+            if (reg0 > 5) {
                 intValue += 1;
             }
-            else if (reg2 === 5) {
+            else if (reg0 === 5) {
                 // 当五后面有数时进一
-                if (reg3 > 0) {
+                if (reg1 > 0) {
                     intValue++;
                 }
                 // 当五后面无有效数字时，若五前为奇数，则进一
@@ -259,40 +223,45 @@ module suncom {
             }
 
             // 还原小数点，并返回
-            const s4: string = intValue.toString();
-            const reg4: number = s4.length - n;
+            const newValue: string = intValue.toString();
+            const newDotIndex: number = newValue.length - n;
 
-            const s5: string = `${s4.substr(0, reg4)}.${s4.substr(reg4)}`;
-            const reg5: number = parseFloat(s5);
+            const retValue: string = `${newValue.substr(0, newDotIndex)}.${newValue.substr(newDotIndex)}`;
+            const retValueF: number = parseFloat(retValue);
 
-            return reg5;
+            return retValueF;
         }
 
         /**
          * 返回四舍五入后的结果
-         * 因各个平台实现的版本可能不一致，故自定义了此方法
          * @n: 保留小数位数，默认为0
+         * 说明：
+         * 1. 因各个平台实现的版本可能不一致，故自定义了此方法
+         * 弃用原因：
+         * 1. tmpValue值的计算会因精度问题存在误差
          */
         export function $round(value: number, n: number = 0): number {
-            // 多保留一位小数点
-            let multiples: number = Math.pow(10, n + 1);
-            // 临时值（去小数点）
-            let tmpValue: number = Math.floor(value * multiples);
-            // 浮点值
-            let floatValue: number = tmpValue % 10;
-            // 整数值
-            let intValue: number = (tmpValue - floatValue) / 10;
-            // 若浮点值小于 0 ，则进行修正
-            if (floatValue < 0) {
+            console.warn(`此接口己弃用：suncom.Common.$round(value: number, n: number = 0);`);
+            let tmpValue: number = Math.floor(value * Math.pow(10, n + 2));
+
+            let floatValue: number = tmpValue % 100;
+            let intValue: number = (tmpValue - floatValue) / 100;
+
+            // 若整数值为负，且小数值有效，则需要修正小数值
+            if (floatValue < 0 && floatValue > 0) {
                 intValue -= 1;
-                floatValue += 10;
+                floatValue += 100;
             }
+
+            const a: number = floatValue % 10;
+            const b: number = (floatValue - a) / 10;
+
             // 四舍六入五成双
-            if (floatValue > 5) {
+            if (b > 5) {
                 intValue += 1;
             }
-            else if (floatValue === 5) {
-                const modValue: number = intValue % 2;
+            else if (b === 5) {
+                const modValue: number = a % 2;
                 if (modValue === 1 || modValue === -1) {
                     intValue += 1;
                 }
@@ -331,9 +300,9 @@ module suncom {
             // 自定义格式
             if (typeof date === "string") {
                 // 自定义时间格式 yyyy-MM-dd hh:mm:ss 或 hh:mm:ss
-                const array: Array<string> = date.split(" ");
-                const dates: Array<string> = array.length === 1 ? [] : array.shift().split("-");
-                const times: Array<string> = array[0].split(":");
+                const array: string[] = date.split(" ");
+                const dates: string[] = array.length === 1 ? [] : array.shift().split("-");
+                const times: string[] = array[0].split(":");
                 if (times.length === 3) {
                     if (dates.length === 0) {
                         const a: Date = new Date();
@@ -415,50 +384,43 @@ module suncom {
             const d1: Date = Common.convertToDate(date);
             const d2: Date = Common.convertToDate(date2);
 
-            let time: number = d1.valueOf();
-            let time2: number = d2.valueOf();
-
+            let t1: number = d1.valueOf();
+            let t2: number = d2.valueOf();
             if (datepart === "ms") {
-                return time2 - time;
+                return t2 - t1;
             }
 
-            time = Math.floor(time / 1000);
-            time2 = Math.floor(time2 / 1000);
-
+            t1 = Math.floor(t1 / 1000);
+            t2 = Math.floor(t2 / 1000);
             if (datepart === "ss") {
-                return time2 - time;
+                return t2 - t1;
             }
 
-            time = Math.floor(time / 60);
-            time2 = Math.floor(time2 / 60);
-
+            t1 = Math.floor(t1 / 60);
+            t2 = Math.floor(t2 / 60);
             if (datepart === "mm") {
-                return time2 - time;
+                return t2 - t1;
             }
 
-            time = Math.floor(time / 60);
-            time2 = Math.floor(time2 / 60);
-
+            t1 = Math.floor(t1 / 60);
+            t2 = Math.floor(t2 / 60);
             if (datepart === "hh") {
-                return time2 - time;
+                return t2 - t1;
             }
 
-            time = Math.floor(time / 24);
-            time2 = Math.floor(time2 / 24);
-
+            t1 = Math.floor(t1 / 24);
+            t2 = Math.floor(t2 / 24);
             if (datepart === "dd") {
-                return time2 - time;
+                return t2 - t1;
             }
 
             if (datepart === "ww") {
                 //1970/1/1是星期四，故应当减去4天
-                return Math.floor(((time2 - 4) - (time - 4)) / 7);
+                return Math.floor(((t2 - 4) - (t1 - 4)) / 7);
             }
-
             if (datepart === "MM") {
                 return d2.getMonth() - d1.getMonth() + (d2.getFullYear() - d1.getFullYear()) * 12;
             }
-
             if (datepart === "yy") {
                 return d2.getFullYear() - d1.getFullYear();
             }
@@ -491,9 +453,9 @@ module suncom {
 
         /**
          * 返回MD5加密后的串
+         * export
          */
         export function md5(str: string): string {
-            // return new md5().hex_md5(str);
             throw Error("未实现的接口！！！");
         }
 
@@ -540,18 +502,21 @@ module suncom {
 
         /**
          * 生成HTTP签名
+         * @key: 密钥
+         * @sign: 忽略签名字段，默认为："sign"
+         * export
          */
-        export function createHttpSign(params: Object): string {
-            const keys: Array<string> = Object.keys(params).sort();
-            const array: Array<string> = [];
+        export function createHttpSign(params: Object, key: string, sign: string = "sign"): string {
+            const keys: string[] = Object.keys(params).sort();
+            const array: string[] = [];
 
             for (let i: number = 0; i < keys.length; i++) {
                 const key: string = keys[i];
-                if (key !== "sign") {
+                if (key !== sign) {
                     array.push(`${key}=${params[key]}`);
                 }
             }
-            array.push("key=123456789012345678");
+            array.push(`key=${key}`);
 
             return Common.md5(array.join("&"));
         }
@@ -600,10 +565,6 @@ module suncom {
         }
 
         /**
-         * 版本比较
-         */
-
-        /**
          * 比较版本号
          * 若当前版本低于参数版本，返回 -1
          * 若当前版本高于参数版本，返回 1
@@ -612,11 +573,11 @@ module suncom {
          */
         export function compareVersion(ver: string): number {
             if (typeof ver !== "string") {
-                Logger.error(`参数版本号无效`);
+                console.error(`参数版本号无效`);
                 return 0;
             }
             if (typeof Global.VERSION !== "string") {
-                Logger.error(`版本号未设置`);
+                console.error(`版本号未设置`);
                 return 0;
             }
             const array: string[] = ver.split(".");
@@ -631,38 +592,34 @@ module suncom {
                 array2.push("0");
             }
 
-            let a: boolean = false;
-            let b: boolean = false;
+            let error: number = 0;
 
             for (let i: number = 0; i < length; i++) {
                 const s0: string = array[i];
                 const s1: string = array2[i];
                 if (Common.isNumber(s0) === false) {
-                    a = true;
+                    error = (error & 1);
                     array[i] = "0";
                 }
                 if (Common.isNumber(s1) === false) {
-                    b = true;
+                    error = (error & 2);
                     array2[i] = "0";
                 }
             }
 
-            if (a === true) {
-                Logger.error(`参数版本号无效 ver:${ver}`);
+            if (error & 1) {
+                console.error(`参数版本号无效 ver:${ver}`);
             }
-            if (b === true) {
-                Logger.error(`当前版本号无效 ver:${Global.VERSION}`);
+            if (error & 2) {
+                console.error(`当前版本号无效 ver:${Global.VERSION}`);
             }
-
-            if (a === true || b === true) {
+            if (error > 0) {
                 return 0;
             }
 
             for (let i: number = 0; i < length; i++) {
-                const s0: string = array[i];
-                const s1: string = array2[i];
-                const reg0: number = Number(s0);
-                const reg1: number = Number(s1);
+                const reg0: number = Number(array[i]);
+                const reg1: number = Number(array2[i]);
                 if (reg0 < reg1) {
                     return 1;
                 }

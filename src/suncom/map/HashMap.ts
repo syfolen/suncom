@@ -14,7 +14,7 @@ module suncom {
          * 数据源（请勿直接操作其中的数据）
          * export
          */
-        source: Array<T> = [];
+        source: T[] = [];
 
         /**
          * 哈希表（请勿直接操作其中的数据）
