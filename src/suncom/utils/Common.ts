@@ -65,7 +65,6 @@ module suncom {
 
         /**
          * 将枚举转化成字符串
-         * export
          */
         export function convertEnumToString(value: number, oEnum: any): string {
             const keys: string[] = Object.keys(oEnum);
@@ -112,24 +111,28 @@ module suncom {
          */
         export function formatString(str: string, args: any[]): string {
             const signs: string[] = ["%d", "%s"];
+
+            let index: number = 0;
             while (args.length > 0) {
                 let key: string = null;
-                let index: number = -1;
+                let indexOfReplace: number = -1;
                 for (let i: number = 0; i < signs.length; i++) {
                     const sign: string = signs[i];
-                    const indexOfSign: number = str.indexOf(sign);
+                    const indexOfSign: number = str.indexOf(sign, index);
                     if (indexOfSign === -1) {
                         continue;
                     }
-                    if (index === -1 || indexOfSign < index) {
+                    if (indexOfReplace === -1 || indexOfSign < indexOfReplace) {
                         key = sign;
-                        index = indexOfSign;
+                        indexOfReplace = indexOfSign;
                     }
                 }
-                if (index === -1) {
+                if (indexOfReplace === -1) {
                     throw Error(`字符串替换未完成 str:${str}`);
                 }
-                str = str.replace(key, args.shift());
+                const suffix: string = str.substr(indexOfReplace + key.length);
+                str = str.substr(0, indexOfReplace) + args.shift() + suffix;
+                index = str.length - suffix.length;
             }
             return str;
         }
@@ -138,13 +141,15 @@ module suncom {
          * 格式化字符串
          */
         export function formatString$(str: string, args: any[]): string {
+            let index: number = 0;
             while (args.length > 0) {
-                if (str.indexOf("{$}") === -1) {
+                const indexOfSign: number = str.indexOf("{$}", index);
+                if (index === -1) {
                     throw Error(`字符串替换未完成 str:${str}`);
                 }
-                else {
-                    str = str.replace("{$}", args.shift());
-                }
+                const suffix: string = str.substr(indexOfSign + 3);
+                str = str.substr(0, indexOfSign) + args.shift() + suffix;
+                index = str.length - suffix.length;
             }
             return str;
         }
@@ -339,7 +344,7 @@ module suncom {
                 // 增加余数的年份
                 const month: number = date.getMonth() + rem;
                 if (month > 11) {
-                    date.setMonth(month - 11);
+                    date.setMonth(month - 12);
                     date.setFullYear(date.getFullYear() + 1);
                 }
                 else if (month < 0) {
@@ -598,19 +603,19 @@ module suncom {
                 const s0: string = array[i];
                 const s1: string = array2[i];
                 if (Common.isNumber(s0) === false) {
-                    error = (error & 1);
+                    error |= 0x01;
                     array[i] = "0";
                 }
                 if (Common.isNumber(s1) === false) {
-                    error = (error & 2);
+                    error |= 0x02;
                     array2[i] = "0";
                 }
             }
 
-            if (error & 1) {
+            if (error & 0x1) {
                 Logger.error(DebugMode.ANY, `参数版本号无效 ver:${ver}`);
             }
-            if (error & 2) {
+            if (error & 0x2) {
                 Logger.error(DebugMode.ANY, `当前版本号无效 ver:${Global.VERSION}`);
             }
             if (error > 0) {

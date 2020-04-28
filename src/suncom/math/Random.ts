@@ -22,6 +22,9 @@ module suncom {
          * export
          */
         export function seed(value: number): void {
+            if (value < 1) {
+                throw Error("随机种子不允许小于1");
+            }
             $r = value;
         }
 
