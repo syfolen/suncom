@@ -129,6 +129,14 @@ module test {
             console.assert(suncom.Common.formatDate("yyyy-MM-dd hh:mm:ss ms", suncom.Common.dateAdd("ss", 31, "1993-12-10 12:11:15")) === "1993-12-10 12:11:46 0", `秒累加有误`);
             console.assert(suncom.Common.formatDate("yyyy-MM-dd hh:mm:ss ms", suncom.Common.dateAdd("ms", 31, "1993-12-10 12:11:15")) === "1993-12-10 12:11:15 31", `毫秒累加有误`);
 
+            console.assert(suncom.Common.formatDate("yyyy-MM-dd hh:mm:ss ms", suncom.Common.dateAdd("yy", -31, "1993-12-10 12:11:15")) === "1962-12-10 12:11:15 0", `年减少有误`);
+            console.assert(suncom.Common.formatDate("yyyy-MM-dd hh:mm:ss ms", suncom.Common.dateAdd("MM", -31, "1993-12-10 12:11:15")) === "1991-05-10 12:11:15 0", `月减少有误`);
+            console.assert(suncom.Common.formatDate("yyyy-MM-dd hh:mm:ss ms", suncom.Common.dateAdd("dd", -31, "1993-12-10 12:11:15")) === "1993-11-09 12:11:15 0", `日减少有误`);
+            console.assert(suncom.Common.formatDate("yyyy-MM-dd hh:mm:ss ms", suncom.Common.dateAdd("hh", -31, "1993-12-10 12:11:15")) === "1993-12-09 05:11:15 0", `时减少有误`);
+            console.assert(suncom.Common.formatDate("yyyy-MM-dd hh:mm:ss ms", suncom.Common.dateAdd("mm", -31, "1993-12-10 12:11:15")) === "1993-12-10 11:40:15 0", `分减少有误`);
+            console.assert(suncom.Common.formatDate("yyyy-MM-dd hh:mm:ss ms", suncom.Common.dateAdd("ss", -31, "1993-12-10 12:11:15")) === "1993-12-10 12:10:44 0", `秒减少有误`);
+            console.assert(suncom.Common.formatDate("yyyy-MM-dd hh:mm:ss ms", suncom.Common.dateAdd("ms", -31, "1993-12-10 12:11:15")) === "1993-12-10 12:11:14 969", `毫秒减少有误`);
+
             // console.log(suncom.Common.createHttpSign({ a: 1, b: "yes" }));
 
             console.assert(suncom.Common.getFileName("http://url.xx") === "url", `文件名获取有误，应当为url`);
