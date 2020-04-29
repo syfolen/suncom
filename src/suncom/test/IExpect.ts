@@ -92,19 +92,19 @@ module suncom {
         toBeLessOrEqualThan(value: number): void;
 
         /**
-         * 是否与期望对象一致
+         * 深度相等
          * export
          */
         toEqual(value: any): void;
 
         /**
-         * 是否与期望对象完成一致
+         * 深度相等且类型一致
          * export
          */
         toStrictEqual(value: any): void;
 
         /**
-         * 测试与期望接口相反的情形
+         * 期望相反
          * export
          */
         readonly not: IExpect;

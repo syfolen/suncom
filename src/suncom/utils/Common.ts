@@ -572,6 +572,89 @@ module suncom {
         }
 
         /**
+         * 判断深度相等
+         * export
+         */
+        export function isEqual(oldData: any, newData: any, strict: boolean): boolean {
+            if (oldData === newData) {
+                return true;
+            }
+            // NaN 比较特别
+            if (typeof oldData === "number" && typeof newData === "number" && isNaN(oldData) && isNaN(newData)) {
+                return true;
+            }
+            // 比较数组
+            if (oldData instanceof Array && newData instanceof Array && oldData.length === newData.length) {
+                if (strict === false) {
+                    oldData = oldData.slice();
+                    newData = newData.slice();
+                    oldData.sort();
+                    newData.sort();
+                }
+                // 类型为数组并且数组长度相同
+                for (let i: number = 0; i < oldData.length; i++) {
+                    if (Common.isEqual(oldData[i], newData[i], strict) === false) {
+                        return false;
+                    }
+                }
+                return true;
+            }
+            else if (oldData instanceof Object && newData instanceof Object && Object.keys(oldData).length === Object.keys(newData).length) {
+                if (strict === true && oldData.constructor !== newData.constructor) {
+                    return false;
+                }
+                for (const key in oldData) {
+                    if (oldData.hasOwnProperty(key) === true && Common.isEqual(oldData[key], newData[key], strict) === false) {
+                        return false;
+                    }
+                }
+                return true;
+            }
+            // 其它类型,均返回 false
+            else {
+                return false;
+            }
+        }
+
+        /**
+         * 将对象转化为字符串
+         */
+        export function toDisplayString(data: any): string {
+            if (data === void 0 || data === null) {
+                return data;
+            }
+            if (typeof data === "number" || typeof data === "string" || typeof data === "boolean") {
+                return data.toString();
+            }
+
+            let str: string;
+
+            if (data instanceof Array) {
+                const array: string[] = [];
+                for (let i: number = 0; i < data.length; i++) {
+                    array.push(Common.toDisplayString(data[i]));
+                }
+                return `[${array.join(",")}]`;
+            }
+            else {
+                const json: any = {};
+                for (const key in data) {
+                    if (data.hasOwnProperty(key) === true) {
+                        json[key] = data[key];
+                    }
+                }
+                try {
+                    str = JSON.stringify(data);
+                }
+                catch (error) {
+                    str = JSON.stringify(json);
+                }
+            }
+
+            return str;
+        }
+
+        /**
          * 比较版本号
          * 若当前版本低于参数版本，返回 -1
          * 若当前版本高于参数版本，返回 1
