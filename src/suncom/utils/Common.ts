@@ -326,7 +326,8 @@ module suncom {
          * 时间累加
          * @datepart: yy, MM, ww, dd, hh, mm, ss, ms
          * @increment： 增量，可为负
-         * @arg2: 时间参数
+         * @time: 时间参数
+         * @return: 时间戳
          * export
          */
         export function dateAdd(datepart: string, increment: number, time: string | number | Date): number {
@@ -383,6 +384,7 @@ module suncom {
         /**
          * 计算时间差
          * @datepart: yy, MM, ww, dd, hh, mm, ss, ms
+         * @return: 时间戳
          * export
          */
         export function dateDiff(datepart: string, date: string | number | Date, date2: string | number | Date): number {
