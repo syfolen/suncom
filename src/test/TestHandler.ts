@@ -4,25 +4,25 @@ module test {
     export class TestHandler {
 
         constructor() {
-            console.log("test Handler");
-
+            console.log("TestHandler");
+            
             const a = new A();
             const b = new B();
             const data: IData = { msg: 0 };
 
             let handler: suncom.IHandler = suncom.Handler.create(a, a.test, [data]);
             handler.run();
-            console.assert(data.msg === 1, `执行器运行未成功`);
+            suncom.Test.expect(data.msg).toBe(1);
 
             data.msg = 0;
             handler = suncom.Handler.create(b, a.test, [data]);
             handler.run();
-            console.assert(data.msg === 2, `执行器作用域未绑定成功`);
+            suncom.Test.expect(data.msg).toBe(2);
 
             data.msg = 0;
             handler = suncom.Handler.create(a, a.test, [data]);
             handler.runWith({ msg: 5 });
-            console.assert(data.msg === 6, `执行器传参未成功`);
+            suncom.Test.expect(data.msg).toBe(6);
         }
     }
 
