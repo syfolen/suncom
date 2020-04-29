@@ -4,24 +4,21 @@ module test {
     export class TestPool {
 
         constructor() {
-            console.log("test pool");
-
+            console.log("TestPool");
+            
             const a = suncom.Pool.getItemByClass("A", A);
-            console.assert(a instanceof A, `对象池创建对象失败`);
+            suncom.Test.expect(a).toBeInstanceOf(A);
 
             suncom.Pool.recover("A", a);
-            console.assert(a["__suncom__$__inPool__"] === true, `存储对象失败`);
+            suncom.Test.assertTrue(a["__suncom__$__inPool__"]);
             suncom.Pool.recover("A", a);
 
-            const b = suncom.Pool.getItem("A");
-            console.assert(a === b, `获取对象失败`);
-
-            const c = suncom.Pool.getItem("A");
-            console.assert(c === null, `存储对象未排重`);
+            suncom.Test.expect(suncom.Pool.getItem("A")).toBe(a);
+            suncom.Test.expect(suncom.Pool.getItem("A")).toBeNull();
 
             suncom.Pool.recover("A", a);
             suncom.Pool.clear("A");
-            console.assert(suncom.Pool.getItem("A") === null, `清理对象失败`);
+            suncom.Test.expect(suncom.Pool.getItem("A")).toBeNull();
         }
     }
 
