@@ -4,7 +4,7 @@ module test {
     export class TestRandom {
 
         constructor() {
-            console.log("TestRandom");
+            console.log("test Random");
 
             suncom.Random.seed(1);
 
@@ -30,7 +30,7 @@ module test {
                 suncom.Random.random(),
                 suncom.Random.random()
             ];
-            suncom.Test.expect(array).toEqual(array2);
+            this.$aEqualsB(array, array2);
 
             // console.log(array.join(","));
 
@@ -38,6 +38,17 @@ module test {
             //     suncom.Random.random();
             // }
             // console.log(suncom.Random.random());
+        }
+
+        private $aEqualsB<T>(a: T[], b: T[]): void {
+            a = a.slice();
+            b = b.slice();
+            a.sort();
+            b.sort();
+            console.assert(a.length === b.length, `当前：[${a.join(",")}], 预期：[${b.join(",")}]`);
+            for (let i = 0; i < a.length; i++) {
+                console.assert(a[i] === b[i], `当前：[${a.join(",")}], 预期：[${b.join(",")}]`);
+            }
         }
     }
 }

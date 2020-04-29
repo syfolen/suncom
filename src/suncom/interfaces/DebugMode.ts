@@ -13,7 +13,6 @@ module suncom {
 
         /**
          * 测试信息
-         * export
          */
         TEST = 0x02,
 

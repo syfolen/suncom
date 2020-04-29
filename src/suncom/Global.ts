@@ -15,7 +15,7 @@ module suncom {
          * 调试模式
          * export
          */
-        export let debugMode: DebugMode = DebugMode.TEST;
+        export let debugMode: DebugMode = 0;
 
         /**
          * 设计分辨率
