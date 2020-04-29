@@ -292,6 +292,10 @@ module suncom {
             }
         }
 
+        /**
+         * 测试与期望接口相反的情形
+         * export
+         */
         get not(): IExpect {
             this.$asNot = true;
             return this as any;
