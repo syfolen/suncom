@@ -50,11 +50,12 @@ module suncom {
         test(pass: boolean, message: string): void {
             if ((this.$asNot === false && pass === false) || (this.$asNot === true && pass === true)) {
                 Test.ASSERT_FAILED = true;
-                message !== null && suncom.Logger.error(DebugMode.ANY, message);
-                this.$interpretation !== null && suncom.Logger.error(DebugMode.ANY, this.$interpretation);
+                message !== null && Logger.error(DebugMode.ANY, message);
+                this.$interpretation !== null && Logger.error(DebugMode.ANY, this.$interpretation);
                 if (Test.ASSERT_BREAKPOINT === true) {
                     debugger;
                 }
+                throw Error("测试失败！");
             }
         }
 
@@ -152,7 +153,7 @@ module suncom {
         toBeInstanceOf(cls: new () => any): void {
             if (Global.debugMode & DebugMode.TEST) {
                 const pass: boolean = this.$value instanceof cls;
-                const message: string = `期望 ${suncom.Common.getQualifiedClassName(this.$value)} 的类型${this.$asNot === false ? "" : "不"}为 ${Common.getClassName(cls)}`;
+                const message: string = `期望 ${Common.getQualifiedClassName(this.$value)} 的类型${this.$asNot === false ? "" : "不"}为 ${Common.getClassName(cls)}`;
                 this.test(pass, message);
             }
         }
@@ -240,7 +241,7 @@ module suncom {
          */
         toEqual(value: any): void {
             if (Global.debugMode & DebugMode.TEST) {
-                const pass: boolean = suncom.Common.isEqual(this.$value, value, false);
+                const pass: boolean = Common.isEqual(this.$value, value, false);
                 const message: string = `期望相等：${Common.toDisplayString(value)}，实际值：${Common.toDisplayString(this.$value)}`;
                 this.test(pass, message);
             }
@@ -251,7 +252,7 @@ module suncom {
          */
         toStrictEqual(value: any): void {
             if (Global.debugMode & DebugMode.TEST) {
-                const pass: boolean = suncom.Common.isEqual(this.$value, value, true);
+                const pass: boolean = Common.isEqual(this.$value, value, true);
                 const message: string = `期望相等：${Common.toDisplayString(value)}，实际值：${Common.toDisplayString(this.$value)}`;
                 this.test(pass, message);
             }

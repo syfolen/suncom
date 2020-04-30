@@ -65,7 +65,7 @@ module suncom {
          * 期望对象类型为：cls
          * export
          */
-        toBeInstanceOf(cls: new () => any): void;
+        toBeInstanceOf(cls: new (...args: any[]) => any): void;
 
         /**
          * 期望在不关心类型的情况下，值在布尔上下文中为假

@@ -18,6 +18,20 @@ module suncom {
         export let ASSERT_BREAKPOINT: boolean = true;
 
         /**
+         * 启用微服务器，默认为：false
+         * export
+         */
+        export let ENABLE_MICRO_SERVER: boolean = false;
+
+        /**
+         * 测试信号
+         */
+        const signal: ISingal = {
+            id: -1,
+            handler: null
+        };
+
+        /**
          * 期望测试
          * export
          */
@@ -52,6 +66,33 @@ module suncom {
         export function assertFalse(value: boolean, message?: string): void {
             if (Global.debugMode & DebugMode.TEST) {
                 new Expect().test(value === false, message || `Test.assertFalse error，实际值：${Common.toDisplayString(value)}`);
+            }
+        }
+
+        /**
+         * 等待信号，同一时间只允许监听一个测试信号
+         * export
+         */
+        export function wait(id: number, handler: IHandler): void {
+            if (Global.debugMode & DebugMode.TEST) {
+                Test.expect(id).interpret("信号ID必须大于或等于0").toBeGreaterOrEqualThan(0);
+                Test.expect(handler).interpret("必须设置有效的信号回调").toBeInstanceOf(Handler);
+                Test.expect(signal.id).interpret("同一时间只允许监听一个测试信号").toBe(-1);
+                signal.id = id;
+                signal.handler = handler || null;
+            }
+        }
+
+        /**
+         * 发送信号
+         * export
+         */
+        export function emit(id: number, args?: any): void {
+            if (Global.debugMode & DebugMode.TEST) {
+                if (signal.id > -1 && signal.id === id) {
+                    signal.id = -1;
+                    signal.handler.runWith(args);
+                }
             }
         }
     }
