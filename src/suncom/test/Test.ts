@@ -6,13 +6,13 @@ module suncom {
      */
     export namespace Test {
         /**
-         * 断言是否失败
+         * 断言是否失败，默认为：false
          * export
          */
         export let ASSERT_FAILED: boolean = false;
 
         /**
-         * 断言失败时是否自动断点
+         * 断言失败时是否自动断点，默认为：true
          * export
          */
         export let ASSERT_BREAKPOINT: boolean = true;
