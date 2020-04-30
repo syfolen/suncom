@@ -30,7 +30,9 @@ module suncom {
          * export
          */
         export function notExpected(): void {
-            new Expect().test(false, `Test.notExpected 期望之外的`);
+            if (Global.debugMode & DebugMode.TEST) {
+                new Expect().test(false, `Test.notExpected 期望之外的`);
+            }
         }
 
         /**

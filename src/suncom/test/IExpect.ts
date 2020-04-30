@@ -7,6 +7,12 @@ module suncom {
     export interface IExpect {
 
         /**
+         * 解释异常
+         * export
+         */
+        interpret(str: string): IExpect;
+
+        /**
          * 期望为任意值，但不为null和undefined
          * export
          */

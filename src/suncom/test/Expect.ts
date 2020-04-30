@@ -15,6 +15,11 @@ module suncom {
         private $asNot: boolean = false;
 
         /**
+         * 对异常的解释说明
+         */
+        private $interpretation: string = null;
+
+        /**
          * 测试描述
          */
         constructor(description: string = null) {
@@ -32,12 +37,21 @@ module suncom {
         }
 
         /**
+         * 解释异常
+         */
+        interpret(str: string): IExpect {
+            this.$interpretation = str;
+            return this;
+        }
+
+        /**
          * 测试执行接口，若测试未通过，则输出description
          */
         test(pass: boolean, message: string): void {
             if ((this.$asNot === false && pass === false) || (this.$asNot === true && pass === true)) {
                 Test.ASSERT_FAILED = true;
                 message !== null && suncom.Logger.error(DebugMode.ANY, message);
+                this.$interpretation !== null && suncom.Logger.error(DebugMode.ANY, this.$interpretation);
                 if (Test.ASSERT_BREAKPOINT === true) {
                     debugger;
                 }

@@ -16,7 +16,7 @@ module test {
             hashMap.put(y);
             try {
                 hashMap.put(z);
-                suncom.Test.outOfExpection();
+                suncom.Test.notExpected();
             }
             catch (error) {
 
