@@ -37,9 +37,9 @@ module suncom {
          * 测试表达式是否为true
          * export
          */
-        export function assertTrue(value: boolean, description?: string): void {
+        export function assertTrue(value: boolean, message?: string): void {
             if (Global.debugMode & DebugMode.TEST) {
-                new Expect(description).test(value, description || `Test.assertTrue error，实际值：${Common.toDisplayString(value)}`);
+                new Expect().test(value, message || `Test.assertTrue error，实际值：${Common.toDisplayString(value)}`);
             }
         }
 
@@ -47,9 +47,9 @@ module suncom {
          * 测试表达式是否为false
          * export
          */
-        export function assertFalse(value: boolean, description?: string): void {
+        export function assertFalse(value: boolean, message?: string): void {
             if (Global.debugMode & DebugMode.TEST) {
-                new Expect(description).test(value === false, description || `Test.assertFalse error，实际值：${Common.toDisplayString(value)}`);
+                new Expect().test(value === false, message || `Test.assertFalse error，实际值：${Common.toDisplayString(value)}`);
             }
         }
     }
