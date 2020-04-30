@@ -22,8 +22,8 @@ module test {
             console.log("TestCommon");
 
             suncom.Test.expect(suncom.Common.getClassName(Abc)).toBe("Abc");
-            suncom.Test.expect(suncom.Common.getMethodName(TestFunc)).toBe("TestFunc");
             suncom.Test.expect(suncom.Common.getQualifiedClassName(new Abc())).toBe("Abc");
+            suncom.Test.expect(suncom.Common.getMethodName(TestFunc)).toBe("TestFunc");
 
             const abc = new Abc();
             suncom.Test.expect(suncom.Common.getMethodName(abc.func, abc)).toBe("func");
@@ -36,6 +36,7 @@ module test {
             suncom.Test.assertFalse(suncom.Common.isNumber(void 0));
             suncom.Test.assertTrue(suncom.Common.isNumber("11.5"));
             suncom.Test.assertTrue(suncom.Common.isNumber(11.6));
+            suncom.Test.assertFalse(suncom.Common.isNumber(abc as any));
 
             suncom.Test.assertTrue(suncom.Common.isStringInvalidOrEmpty(""));
             suncom.Test.assertFalse(suncom.Common.isStringInvalidOrEmpty("null"));

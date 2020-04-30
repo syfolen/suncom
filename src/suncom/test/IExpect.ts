@@ -62,6 +62,18 @@ module suncom {
         toBeInstanceOf(cls: new () => any): void;
 
         /**
+         * 期望在不关心类型的情况下，值在布尔上下文中为假
+         * export
+         */
+        toBeFalsy(value: any): void;
+
+        /**
+         * 期望在不关心类型的情况下，值在布尔上下文中为真
+         * export
+         */
+        toBeTruthy(value: any): void;
+
+        /**
          * 期望两个数字是否相等
          * @deviation: 误差，默认为：0
          */

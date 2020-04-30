@@ -144,6 +144,28 @@ module suncom {
         }
 
         /**
+         * 期望在不关心类型的情况下，值在布尔上下文中为假
+         */
+        toBeFalsy(value: any): void {
+            if (Global.debugMode & DebugMode.TEST) {
+                const pass: boolean = value ? false : true;
+                const description: string = `期望 ${Common.toDisplayString(value)} ${this.$asNot === false ? "" : "不"}为假, 实际值：${Common.toDisplayString(this.$value)}`;
+                this.test(pass, description);
+            }
+        }
+
+        /**
+         * 期望在不关心类型的情况下，值在布尔上下文中为真
+         */
+        toBeTruthy(value: any): void {
+            if (Global.debugMode & DebugMode.TEST) {
+                const pass: boolean = value ? true : false;
+                const description: string = `期望 ${Common.toDisplayString(value)} ${this.$asNot === false ? "" : "不"}为假, 实际值：${Common.toDisplayString(this.$value)}`;
+                this.test(pass, description);
+            }
+        }
+
+        /**
          * 期望两个数字是否相等
          * @deviation: 误差，默认为：0
          */
