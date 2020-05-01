@@ -43,9 +43,9 @@ module suncom {
          * 期望之外的，执行此方法时直接触发ASSERT_FAILED
          * export
          */
-        export function notExpected(): void {
+        export function notExpected(message?: string): void {
             if (Global.debugMode & DebugMode.TEST) {
-                new Expect().test(false, `Test.notExpected 期望之外的`);
+                new Expect().test(false, message || `Test.notExpected 期望之外的`);
             }
         }
 
