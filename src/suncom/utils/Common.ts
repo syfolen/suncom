@@ -637,17 +637,11 @@ module suncom {
                 return `[${array.join(",")}]`;
             }
             else {
-                const json: any = {};
-                for (const key in data) {
-                    if (data.hasOwnProperty(key) === true) {
-                        json[key] = data[key];
-                    }
-                }
                 try {
                     str = JSON.stringify(data);
                 }
                 catch (error) {
-                    str = JSON.stringify(json);
+                    str = `[${Common.getQualifiedClassName(data)}]`;
                 }
             }
 
