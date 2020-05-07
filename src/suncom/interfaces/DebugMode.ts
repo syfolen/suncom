@@ -12,51 +12,57 @@ module suncom {
         ANY = 0x01,
 
         /**
+         * 自动验收测试
+         * export
+         */
+        AAT = 0x02,
+
+        /**
          * 测试信息
          * export
          */
-        TEST = 0x02,
+        TEST = 0x04,
 
         /**
          * 调试信息
          * export
          */
-        DEBUG = 0x04,
+        DEBUG = 0x08,
 
         /**
          * 工程模式
          * export
          */
-        ENGINEER = 0x08,
+        ENGINEER = 0x10,
 
         /**
          * 框架
          * export
          */
-        ENGINE = 0x10,
+        ENGINE = 0x20,
 
         /**
          * 原生
          * export
          */
-        NATIVE = 0x20,
+        NATIVE = 0x40,
 
         /**
          * 网络
          * export
          */
-        NETWORK = 0x40,
+        NETWORK = 0x80,
 
         /**
          * 网络心跳
          * export
          */
-        NETWORK_HEARTBEAT = 0x80,
+        NETWORK_HEARTBEAT = 0x100,
 
         /**
          * 普通
          * export
          */
-        NORMAL = 0x100
+        NORMAL = 0x200
     }
 }
