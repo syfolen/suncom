@@ -63,11 +63,15 @@ module suncom {
 
         /**
          * 等待信号，同一时间只允许监听一个测试信号
+         * @line: 是否进入测试队列，若为false，则需要指定handler，默认为：true
          * export
          */
-        export function wait(id: number, handler: IHandler = null): void {
+        export function wait(id: number, handler: IHandler = null, line: boolean = true, once: boolean = true): void {
             if (Global.debugMode & DebugMode.TEST) {
-                puremvc.Facade.getInstance().sendNotification(NotifyKey.TEST_WAIT, [id, handler]);
+                if (line === false) {
+                    suncom.Test.expect(handler).not.toBeUndefined();
+                }
+                puremvc.Facade.getInstance().sendNotification(NotifyKey.TEST_EVENT, [id, TestActKindEnum.SIGNAL_WAIT, handler, line, once]);
             }
         }
 
@@ -75,9 +79,9 @@ module suncom {
          * 发射信号
          * export
          */
-        export function emit(id: number, args?: any): void {
+        export function emit(id: number, args?: any, line: boolean = false): void {
             if (Global.debugMode & DebugMode.TEST) {
-                puremvc.Facade.getInstance().sendNotification(NotifyKey.TEST_EMIT, [id, args]);
+                puremvc.Facade.getInstance().sendNotification(NotifyKey.TEST_EVENT, [id, TestActKindEnum.SIGNAL_EMIT, args, line]);
             }
         }
 
@@ -88,9 +92,9 @@ module suncom {
          * 1. 按钮的点击会延时500毫秒执行
          * export
          */
-        export function click(btnId: number, event: string | Laya.Event = Laya.Event.CLICK): void {
+        export function click(id: number, event: string | Laya.Event = Laya.Event.CLICK): void {
             if (Global.debugMode & DebugMode.TEST) {
-                puremvc.Facade.getInstance().sendNotification(NotifyKey.TEST_CLICK_BUTTON, [btnId, event]);
+                puremvc.Facade.getInstance().sendNotification(NotifyKey.TEST_EVENT, [id, TestActKindEnum.BUTTON_CLICK, event]);
             }
         }
 
@@ -102,7 +106,29 @@ module suncom {
          */
         export function regButton(id: number, button?: any, once: boolean = true): void {
             if (Global.debugMode & DebugMode.TEST) {
-                puremvc.Facade.getInstance().sendNotification(NotifyKey.TEST_REG_BUTTON, [id, button, once]);
+                puremvc.Facade.getInstance().sendNotification(NotifyKey.TEST_EVENT, [id, TestActKindEnum.BUTTON_REGISTER, button, once]);
+            }
+        }
+
+        /**
+         * 序列化WebSocket状态包
+         * export
+         */
+        export function serializeWebSocketStatePacket(packet: suntdd.IMSWSStatePacket): void {
+            if (suncom.Global.debugMode & suncom.DebugMode.TEST) {
+                puremvc.Facade.getInstance().sendNotification(suncom.NotifyKey.TEST_EVENT, [0, TestActKindEnum.WS_STATE_NOTIFY, packet]);
+            }
+        }
+
+        /**
+         * 序列化WebSocket协议包
+         * @timeFileds: 若有值，则视为时间偏移
+         * @hashFileds: 无论是否有值，哈希值均会被重写
+         * export
+         */
+        export function serializeWebSocketProtocalPacket(packet: suntdd.IMSWSProtocalPacket, timeFields?: string[], hashFields?: string[]): void {
+            if (suncom.Global.debugMode & suncom.DebugMode.TEST) {
+                puremvc.Facade.getInstance().sendNotification(suncom.NotifyKey.TEST_EVENT, [0, TestActKindEnum.PROTOCAL_SERIALIZE, packet, timeFields, hashFields]);
             }
         }
     }
