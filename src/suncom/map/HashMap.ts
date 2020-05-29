@@ -76,16 +76,10 @@ module suncom {
             if (typeof value === "number") {
                 value = value.toString();
             }
-            if (typeof value !== "string") {
-                throw Error(`主键的值类型错误：${typeof value}，只允许使用Number或String类型`);
-            }
-            if (this.getByPrimaryValue(value) === null) {
-                this.source.push(data);
-                this.dataMap[value] = data;
-            }
-            else {
-                throw Error(`重复的主键值：[${this.$primaryKey}]${value}`);
-            }
+            suncom.Test.expect(typeof value).interpret(`主键的值类型错误：${typeof value}，只允许使用Number或String类型`).toBe("string");
+            suncom.Test.expect(this.getByPrimaryValue(value)).interpret(`重复的主键值：[${this.$primaryKey}]${value}`).toBeNull();
+            this.source.push(data);
+            this.dataMap[value] = data;
             return data;
         }
 

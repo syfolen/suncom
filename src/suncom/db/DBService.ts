@@ -30,7 +30,7 @@ module suncom {
 		 * @name: 若小于0，则存储的数据不可通过get方法获取
 		 * export
 		 */
-		export function put(name: number, data: any): any {
+		export function put<T>(name: number, data: T): T {
 			if (name > -1) {
 				$table[name.toString()] = data;
 			}

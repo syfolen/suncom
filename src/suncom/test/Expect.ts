@@ -148,6 +148,17 @@ module suncom {
         }
 
         /**
+         * 期望为：布尔类型
+         */
+        toBeBoolean(): void {
+            if (Global.debugMode & DebugMode.TEST) {
+                const pass: boolean = typeof this.$value === "boolean";
+                const message: string = `期望${this.$asNot === false ? "为" : "不为"}：布尔类型, 实际为：${typeof this.$value}`;
+                this.test(pass, message);
+            }
+        }
+
+        /**
          * 期望对象类型为：cls
          */
         toBeInstanceOf(cls: new () => any): void {

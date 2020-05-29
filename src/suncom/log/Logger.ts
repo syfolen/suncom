@@ -61,5 +61,19 @@ module suncom {
                 }
             }
         }
+
+        /**
+         * 调用追踪日志
+         * export
+         */
+        export function trace(mod: DebugMode, ...args: any[]): void {
+            if (Global.debugMode > 0 && (mod === DebugMode.ANY || (Global.debugMode & mod) === mod)) {
+                const str: string = args.join(" ");
+                console.trace(str);
+                if (Global.debugMode === DebugMode.DEBUG) {
+                    puremvc.Facade.getInstance().sendNotification(NotifyKey.DEBUG_PRINT, [LogTypeEnum.VERBOSE, str]);
+                }
+            }
+        }
     }
 }

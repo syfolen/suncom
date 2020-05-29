@@ -533,9 +533,10 @@ module suncom {
          * @array: 数据源
          * @method: 查询规则，返回true表示与规则匹配
          * @out: 若为null，则只返回查询到的第一条数据，否则将以数组的形式返回查询到的所有数据
+         * @return: 若out不为null，则返回null
          * export
          */
-        export function findFromArray<T>(array: T[], method: (data: T) => boolean, out: T[] = null): T | T[] {
+        export function findFromArray<T>(array: T[], method: (data: T) => boolean, out: T[] = null): T {
             for (let i: number = 0; i < array.length; i++) {
                 const item: T = array[i];
                 if (method(item) === true) {
@@ -545,7 +546,7 @@ module suncom {
                     out.push(item);
                 }
             }
-            return out;
+            return null;
         }
 
         /**

@@ -62,6 +62,12 @@ module suncom {
         toBeUndefined(): void;
 
         /**
+         * 期望值为：布尔类型
+         * export
+         */
+        toBeBoolean(): void;
+
+        /**
          * 期望对象类型为：cls
          * export
          */

@@ -24,11 +24,22 @@ module suncom {
         export let ENABLE_MICRO_SERVER: boolean = false;
 
         /**
+         * 全局唯一
+         */
+        export let $expect: IExpect = null;
+
+        /**
          * 期望测试
          * export
          */
         export function expect(value: any, description?: string): IExpect {
-            return new Expect(description).expect(value);
+            if (Global.debugMode & DebugMode.TEST) {
+                return new Expect(description).expect(value);
+            }
+            if ($expect === null) {
+                $expect = new Expect();
+            }
+            return $expect;
         }
 
         /**
@@ -64,6 +75,8 @@ module suncom {
         /**
          * 等待信号，同一时间只允许监听一个测试信号
          * @line: 是否进入测试队列，若为false，则需要指定handler，默认为：true
+         * 说明：
+         * 1. 这个方法只允许在suncore.TestTask中使用
          * export
          */
         export function wait(id: number, handler: IHandler = null, line: boolean = true, once: boolean = true): void {
@@ -77,11 +90,13 @@ module suncom {
 
         /**
          * 发射信号
+         * @line: 是否进入测试队列，若为false，则需要指定handler，默认为：false
+         * @delay: 信号发射延时
          * export
          */
-        export function emit(id: number, args?: any, line: boolean = false): void {
+        export function emit(id: number, args?: any, line: boolean = false, delay: number = 0): void {
             if (Global.debugMode & DebugMode.TEST) {
-                puremvc.Facade.getInstance().sendNotification(NotifyKey.TEST_EVENT, [id, TestActKindEnum.SIGNAL_EMIT, args, line]);
+                puremvc.Facade.getInstance().sendNotification(NotifyKey.TEST_EVENT, [id, TestActKindEnum.SIGNAL_EMIT, args, line, delay]);
             }
         }
 
