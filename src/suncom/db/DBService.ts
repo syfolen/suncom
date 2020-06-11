@@ -21,7 +21,7 @@ module suncom {
 		 * 获取数据
 		 * export
 		 */
-		export function get(name: number): any {
+		export function get<T>(name: number): T {
 			return $table[name];
 		}
 
