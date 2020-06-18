@@ -565,6 +565,16 @@ module suncom {
         }
 
         /**
+         * 创建预置对象
+         * export
+         */
+        export function createPrefab(json: string): Laya.View {
+            const prefab: Laya.Prefab = new Laya.Prefab();
+            prefab.json = Laya.loader.getRes(json);
+            return prefab.create();
+        }
+
+        /**
          * 复制数据对象
          */
         export function copy(data: any, deep: boolean = false): any {

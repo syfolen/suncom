@@ -34,9 +34,7 @@ module suncom {
             if (this.$args === void 0) {
                 return this.$method.call(this.$caller);
             }
-            else {
-                return this.$method.apply(this.$caller, this.$args);
-            }
+            return this.$method.apply(this.$caller, this.$args);
         }
 
         /**
@@ -49,13 +47,9 @@ module suncom {
                 if (args instanceof Array) {
                     return this.$method.apply(this.$caller, args);
                 }
-                else {
-                    return this.$method.call(this.$caller, args);
-                }
+                return this.$method.call(this.$caller, args);
             }
-            else {
-                return this.$method.apply(this.$caller, this.$args.concat(args));
-            }
+            return this.$method.apply(this.$caller, this.$args.concat(args));
         }
 
         /**
