@@ -1,7 +1,7 @@
 
 module suncom {
     /**
-     * 环境模式，主要用于代码的版本控制
+     * 环境模式，主要用于发布控制
      * export
      */
     export enum EnvMode {

@@ -1,7 +1,7 @@
 
 module suncom {
     /**
-     * 哈希表接口，通常用于作为一个大量数据的集合，用于快速获取数据集中的某条数据
+     * 哈希表，通常用于作为一个大量数据的集合，用于快速获取数据集中的某条数据
      * export
      */
     export class HashMap<T> implements IHashMap<T> {
@@ -25,19 +25,14 @@ module suncom {
          * @primaryKey: 指定主键字段名，哈希表会使用主键值来作为数据索引，所以请确保主键值是恒值
          * export
          */
-        constructor(primaryKey: number | string) {
-            if (typeof primaryKey === "number") {
-                primaryKey = primaryKey.toString();
-            }
+        constructor(primaryKey: string) {
             if (typeof primaryKey !== "string") {
                 throw Error(`非法的主键字段名：${primaryKey}`);
             }
-            if (primaryKey.length == 0) {
+            if (primaryKey.length === 0) {
                 throw Error(`无效的主键字段名字长度：${primaryKey.length}`);
             }
-            else {
-                this.$primaryKey = primaryKey;
-            }
+            this.$primaryKey = primaryKey;
         }
 
         /**
@@ -73,28 +68,17 @@ module suncom {
          */
         put(data: T): T {
             let value: any = data[this.$primaryKey];
-            if (typeof value === "number") {
-                value = value.toString();
+            if (Common.isStringInvalidOrEmpty(value) === true) {
+                throw Error(`无效的主键的值，type:${typeof value}, value:${value}`);
             }
-            suncom.Test.expect(typeof value).interpret(`主键的值类型错误：${typeof value}，只允许使用Number或String类型`).toBe("string");
-            suncom.Test.expect(this.getByPrimaryValue(value)).interpret(`重复的主键值：[${this.$primaryKey}]${value}`).toBeNull();
-            this.source.push(data);
-            this.dataMap[value] = data;
-            return data;
-        }
-
-        /**
-         * 移除数据
-         * export
-         */
-        remove(data: T): T {
-            const index: number = this.source.indexOf(data);
-            if (index === -1) {
-                return data;
+            if (this.getByPrimaryValue(value) === null) {
+                this.source.push(data);
+                this.dataMap[value] = data;
             }
             else {
-                return this.$removeByIndex(index);
+                throw Error(`重复的主键值：[${this.$primaryKey}]${value}`);
             }
+            return data;
         }
 
         /**
@@ -117,7 +101,19 @@ module suncom {
          * export
          */
         getByPrimaryValue(value: number | string): T {
-            return this.dataMap[value] || null;
+            return this.dataMap[value.toString()] || null;
+        }
+
+        /**
+         * 移除数据
+         * export
+         */
+        remove(data: T): T {
+            const index: number = this.source.indexOf(data);
+            if (index === -1) {
+                return data;
+            }
+            return this.$removeByIndex(index);
         }
 
         /**
@@ -125,13 +121,14 @@ module suncom {
          * export
          */
         removeByValue(key: string, value: any): T {
+            if (key === this.$primaryKey) {
+                return this.removeByPrimaryValue(value);
+            }
             const index: number = this.$getIndexByValue(key, value);
             if (index === -1) {
                 return null;
             }
-            else {
-                return this.$removeByIndex(index);
-            }
+            return this.$removeByIndex(index);
         }
 
         /**
@@ -147,14 +144,15 @@ module suncom {
         }
 
         /**
-         * 为每个数据执行方法（谨慎在此方法中新增或移除数据）
-         * 若method返回true，则会中断遍历
+         * 为每个数据执行方法
+         * 说明：
+         * 1. 若method返回true，则会中断遍历
+         * 2. 谨慎在此方法中新增或移除数据
          * export
          */
         forEach(method: (data: T) => any): void {
-            const source: T[] = this.source.slice(0);
-            for (let i: number = 0; i < source.length; i++) {
-                if (method(source[i]) === true) {
+            for (let i: number = 0; i < this.source.length; i++) {
+                if (method(this.source[i]) === true) {
                     break;
                 }
             }

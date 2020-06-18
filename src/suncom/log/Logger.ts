@@ -14,9 +14,7 @@ module suncom {
             if (Global.debugMode > 0 && (mod === DebugMode.ANY || (Global.debugMode & mod) === mod)) {
                 const str: string = args.join(" ");
                 console.log(str);
-                if (Global.debugMode === DebugMode.DEBUG) {
-                    puremvc.Facade.getInstance().sendNotification(NotifyKey.DEBUG_PRINT, [LogTypeEnum.VERBOSE, str]);
-                }
+                puremvc.Facade.getInstance().sendNotification(NotifyKey.DEBUG_PRINT, [LogTypeEnum.VERBOSE, str]);
             }
         }
 
@@ -28,9 +26,7 @@ module suncom {
             if (Global.debugMode > 0 && (mod === DebugMode.ANY || (Global.debugMode & mod) === mod)) {
                 const str: string = args.join(" ");
                 console.warn(str);
-                if (Global.debugMode === DebugMode.DEBUG) {
-                    puremvc.Facade.getInstance().sendNotification(NotifyKey.DEBUG_PRINT, [LogTypeEnum.WARN, str]);
-                }
+                puremvc.Facade.getInstance().sendNotification(NotifyKey.DEBUG_PRINT, [LogTypeEnum.WARN, str]);
             }
         }
 
@@ -42,9 +38,7 @@ module suncom {
             if (Global.debugMode > 0 && (mod === DebugMode.ANY || (Global.debugMode & mod) === mod)) {
                 const str: string = args.join(" ");
                 console.error(str);
-                if (Global.debugMode === DebugMode.DEBUG) {
-                    puremvc.Facade.getInstance().sendNotification(NotifyKey.DEBUG_PRINT, [LogTypeEnum.ERROR, str]);
-                }
+                puremvc.Facade.getInstance().sendNotification(NotifyKey.DEBUG_PRINT, [LogTypeEnum.ERROR, str]);
             }
         }
 
@@ -56,9 +50,7 @@ module suncom {
             if (Global.debugMode > 0 && (mod === DebugMode.ANY || (Global.debugMode & mod) === mod)) {
                 const str: string = args.join(" ");
                 console.info(str);
-                if (Global.debugMode === DebugMode.DEBUG) {
-                    puremvc.Facade.getInstance().sendNotification(NotifyKey.DEBUG_PRINT, [LogTypeEnum.LOG2F, str]);
-                }
+                puremvc.Facade.getInstance().sendNotification(NotifyKey.DEBUG_PRINT, [LogTypeEnum.LOG2F, str]);
             }
         }
 
@@ -70,9 +62,6 @@ module suncom {
             if (Global.debugMode > 0 && (mod === DebugMode.ANY || (Global.debugMode & mod) === mod)) {
                 const str: string = args.join(" ");
                 console.trace(str);
-                if (Global.debugMode === DebugMode.DEBUG) {
-                    puremvc.Facade.getInstance().sendNotification(NotifyKey.DEBUG_PRINT, [LogTypeEnum.VERBOSE, str]);
-                }
             }
         }
     }

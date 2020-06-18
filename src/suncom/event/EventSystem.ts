@@ -1,7 +1,7 @@
 
 module suncom {
     /**
-     * EventSystem 自定义事件系统
+     * 自定义事件系统
      * export
      */
     export class EventSystem implements IEventSystem {
@@ -46,7 +46,7 @@ module suncom {
             }
             const list: Array<boolean | IEventInfo> = this.$events[type] || null;
 
-            if (list === null || list.length === 1) {
+            if (list === null) {
                 return;
             }
             // 标记禁止直接更新
@@ -100,6 +100,9 @@ module suncom {
             if (Common.isStringInvalidOrEmpty(type) === true) {
                 throw Error("注册无效事件！！！");
             }
+            if (method === void 0 || method === null) {
+                throw Error(`注册无效的事件回调！！！`);
+            }
             let list: Array<boolean | IEventInfo> = this.$events[type] || null;
 
             if (list === null) {
@@ -146,11 +149,14 @@ module suncom {
          */
         removeEventListener(type: string, method: Function, caller: Object): void {
             if (Common.isStringInvalidOrEmpty(type) === true) {
-                throw Error("移除无效事件！！！");
+                throw Error("移除无效的事件！！！");
+            }
+            if (method === void 0 || method === null) {
+                throw Error(`移除无效的事件回调！！！`);
             }
             let list: Array<boolean | IEventInfo> = this.$events[type] || null;
 
-            if (list === null || list.length === 1) {
+            if (list === null) {
                 return;
             }
 

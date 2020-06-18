@@ -22,7 +22,7 @@ module suncom {
 		 * export
 		 */
 		export function get<T>(name: number): T {
-			return $table[name];
+			return $table[name.toString()];
 		}
 
 		/**
@@ -31,12 +31,12 @@ module suncom {
 		 * export
 		 */
 		export function put<T>(name: number, data: T): T {
-			if (name > -1) {
-				$table[name.toString()] = data;
-			}
-			else {
+			if (name < 0) {
 				$id++;
 				$table["auto_" + $id] = data;
+			}
+			else {
+				$table[name.toString()] = data;
 			}
 			return data;
 		}

@@ -55,7 +55,7 @@ module suncom {
             if (caller === null) {
                 return Common.getClassName(method);
             }
-            for (let key in caller) {
+            for (const key in caller) {
                 if (caller[key] === method) {
                     return key;
                 }
@@ -67,9 +67,7 @@ module suncom {
          * 将枚举转化成字符串
          */
         export function convertEnumToString(value: number, oEnum: any): string {
-            const keys: string[] = Object.keys(oEnum);
-            for (let i: number = 0; i < keys.length; i++) {
-                const key: string = keys[i];
+            for (const key in oEnum) {
                 if (oEnum[key] === value) {
                     return key;
                 }
@@ -128,7 +126,8 @@ module suncom {
                     }
                 }
                 if (indexOfReplace === -1) {
-                    throw Error(`字符串替换未完成 str:${str}`);
+                    Logger.warn(DebugMode.ANY, `字符串替换未完成 str:${str}`);
+                    break;
                 }
                 const suffix: string = str.substr(indexOfReplace + key.length);
                 str = str.substr(0, indexOfReplace) + args.shift() + suffix;
@@ -145,7 +144,8 @@ module suncom {
             while (args.length > 0) {
                 const indexOfSign: number = str.indexOf("{$}", index);
                 if (index === -1) {
-                    throw Error(`字符串替换未完成 str:${str}`);
+                    Logger.warn(DebugMode.ANY, `字符串替换未完成 str:${str}`);
+                    break;
                 }
                 const suffix: string = str.substr(indexOfSign + 3);
                 str = str.substr(0, indexOfSign) + args.shift() + suffix;
@@ -242,7 +242,7 @@ module suncom {
          * @n: 保留小数位数，默认为0
          * 说明：
          * 1. 因各个平台实现的版本可能不一致，故自定义了此方法
-         * 弃用原因：
+         * 己弃用，原因：
          * 1. tmpValue值的计算会因精度问题存在误差
          */
         export function $round(value: number, n: number = 0): number {
@@ -310,10 +310,10 @@ module suncom {
                 const times: string[] = array[0].split(":");
                 if (times.length === 3) {
                     if (dates.length === 0) {
-                        const a: Date = new Date();
-                        dates[0] = a.getFullYear().toString();
-                        dates[1] = (a.getMonth() + 1).toString();
-                        dates[2] = a.getDate().toString();
+                        const dt: Date = new Date();
+                        dates[0] = dt.getFullYear().toString();
+                        dates[1] = (dt.getMonth() + 1).toString();
+                        dates[2] = dt.getDate().toString();
                     }
                     return new Date(Number(dates[0]), Number(dates[1]) - 1, Number(dates[2]), Number(times[0]), Number(times[1]), Number(times[2]));
                 }
@@ -467,7 +467,7 @@ module suncom {
         }
 
         /**
-         * 获取文件名（不包括后缀名）
+         * 获取文件名（不包括扩展名）
          * export
          */
         export function getFileName(path: string): string {
@@ -488,9 +488,7 @@ module suncom {
             if (index === -1) {
                 return null;
             }
-            else {
-                return path.substr(index + 1).toLowerCase();
-            }
+            return path.substr(index + 1).toLowerCase();
         }
 
         /**
@@ -502,9 +500,7 @@ module suncom {
             if (index === -1) {
                 return path;
             }
-            else {
-                return path.substr(0, index + 1) + newExt;
-            }
+            return path.substr(0, index + 1) + newExt;
         }
 
         /**
@@ -514,17 +510,13 @@ module suncom {
          * export
          */
         export function createHttpSign(params: Object, key: string, sign: string = "sign"): string {
-            const keys: string[] = Object.keys(params).sort();
             const array: string[] = [];
-
-            for (let i: number = 0; i < keys.length; i++) {
-                const key: string = keys[i];
+            for (const key in params) {
                 if (key !== sign) {
                     array.push(`${key}=${params[key]}`);
                 }
             }
             array.push(`key=${key}`);
-
             return Common.md5(array.join("&"));
         }
 
@@ -532,8 +524,8 @@ module suncom {
          * 从数组中查找数据
          * @array: 数据源
          * @method: 查询规则，返回true表示与规则匹配
-         * @out: 若为null，则只返回查询到的第一条数据，否则将以数组的形式返回查询到的所有数据
-         * @return: 若out不为null，则返回null
+         * @out: 若不为null，则返回查询到的所有数据
+         * @return: 若out为null，则只返回查询到的第一条数据，否则返回null
          * export
          */
         export function findFromArray<T>(array: T[], method: (data: T) => boolean, out: T[] = null): T {
@@ -570,6 +562,63 @@ module suncom {
             for (let i: number = 0; i < items.length; i++) {
                 Common.removeItemFromArray(items[i], array);
             }
+        }
+
+        /**
+         * 复制数据对象
+         */
+        export function copy(data: any, deep: boolean = false): any {
+            if (data instanceof Array) {
+                if (deep === false) {
+                    return data.slice(0);
+                }
+                else {
+                    const array: any[] = [];
+                    for (let i: number = 0; i < array.length; i++) {
+                        array.push(Common.copy(array[i], deep));
+                    }
+                    return array;
+                }
+            }
+            else if (data instanceof Object) {
+                const newData: any = {};
+                for (const key of data) {
+                    if (deep === false) {
+                        newData[key] = data[key];
+                    }
+                    else {
+                        newData[key] = Common.copy(data[key], deep);
+                    }
+                }
+                return newData;
+            }
+            return data;
+        }
+
+        /**
+         * 克隆数据结构
+         */
+        export function clone(data: any): any {
+            const newData: any = {};
+            for (const key of data) {
+                const value: any = data[key];
+                if (typeof data === "number") {
+                    newData[key] = 0;
+                }
+                else if (typeof data === "boolean") {
+                    newData[key] = false;
+                }
+                else if (data instanceof Array) {
+                    newData[key] = [];
+                }
+                else if (data instanceof Object) {
+                    newData[key] = null;
+                }
+                else {
+                    throw Error(`克隆意外的数据类型：${data[key]}`);
+                }
+            }
+            return newData;
         }
 
         /**
@@ -612,9 +661,8 @@ module suncom {
                 return true;
             }
             // 其它类型,均返回 false
-            else {
-                return false;
-            }
+
+            return false;
         }
 
         /**

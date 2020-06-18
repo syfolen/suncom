@@ -53,8 +53,10 @@ module suncom {
         removeByPrimaryValue(value: number | string): T;
 
         /**
-         * 为每个数据执行方法（谨慎在此方法中新增或移除数据）
-         * 若method的返回值为true，则会中断遍历
+         * 为每个数据执行方法
+         * 说明：
+         * 1. 若method返回true，则会中断遍历
+         * 2. 谨慎在此方法中新增或移除数据
          * export
          */
         forEach(method: (data: T) => any): void;
