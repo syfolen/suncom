@@ -467,6 +467,23 @@ module suncom {
         }
 
         /**
+         * 生成HTTP签名
+         * @key: 密钥
+         * @sign: 忽略签名字段，默认为："sign"
+         * export
+         */
+        export function createHttpSign(params: Object, key: string, sign: string = "sign"): string {
+            const array: string[] = [];
+            for (const key in params) {
+                if (key !== sign) {
+                    array.push(`${key}=${params[key]}`);
+                }
+            }
+            array.push(`key=${key}`);
+            return Common.md5(array.join("&"));
+        }
+
+        /**
          * 获取文件名（不包括扩展名）
          * export
          */
@@ -501,23 +518,6 @@ module suncom {
                 return path;
             }
             return path.substr(0, index + 1) + newExt;
-        }
-
-        /**
-         * 生成HTTP签名
-         * @key: 密钥
-         * @sign: 忽略签名字段，默认为："sign"
-         * export
-         */
-        export function createHttpSign(params: Object, key: string, sign: string = "sign"): string {
-            const array: string[] = [];
-            for (const key in params) {
-                if (key !== sign) {
-                    array.push(`${key}=${params[key]}`);
-                }
-            }
-            array.push(`key=${key}`);
-            return Common.md5(array.join("&"));
         }
 
         /**
@@ -584,19 +584,21 @@ module suncom {
                 }
                 else {
                     const array: any[] = [];
-                    for (let i: number = 0; i < array.length; i++) {
-                        array.push(Common.copy(array[i], deep));
+                    for (let i: number = 0; i < data.length; i++) {
+                        array.push(Common.copy(data[i], deep));
                     }
                     return array;
                 }
             }
             else if (data instanceof Object) {
                 const newData: any = {};
-                for (const key of data) {
-                    if (deep === false) {
+                if (deep === false) {
+                    for (const key in data) {
                         newData[key] = data[key];
                     }
-                    else {
+                }
+                else {
+                    for (const key in data) {
                         newData[key] = Common.copy(data[key], deep);
                     }
                 }
@@ -610,22 +612,22 @@ module suncom {
          */
         export function clone(data: any): any {
             const newData: any = {};
-            for (const key of data) {
+            for (const key in data) {
                 const value: any = data[key];
-                if (typeof data === "number") {
+                if (typeof value === "number") {
                     newData[key] = 0;
                 }
-                else if (typeof data === "boolean") {
+                else if (typeof value === "boolean") {
                     newData[key] = false;
                 }
-                else if (data instanceof Array) {
+                else if (value instanceof Array) {
                     newData[key] = [];
                 }
-                else if (data instanceof Object) {
+                else if (value instanceof Object) {
                     newData[key] = null;
                 }
                 else {
-                    throw Error(`克隆意外的数据类型：${data[key]}`);
+                    throw Error(`克隆意外的数据类型：${value}`);
                 }
             }
             return newData;

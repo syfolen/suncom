@@ -48,6 +48,8 @@ module test {
             suncom.Test.expect(suncom.Common.formatString$("{$}{$}", ["a", 3])).toBe("a3");
             suncom.Test.expect(suncom.Common.formatString("%s%d", ["%d", 3])).toBe("%d3");
             suncom.Test.expect(suncom.Common.formatString$("{$}{$}", ["{$}", 3])).toBe("{$}3");
+            suncom.Test.expect(suncom.Common.formatString("%s%d%s", ["a", 3])).toBe("a3%s");
+            suncom.Test.expect(suncom.Common.formatString$("{$}{$}{$}", ["{$}", 3])).toBe("{$}3{$}");
 
             suncom.Test.expect(suncom.Common.clamp(0, 2, 5)).toBe(2);
             suncom.Test.expect(suncom.Common.clamp(3, 2, 5)).toBe(3);
@@ -106,13 +108,13 @@ module test {
             // }
             // console.log(new Date().valueOf() - time3.valueOf());
 
-            // console.log(suncom.Common.random(0, 2));
-            // console.log(suncom.Common.random(0, 2));
-            // console.log(suncom.Common.random(0, 2));
-            // console.log(suncom.Common.random(0, 2));
-            // console.log(suncom.Common.random(0, 2));
-            // console.log(suncom.Common.random(0, 2));
-            // console.log(suncom.Common.random(0, 2));
+            console.log(suncom.Common.random(0, 2));
+            console.log(suncom.Common.random(0, 2));
+            console.log(suncom.Common.random(0, 2));
+            console.log(suncom.Common.random(0, 2));
+            console.log(suncom.Common.random(0, 2));
+            console.log(suncom.Common.random(0, 2));
+            console.log(suncom.Common.random(0, 2));
 
             console.log(suncom.Common.formatDate("yyyy-MM-dd hh:mm:ss ms", new Date()));
             console.log(suncom.Common.formatDate("yyyy-MM-dd hh:mm:ss ms", suncom.Common.convertToDate(new Date())));
@@ -150,7 +152,7 @@ module test {
                     return true;
                 }
                 return false;
-            }, null) as number;
+            }, null);
             suncom.Test.expect(x).toBe(1)
 
             const out: number[] = [];
@@ -167,6 +169,41 @@ module test {
 
             suncom.Common.removeItemsFromArray([3, 5, 6], array);
             suncom.Test.expect(array).toEqual([7]);
+
+            // suncom.Common.createPrefab("test.json");
+
+            const forClone: any = {
+                a: 2,
+                b: [1, 2, 3],
+                c: {
+                    a: 5
+                },
+                d: true
+            }
+
+            const cloneObj: any = suncom.Common.clone(forClone);
+            suncom.Test.expect(Object.keys(cloneObj).length).toBe(Object.keys(forClone).length);
+            suncom.Test.expect(cloneObj["a"]).toBe(0);
+            suncom.Test.expect(cloneObj["b"]).toBeInstanceOf(Array);
+            suncom.Test.expect(cloneObj["b"].length).toBe(0);
+            suncom.Test.expect(cloneObj["c"]).toBeNull();
+            suncom.Test.expect(cloneObj["d"]).toBe(false);
+
+            const copyObj: any = suncom.Common.copy(forClone);
+            suncom.Test.expect(Object.keys(cloneObj).length).toBe(Object.keys(forClone).length);
+            suncom.Test.assertTrue(forClone["a"] === copyObj["a"]);
+            suncom.Test.assertTrue(forClone["b"] === copyObj["b"]);
+            suncom.Test.assertTrue(forClone["c"] === copyObj["c"]);
+            suncom.Test.assertTrue(forClone["d"] === copyObj["d"]);
+
+            const deepCopyObj: any = suncom.Common.copy(forClone, true);
+            suncom.Test.assertTrue(forClone["a"] === deepCopyObj["a"]);
+            suncom.Test.assertFalse(forClone["b"] === deepCopyObj["b"]);
+            suncom.Test.expect(forClone["b"]).toEqual(deepCopyObj["b"]);
+            suncom.Test.assertFalse(forClone["c"] === deepCopyObj["c"]);
+            suncom.Test.expect(forClone["c"]).toEqual(deepCopyObj["c"]);
+            suncom.Test.expect(forClone["c"]).toStrictEqual(deepCopyObj["c"]);
+            suncom.Test.assertTrue(forClone["d"] === deepCopyObj["d"]);
 
             suncom.Global.VERSION = "1.0.1";
 

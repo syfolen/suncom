@@ -16,7 +16,7 @@ module suncom {
          */
         export function getItem(sign: string): any {
             const array: any[] = $pool[sign] || null;
-            if (array === null) {
+            if (array === null || array.length === 0) {
                 return null;
             }
             const item: any = array.pop();
