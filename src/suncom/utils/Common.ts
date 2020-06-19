@@ -6,6 +6,30 @@ module suncom {
      */
     export namespace Common {
         /**
+         * PI
+         * export
+         */
+        export const PI: number = Math.PI;
+
+        /**
+         * 2PI
+         * export
+         */
+        export const PI2: number = Math.PI * 2;
+
+        /**
+         * 整数的最大安全值
+         * export
+         */
+        export const MAX_SAFE_INTEGER: number = 9007199254740991;
+
+        /**
+         * 整数的最小安全值
+         * export
+         */
+        export const MIN_SAFE_INTEGER: number = -9007199254740991;
+
+        /**
          * 哈希种子
          */
         let $hashId: number = 0;
@@ -138,6 +162,7 @@ module suncom {
 
         /**
          * 格式化字符串
+         * export
          */
         export function formatString$(str: string, args: any[]): string {
             let index: number = 0;
@@ -152,6 +177,58 @@ module suncom {
                 index = str.length - suffix.length;
             }
             return str;
+        }
+
+        /**
+         * 角度换算为弧度
+         * export
+         */
+        export function d2r(d: number): number {
+            return d * Math.PI / 180;
+        }
+
+        /**
+         * 弧度换算为角度
+         * export
+         */
+        export function r2d(a: number): number {
+            return a * 180 / Math.PI;
+        }
+
+        /**
+         * 获取绝对值
+         */
+        export function abs(a: number): number {
+            if (a < 0) {
+                return -a;
+            }
+            else {
+                return a;
+            }
+        }
+
+        /**
+         * 获取较小值
+         */
+        export function min(a: number, b: number): number {
+            if (a < b) {
+                return a;
+            }
+            else {
+                return b;
+            }
+        }
+
+        /**
+         * 获取较大值
+         */
+        export function max(a: number, b: number): number {
+            if (a > b) {
+                return a;
+            }
+            else {
+                return b;
+            }
         }
 
         /**
