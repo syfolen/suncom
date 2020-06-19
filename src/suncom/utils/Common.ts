@@ -197,6 +197,7 @@ module suncom {
 
         /**
          * 获取绝对值
+         * export
          */
         export function abs(a: number): number {
             if (a < 0) {
@@ -209,6 +210,7 @@ module suncom {
 
         /**
          * 获取较小值
+         * export
          */
         export function min(a: number, b: number): number {
             if (a < b) {
@@ -221,6 +223,7 @@ module suncom {
 
         /**
          * 获取较大值
+         * export
          */
         export function max(a: number, b: number): number {
             if (a > b) {
