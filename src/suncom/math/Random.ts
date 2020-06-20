@@ -22,10 +22,8 @@ module suncom {
          * export
          */
         export function seed(value: number): void {
-            if (value < 1) {
-                throw Error("随机种子不允许小于1");
-            }
-            $r = value;
+            Test.expect(value).interpret(`随机种子不允许小于1`).toBeGreaterThan(0);
+            $r = value < 1 ? 1 : value;
         }
 
         /**

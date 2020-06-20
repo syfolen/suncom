@@ -42,7 +42,7 @@ module suncom {
          */
         dispatchEvent(type: string, args?: any, cancelable: boolean = false): void {
             if (Common.isStringInvalidOrEmpty(type) === true) {
-                throw Error("派发无效事件！！！");
+                throw Error(`派发无效事件！！！`);
             }
             const list: Array<boolean | IEventInfo> = this.$events[type] || null;
 
@@ -98,7 +98,7 @@ module suncom {
          */
         addEventListener(type: string, method: Function, caller: Object, receiveOnce: boolean = false, priority: EventPriorityEnum = EventPriorityEnum.LOW): void {
             if (Common.isStringInvalidOrEmpty(type) === true) {
-                throw Error("注册无效事件！！！");
+                throw Error(`注册无效事件！！！`);
             }
             if (method === void 0 || method === null) {
                 throw Error(`注册无效的事件回调！！！`);
@@ -149,7 +149,7 @@ module suncom {
          */
         removeEventListener(type: string, method: Function, caller: Object): void {
             if (Common.isStringInvalidOrEmpty(type) === true) {
-                throw Error("移除无效的事件！！！");
+                throw Error(`移除无效的事件！！！`);
             }
             if (method === void 0 || method === null) {
                 throw Error(`移除无效的事件回调！！！`);
