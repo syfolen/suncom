@@ -114,6 +114,36 @@ module suncom {
         }
 
         /**
+         * 去除字符串的头尾空格
+         * export
+         */
+        export function trim(str: string = null): string {
+            if (str === null) {
+                return null;
+            }
+            const chrs: string[] = ["\r", "\n", "\t", " "];
+            while (str.length > 0) {
+                const length: number = str.length;
+                for (let i: number = 0; i < chrs.length; i++) {
+                    const chr: string = chrs[i];
+                    if (str.charAt(0) === chr) {
+                        str = str.substr(1);
+                        break;
+                    }
+                    const index: number = str.length - 1;
+                    if (str.charAt(index) === chr) {
+                        str = str.substr(0, index);
+                        break;
+                    }
+                }
+                if (str.length === length) {
+                    break;
+                }
+            }
+            return str;
+        }
+
+        /**
          * 判断字符串是否为空
          * export
          */
