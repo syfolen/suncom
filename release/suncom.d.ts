@@ -486,25 +486,6 @@ declare module suncom {
      * 常用库（纯JS方法）
      */
     namespace Common {
-        /**
-         * PI
-         */
-        const PI: number;
-
-        /**
-         * 2PI
-         */
-        const PI2: number;
-
-        /**
-         * 整数的最大安全值
-         */
-        const MAX_SAFE_INTEGER: number;
-
-        /**
-         * 整数的最小安全值
-         */
-        const MIN_SAFE_INTEGER: number;
 
         /**
          * 获取全局唯一的哈希值
@@ -547,31 +528,6 @@ declare module suncom {
          * 格式化字符串
          */
         function formatString$(str: string, args: any[]): string;
-
-        /**
-         * 角度换算为弧度
-         */
-        function d2r(d: number): number;
-
-        /**
-         * 弧度换算为角度
-         */
-        function r2d(a: number): number;
-
-        /**
-         * 获取绝对值
-         */
-        function abs(a: number): number;
-
-        /**
-         * 获取较小值
-         */
-        function min(a: number, b: number): number;
-
-        /**
-         * 获取较大值
-         */
-        function max(a: number, b: number): number;
 
         /**
          * 将value限制于min和max之间
