@@ -29,14 +29,14 @@ module test {
             suncom.Test.expect(suncom.Common.getMethodName(abc.func, abc)).toBe("func");
             suncom.Test.expect(suncom.Common.convertEnumToString(TestEnum.A_0, TestEnum)).toBe("A_0");
 
-            suncom.Test.assertFalse(suncom.Common.isNumber("a"));
-            suncom.Test.assertTrue(suncom.Common.isNumber("0x01"));
-            suncom.Test.assertTrue(suncom.Common.isNumber("123"));
-            suncom.Test.assertFalse(suncom.Common.isNumber(null));
-            suncom.Test.assertFalse(suncom.Common.isNumber(void 0));
-            suncom.Test.assertTrue(suncom.Common.isNumber("11.5"));
-            suncom.Test.assertTrue(suncom.Common.isNumber(11.6));
-            suncom.Test.assertFalse(suncom.Common.isNumber(abc as any));
+            suncom.Test.assertFalse(suncom.Mathf.isNumber("a"));
+            suncom.Test.assertTrue(suncom.Mathf.isNumber("0x01"));
+            suncom.Test.assertTrue(suncom.Mathf.isNumber("123"));
+            suncom.Test.assertFalse(suncom.Mathf.isNumber(null));
+            suncom.Test.assertFalse(suncom.Mathf.isNumber(void 0));
+            suncom.Test.assertTrue(suncom.Mathf.isNumber("11.5"));
+            suncom.Test.assertTrue(suncom.Mathf.isNumber(11.6));
+            suncom.Test.assertFalse(suncom.Mathf.isNumber(abc as any));
 
             suncom.Test.assertTrue(suncom.Common.isStringInvalidOrEmpty(""));
             suncom.Test.assertFalse(suncom.Common.isStringInvalidOrEmpty("null"));
@@ -51,23 +51,23 @@ module test {
             suncom.Test.expect(suncom.Common.formatString("%s%d%s", ["a", 3])).toBe("a3%s");
             suncom.Test.expect(suncom.Common.formatString$("{$}{$}{$}", ["{$}", 3])).toBe("{$}3{$}");
 
-            suncom.Test.expect(suncom.Common.clamp(0, 2, 5)).toBe(2);
-            suncom.Test.expect(suncom.Common.clamp(3, 2, 5)).toBe(3);
-            suncom.Test.expect(suncom.Common.clamp(7, 2, 5)).toBe(5);
+            suncom.Test.expect(suncom.Mathf.clamp(0, 2, 5)).toBe(2);
+            suncom.Test.expect(suncom.Mathf.clamp(3, 2, 5)).toBe(3);
+            suncom.Test.expect(suncom.Mathf.clamp(7, 2, 5)).toBe(5);
 
-            suncom.Test.expect(suncom.Common.round(3.144, 2)).toBe(3.14);
-            suncom.Test.expect(suncom.Common.round(3.146, 2)).toBe(3.15);
-            suncom.Test.expect(suncom.Common.round(3.145, 2)).toBe(3.14);
-            suncom.Test.expect(suncom.Common.round(3.155, 2)).toBe(3.16);
-            suncom.Test.expect(suncom.Common.round(3.1451, 2)).toBe(3.15);
-            suncom.Test.expect(suncom.Common.round(3.1551, 2)).toBe(3.16);
+            suncom.Test.expect(suncom.Mathf.round(3.144, 2)).toBe(3.14);
+            suncom.Test.expect(suncom.Mathf.round(3.146, 2)).toBe(3.15);
+            suncom.Test.expect(suncom.Mathf.round(3.145, 2)).toBe(3.14);
+            suncom.Test.expect(suncom.Mathf.round(3.155, 2)).toBe(3.16);
+            suncom.Test.expect(suncom.Mathf.round(3.1451, 2)).toBe(3.15);
+            suncom.Test.expect(suncom.Mathf.round(3.1551, 2)).toBe(3.16);
 
-            // console.log(suncom.Common.$round(3.144, 2));
-            // console.log(suncom.Common.$round(3.146, 2));
-            // console.log(suncom.Common.$round(3.145, 2));
-            // console.log(suncom.Common.$round(3.155, 2));
-            // console.log(suncom.Common.$round(3.1451, 2));
-            // console.log(suncom.Common.$round(3.1551, 2));
+            // console.log(suncom.Mathf.$round(3.144, 2));
+            // console.log(suncom.Mathf.$round(3.146, 2));
+            // console.log(suncom.Mathf.$round(3.145, 2));
+            // console.log(suncom.Mathf.$round(3.155, 2));
+            // console.log(suncom.Mathf.$round(3.1451, 2));
+            // console.log(suncom.Mathf.$round(3.1551, 2));
 
             // console.log("---------------");
 
@@ -108,13 +108,13 @@ module test {
             // }
             // console.log(new Date().valueOf() - time3.valueOf());
 
-            console.log(suncom.Common.random(0, 2));
-            console.log(suncom.Common.random(0, 2));
-            console.log(suncom.Common.random(0, 2));
-            console.log(suncom.Common.random(0, 2));
-            console.log(suncom.Common.random(0, 2));
-            console.log(suncom.Common.random(0, 2));
-            console.log(suncom.Common.random(0, 2));
+            console.log(suncom.Mathf.random(0, 2));
+            console.log(suncom.Mathf.random(0, 2));
+            console.log(suncom.Mathf.random(0, 2));
+            console.log(suncom.Mathf.random(0, 2));
+            console.log(suncom.Mathf.random(0, 2));
+            console.log(suncom.Mathf.random(0, 2));
+            console.log(suncom.Mathf.random(0, 2));
 
             console.log(suncom.Common.formatDate("yyyy-MM-dd hh:mm:ss ms", new Date()));
             console.log(suncom.Common.formatDate("yyyy-MM-dd hh:mm:ss ms", suncom.Common.convertToDate(new Date())));
