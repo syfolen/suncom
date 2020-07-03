@@ -27,7 +27,7 @@ module suncom {
         export function getClassName(cls: any): string {
             const classString: string = cls.toString().trim();
             const index: number = classString.indexOf("(");
-            return classString.substring(9, index);
+            return cls.name || classString.substring(9, index);
         }
 
         /**
@@ -380,6 +380,9 @@ module suncom {
                 path = path.substr(index + 1);
             }
             const suffix: string = Common.getFileExtension(path);
+            if (suffix === null) {
+                return path;
+            }
             return path.substr(0, path.length - suffix.length - 1);
         }
 

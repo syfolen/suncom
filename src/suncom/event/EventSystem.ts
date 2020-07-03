@@ -93,10 +93,10 @@ module suncom {
         /**
          * 事件注册
          * @receiveOnce: 是否只响应一次，默认为false
-         * @priority: 事件优先级，优先级高的先被执行，默认为：EventPriorityEnum.LOW
+         * @priority: 事件优先级，优先级高的先被执行，默认为：EventPriorityEnum.MID
          * export
          */
-        addEventListener(type: string, method: Function, caller: Object, receiveOnce: boolean = false, priority: EventPriorityEnum = EventPriorityEnum.LOW): void {
+        addEventListener(type: string, method: Function, caller: Object, receiveOnce: boolean = false, priority: EventPriorityEnum = EventPriorityEnum.MID): void {
             if (Common.isStringInvalidOrEmpty(type) === true) {
                 throw Error(`注册无效事件！！！`);
             }

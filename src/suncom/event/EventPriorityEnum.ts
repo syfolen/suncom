@@ -9,16 +9,16 @@ module suncom {
          * 最低
          * export
          */
-        LAZY = 0,
+        LOWEST = 0,
 
         /**
-         * 低（默认）
+         * 低
          * export
          */
         LOW,
 
         /**
-         * 中
+         * 中（默认）
          * export
          */
         MID,
@@ -28,6 +28,12 @@ module suncom {
          * export
          */
         HIGH,
+
+        /**
+         * 最高
+         * export
+         */
+        HIGHEST,
 
         /**
          * 框架级别

@@ -53,8 +53,10 @@ module suncom {
 		 * 删除数据
 		 * export
 		 */
-		export function drop(name: number): void {
+		export function drop<T>(name: number): T {
+			const data: T = DBService.get<any>(name);
 			delete $table[name.toString()];
+			return data;
 		}
 	}
 }

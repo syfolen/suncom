@@ -15,12 +15,12 @@ module test {
             system.dispatchEvent("TEST", data);
             suncom.Test.expect(data.msg).toBe(0);
 
-            system.addEventListener("TEST", this.$func2, this, false, suncom.EventPriorityEnum.LAZY);
+            system.addEventListener("TEST", this.$func2, this, false, suncom.EventPriorityEnum.LOWEST);
             system.dispatchEvent("TEST", data);
             suncom.Test.expect(data.msg).toBe(3);
             system.removeEventListener("TEST", this.$func2, this);
 
-            system.addEventListener("TEST", this.$func2, this, true, suncom.EventPriorityEnum.LAZY);
+            system.addEventListener("TEST", this.$func2, this, true, suncom.EventPriorityEnum.LOWEST);
             system.dispatchEvent("TEST", data);
             suncom.Test.expect(data.msg).toBe(3);
             system.dispatchEvent("TEST", data);
