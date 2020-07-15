@@ -34,7 +34,9 @@ module suncom {
             let item: any = Pool.getItem(sign);
             if (item === null) {
                 if (Laya.Prefab !== void 0 && cls === Laya.Prefab) {
-                    item = Common.createPrefab(args);
+                    const prefab: Laya.Prefab = new Laya.Prefab();
+                    prefab.json = args;
+                    item = prefab.create();
                 }
                 else {
                     item = {};

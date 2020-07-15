@@ -72,9 +72,13 @@ module suncom {
                 else {
                     event.method.call(event.caller, args);
                 }
-                // 事件允许被取消，且事件被取消
-                if (cancelable === true && this.$isCanceled) {
-                    break;
+                // 事件被取消
+                if (this.$isCanceled) {
+                    // 事件允许被取消
+                    if (cancelable === true) {
+                        break;
+                    }
+                    suncom.Test.notExpected(`尝试取消不可被取消的事件：${name}`);
                 }
             }
 
