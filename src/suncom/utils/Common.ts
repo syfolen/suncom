@@ -109,7 +109,7 @@ module suncom {
          * 判断字符串是否为空
          * export
          */
-        export function isStringInvalidOrEmpty(str: string | number): boolean {
+        export function isStringNullOrEmpty(str: string | number): boolean {
             if (typeof str === "number") {
                 return false;
             }

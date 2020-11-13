@@ -38,11 +38,11 @@ module test {
             suncom.Test.assertTrue(suncom.Mathf.isNumber(11.6));
             suncom.Test.assertFalse(suncom.Mathf.isNumber(abc as any));
 
-            suncom.Test.assertTrue(suncom.Common.isStringInvalidOrEmpty(""));
-            suncom.Test.assertFalse(suncom.Common.isStringInvalidOrEmpty("null"));
-            suncom.Test.assertTrue(suncom.Common.isStringInvalidOrEmpty(null));
-            suncom.Test.assertTrue(suncom.Common.isStringInvalidOrEmpty(void 0));
-            suncom.Test.assertTrue(suncom.Common.isStringInvalidOrEmpty(abc as any));
+            suncom.Test.assertTrue(suncom.Common.isStringNullOrEmpty(""));
+            suncom.Test.assertFalse(suncom.Common.isStringNullOrEmpty("null"));
+            suncom.Test.assertTrue(suncom.Common.isStringNullOrEmpty(null));
+            suncom.Test.assertTrue(suncom.Common.isStringNullOrEmpty(void 0));
+            suncom.Test.assertTrue(suncom.Common.isStringNullOrEmpty(abc as any));
 
             suncom.Test.expect(suncom.Common.formatString("%s%d", ["a", 3])).toBe("a3");
             suncom.Test.expect(suncom.Common.formatString$("{$}{$}", ["a", 3])).toBe("a3");

@@ -15,14 +15,14 @@ module suncom {
 		/**
 		 * 数据表
 		 */
-		export const $table: { [id: string]: any } = {};
+		export const $table: IDictionaryI<any> = {};
 
 		/**
 		 * 获取数据
 		 * export
 		 */
 		export function get<T>(name: number): T {
-			return $table[name.toString()];
+			return $table[name];
 		}
 
 		/**
@@ -36,7 +36,7 @@ module suncom {
 				$table["auto_" + $id] = data;
 			}
 			else {
-				$table[name.toString()] = data;
+				$table[name] = data;
 			}
 			return data;
 		}
@@ -46,7 +46,7 @@ module suncom {
 		 * export
 		 */
 		export function exist(name: number): boolean {
-			return $table[name.toString()] !== void 0;
+			return $table[name] !== void 0;
 		}
 
 		/**
@@ -55,7 +55,7 @@ module suncom {
 		 */
 		export function drop<T>(name: number): T {
 			const data: T = DBService.get<any>(name);
-			delete $table[name.toString()];
+			delete $table[name];
 			return data;
 		}
 	}

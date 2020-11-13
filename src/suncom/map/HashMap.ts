@@ -68,7 +68,7 @@ module suncom {
          */
         put(data: T): T {
             let value: any = data[this.$primaryKey];
-            if (Common.isStringInvalidOrEmpty(value) === true) {
+            if (Common.isStringNullOrEmpty(value) === true) {
                 throw Error(`无效的主键的值，type:${typeof value}, value:${value}`);
             }
             if (this.getByPrimaryValue(value) === null) {
