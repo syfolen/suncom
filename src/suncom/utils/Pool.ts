@@ -14,7 +14,7 @@ module suncom {
          * 根据标识从池中获取对象，获取失败时返回null
          * export
          */
-        export function getItem(sign: string): any {
+        export function getItem<T>(sign: string): T {
             const array: any[] = $pool[sign] || null;
             if (array === null || array.length === 0) {
                 return null;
@@ -30,7 +30,7 @@ module suncom {
          * @args: 构造函数参数列表，若cls为Laya.Prefab，则args应当为字符串
          * export
          */
-        export function getItemByClass(sign: string, cls: any, args?: any): any {
+        export function getItemByClass<T>(sign: string, cls: any, args?: any): T {
             let item: any = Pool.getItem(sign);
             if (item === null) {
                 if (Laya.Prefab !== void 0 && cls === Laya.Prefab) {
