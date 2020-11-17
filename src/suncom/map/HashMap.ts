@@ -19,7 +19,7 @@ module suncom {
         /**
          * 哈希表（请勿直接操作其中的数据）
          */
-        dataMap: { [key: string]: T } = {};
+        dataMap: IDictionary<T> = {};
 
         /**
          * @primaryKey: 指定主键字段名，哈希表会使用主键值来作为数据索引，所以请确保主键值是恒值
@@ -27,10 +27,10 @@ module suncom {
          */
         constructor(primaryKey: string) {
             if (typeof primaryKey !== "string") {
-                throw Error(`非法的主键字段名：${primaryKey}`);
+                throw Error("非法的主键字段名：" + primaryKey);
             }
             if (primaryKey.length === 0) {
-                throw Error(`无效的主键字段名字长度：${primaryKey.length}`);
+                throw Error("无效的主键字段名字长度：" + primaryKey.length);
             }
             this.$primaryKey = primaryKey;
         }
@@ -69,14 +69,14 @@ module suncom {
         put(data: T): T {
             let value: any = data[this.$primaryKey];
             if (Common.isStringNullOrEmpty(value) === true) {
-                throw Error(`无效的主键的值，type:${typeof value}, value:${value}`);
+                throw Error("无效的主键的值，" + `type:${typeof value}, value:${value}`);
             }
             if (this.getByPrimaryValue(value) === null) {
                 this.source.push(data);
                 this.dataMap[value] = data;
             }
             else {
-                throw Error(`重复的主键值：[${this.$primaryKey}]${value}`);
+                throw Error("重复的主键值：" + `[${this.$primaryKey}]${value}`);
             }
             return data;
         }

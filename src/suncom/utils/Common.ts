@@ -142,7 +142,7 @@ module suncom {
                     }
                 }
                 if (indexOfReplace === -1) {
-                    Logger.warn(DebugMode.ANY, `字符串替换未完成 str:${str}`);
+                    Logger.warn(DebugMode.ANY, "字符串替换未完成 " + `str:${str}`);
                     break;
                 }
                 const suffix: string = str.substr(indexOfReplace + key.length);
@@ -161,7 +161,7 @@ module suncom {
             while (args.length > 0) {
                 const indexOfSign: number = str.indexOf("{$}", index);
                 if (index === -1) {
-                    Logger.warn(DebugMode.ANY, `字符串替换未完成 str:${str}`);
+                    Logger.warn(DebugMode.ANY, "字符串替换未完成 " + `str:${str}`);
                     break;
                 }
                 const suffix: string = str.substr(indexOfSign + 3);
@@ -507,7 +507,7 @@ module suncom {
                     newData[key] = null;
                 }
                 else {
-                    throw Error(`克隆意外的数据类型：${value}`);
+                    throw Error("克隆意外的数据类型：" + value);
                 }
             }
             return newData;
@@ -598,11 +598,11 @@ module suncom {
          */
         export function compareVersion(ver: string): number {
             if (typeof ver !== "string") {
-                Logger.error(DebugMode.ANY, `参数版本号无效`);
+                Logger.error(DebugMode.ANY, "参数版本号无效");
                 return 0;
             }
             if (typeof Global.VERSION !== "string") {
-                Logger.error(DebugMode.ANY, `版本号未设置`);
+                Logger.error(DebugMode.ANY, "版本号未设置");
                 return 0;
             }
             const array: string[] = ver.split(".");
@@ -633,10 +633,10 @@ module suncom {
             }
 
             if (error & 0x1) {
-                Logger.error(DebugMode.ANY, `参数版本号无效 ver:${ver}`);
+                Logger.error(DebugMode.ANY, "参数版本号无效 " + `ver:${ver}`);
             }
             if (error & 0x2) {
-                Logger.error(DebugMode.ANY, `当前版本号无效 ver:${Global.VERSION}`);
+                Logger.error(DebugMode.ANY, "当前版本号无效 " + `ver:${Global.VERSION}`);
             }
             if (error > 0) {
                 return 0;

@@ -46,45 +46,6 @@ module suncom {
         }
 
         /**
-         * 获取绝对值
-         * export
-         */
-        export function abs(a: number): number {
-            if (a < 0) {
-                return -a;
-            }
-            else {
-                return a;
-            }
-        }
-
-        /**
-         * 获取较小值
-         * export
-         */
-        export function min(a: number, b: number): number {
-            if (a < b) {
-                return a;
-            }
-            else {
-                return b;
-            }
-        }
-
-        /**
-         * 获取较大值
-         * export
-         */
-        export function max(a: number, b: number): number {
-            if (a > b) {
-                return a;
-            }
-            else {
-                return b;
-            }
-        }
-
-        /**
          * 将value限制于min和max之间
          * export
          */
@@ -176,7 +137,7 @@ module suncom {
          * 1. tmpValue值的计算会因精度问题存在误差
          */
         export function $round(value: number, n: number = 0): number {
-            Logger.warn(DebugMode.ANY, `此接口己弃用：suncom.Common.$round(value: number, n: number = 0);`);
+            Logger.warn(DebugMode.ANY, "此接口己弃用：suncom.Common.$round(value: number, n: number = 0);");
             let tmpValue: number = Math.floor(value * Math.pow(10, n + 2));
 
             let floatValue: number = tmpValue % 100;
@@ -222,8 +183,11 @@ module suncom {
             if (typeof str === "number") {
                 return true;
             }
-            if (typeof str === "string" && isNaN(Number(str)) === false) {
-                return true;
+            if (typeof str === "string") {
+                if (str === "") {
+                    return false;
+                }
+                return isNaN(+str) === false;
             }
             return false;
         }

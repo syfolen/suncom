@@ -24,7 +24,7 @@ module suncom {
         export function seed(value: number): void {
             if (value < 1) {
                 value = 1;
-                Logger.warn(DebugMode.ANY, `随机种子不允许小于1`);
+                Logger.warn(DebugMode.ANY, "随机种子不允许小于1");
             }
             $r = value;
         }

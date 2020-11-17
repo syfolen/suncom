@@ -27,74 +27,6 @@ module suncom {
         private $isCanceled: boolean = false;
 
         /**
-         * 取消当前正在派发的事件
-         * export
-         */
-        dispatchCancel(): void {
-            this.$isCanceled = true;
-        }
-
-        /**
-         * 事件派发
-         * @args: 参数列表，允许为任意类型的数据
-         * @cancelable: 事件是否允许被中断，默认为false
-         * export
-         */
-        dispatchEvent(type: string, args?: any, cancelable: boolean = false): void {
-            if (Common.isStringNullOrEmpty(type) === true) {
-                throw "派发无效事件！！！";
-            }
-            const list: Array<boolean | EventInfo> = this.$events[type] || null;
-
-            if (list === null) {
-                return;
-            }
-            // 标记禁止直接更新
-            list[0] = true;
-
-            // 记录历史事件状态
-            const isCanceled: boolean = this.$isCanceled;
-            // 标记当前事件未取消
-            this.$isCanceled = false;
-
-            for (let i: number = 1; i < list.length; i++) {
-                const event: EventInfo = list[i] as EventInfo;
-                // 一次性事件入栈
-                if (event.receiveOnce === true) {
-                    this.$onceList.push(event);
-                }
-                if (args === void 0) {
-                    event.method.call(event.caller);
-                }
-                else if (args instanceof Array) {
-                    event.method.apply(event.caller, args);
-                }
-                else {
-                    event.method.call(event.caller, args);
-                }
-                // 事件被取消
-                if (this.$isCanceled) {
-                    // 事件允许被取消
-                    if (cancelable === true) {
-                        break;
-                    }
-                    console.error("尝试取消不可被取消的事件：" + name);
-                }
-            }
-
-            // 回归历史事件状态
-            this.$isCanceled = isCanceled;
-            // 标记允许直接更新
-            list[0] = false;
-
-            // 注销一次性事件
-            while (this.$onceList.length > 0) {
-                const event: EventInfo = this.$onceList.pop();
-                this.removeEventListener(event.type, event.method, event.caller);
-            }
-        }
-
-        /**
          * 事件注册
          * @receiveOnce: 是否只响应一次，默认为false
          * @priority: 事件优先级，优先级高的先被执行，默认为：EventPriorityEnum.MID
@@ -102,17 +34,17 @@ module suncom {
          */
         addEventListener(type: string, method: Function, caller: Object, receiveOnce: boolean = false, priority: EventPriorityEnum = EventPriorityEnum.MID): void {
             if (Common.isStringNullOrEmpty(type) === true) {
-                throw Error(`注册无效事件！！！`);
+                throw Error("注册无效事件！！！");
             }
             if (method === void 0 || method === null) {
-                throw Error(`注册无效的事件回调！！！`);
+                throw Error("注册无效的事件回调！！！");
             }
             if (caller === void 0) {
                 caller = null;
             }
-            let list: Array<boolean | EventInfo> = this.$events[type] || null;
+            let list: Array<boolean | EventInfo> = this.$events[type];
 
-            if (list === null) {
+            if (list === void 0) {
                 list = this.$events[type] = [false];
             }
             // 复制数组以避免干扰
@@ -134,13 +66,12 @@ module suncom {
                 }
             }
 
-            const event: EventInfo = {
-                type: type,
-                caller: caller,
-                method: method,
-                priority: priority,
-                receiveOnce: receiveOnce
-            };
+            const event: EventInfo = Laya.Pool.getItemByClass("suncom.EventInfo", EventInfo);
+            event.type = type;
+            event.caller = caller;
+            event.method = method;
+            event.priority = priority;
+            event.receiveOnce = receiveOnce;
 
             if (index < 0) {
                 list.push(event);
@@ -156,14 +87,17 @@ module suncom {
          */
         removeEventListener(type: string, method: Function, caller: Object): void {
             if (Common.isStringNullOrEmpty(type) === true) {
-                throw Error(`移除无效的事件！！！`);
+                throw Error("移除无效的事件！！！");
             }
             if (method === void 0 || method === null) {
-                throw Error(`移除无效的事件回调！！！`);
+                throw Error("移除无效的事件回调！！！");
             }
-            let list: Array<boolean | EventInfo> = this.$events[type] || null;
+            if (caller === void 0) {
+                caller = null;
+            }
+            let list: Array<boolean | EventInfo> = this.$events[type];
 
-            if (list === null) {
+            if (list === void 0) {
                 return;
             }
 
@@ -178,6 +112,7 @@ module suncom {
                 const event: EventInfo = list[i] as EventInfo;
                 if (event.method === method && event.caller === caller) {
                     list.splice(i, 1);
+                    Laya.Pool.recover("suncom.EventInfo", event);
                     break;
                 }
             }
@@ -185,6 +120,72 @@ module suncom {
             // 移除空列表
             if (list.length === 1) {
                 delete this.$events[type];
+            }
+        }
+
+        /**
+         * 取消当前正在派发的事件
+         * export
+         */
+        dispatchCancel(): void {
+            this.$isCanceled = true;
+        }
+
+        /**
+         * 事件派发
+         * @args: 参数列表，允许为任意类型的数据
+         * @cancelable: 事件是否允许被中断，默认为: true
+         * export
+         */
+        dispatchEvent(type: string, args?: any, cancelable: boolean = true): void {
+            if (Common.isStringNullOrEmpty(type) === true) {
+                throw Error("派发无效事件！！！");
+            }
+            const list: Array<boolean | EventInfo> = this.$events[type];
+
+            if (list === void 0) {
+                return;
+            }
+            // 标记禁止直接更新
+            list[0] = true;
+
+            // 记录历史事件状态
+            const isCanceled: boolean = this.$isCanceled;
+            // 标记当前事件未取消
+            this.$isCanceled = false;
+
+            for (let i: number = 1; i < list.length; i++) {
+                const event: EventInfo = list[i] as EventInfo;
+                // 一次性事件入栈
+                if (event.receiveOnce === true) {
+                    this.$onceList.push(event);
+                }
+                if (args instanceof Array) {
+                    event.method.apply(event.caller, args);
+                }
+                else {
+                    event.method.call(event.caller, args);
+                }
+                // 事件被取消
+                if (this.$isCanceled) {
+                    // 事件允许被取消
+                    if (cancelable === true) {
+                        break;
+                    }
+                    console.error("尝试取消不可被取消的事件：" + type);
+                    this.$isCanceled = false;
+                }
+            }
+
+            // 回归历史事件状态
+            this.$isCanceled = isCanceled;
+            // 标记允许直接更新
+            list[0] = false;
+
+            // 注销一次性事件
+            while (this.$onceList.length > 0) {
+                const event: EventInfo = this.$onceList.pop();
+                this.removeEventListener(event.type, event.method, event.caller);
             }
         }
     }

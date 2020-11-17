@@ -14,7 +14,7 @@ module suncom {
         /**
          * 数据映射表（请勿直接操作其中的数据）
          */
-        dataMap: { [key: string]: T };
+        dataMap: IDictionary<T>;
 
         /**
          * 添加数据

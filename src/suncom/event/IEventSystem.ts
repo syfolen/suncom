@@ -7,6 +7,20 @@ module suncom {
     export interface IEventSystem {
 
         /**
+         * 事件注册
+         * @receiveOnce: 是否只响应一次，默认为: true
+         * @priority: 事件优先级，优先级高的先被执行，默认为：EventPriorityEnum.MID
+         * export
+         */
+        addEventListener(type: string, method: Function, caller: Object, receiveOnce?: boolean, priority?: EventPriorityEnum): void;
+
+        /**
+         * 移除事件
+         * export
+         */
+        removeEventListener(type: string, method: Function, caller: Object): void;
+
+        /**
          * 取消当前正在派发的事件
          * export
          */
@@ -19,19 +33,5 @@ module suncom {
          * export
          */
         dispatchEvent(type: string, args?: any, cancelable?: boolean): void;
-
-        /**
-         * 事件注册
-         * @receiveOnce: 是否只响应一次，默认为false
-         * @priority: 事件优先级，优先级高的先被执行，默认为：EventPriorityEnum.MID
-         * export
-         */
-        addEventListener(type: string, method: Function, caller: Object, receiveOnce?: boolean, priority?: EventPriorityEnum): void;
-
-        /**
-         * 移除事件
-         * export
-         */
-        removeEventListener(type: string, method: Function, caller: Object): void;
     }
 }
