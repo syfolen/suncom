@@ -1283,8 +1283,8 @@ var suncom;
     (function (Pool) {
         var $pool = {};
         function getItem(sign) {
-            var array = $pool[sign] || null;
-            if (array === null || array.length === 0) {
+            var array = $pool[sign];
+            if (array === void 0 || array.length === 0) {
                 return null;
             }
             var item = array.pop();
@@ -1319,8 +1319,8 @@ var suncom;
                 return;
             }
             item["__suncom__$__inPool__"] = true;
-            var array = $pool[sign] || null;
-            if (array === null) {
+            var array = $pool[sign];
+            if (array === void 0) {
                 $pool[sign] = [item];
             }
             else {

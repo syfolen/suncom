@@ -13,7 +13,7 @@ module suncom {
         /**
          * 回收站
          */
-        private static $recycle: Handler[] = [];
+        private static $pool: Handler[] = [];
 
         /**
          * 唯一标识
@@ -92,7 +92,7 @@ module suncom {
             if (this.$id > -1) {
                 this.$id = -1;
                 this.$method = null;
-                Handler.$recycle.push(this);
+                Handler.$pool.push(this);
             }
         }
 
@@ -117,7 +117,7 @@ module suncom {
          * export
          */
         static create(caller: Object, method: Function, args?: any[], once?: boolean): Handler {
-            const handler: Handler = this.$recycle.length > 0 ? this.$recycle.pop() : new Handler();
+            const handler: Handler = this.$pool.length > 0 ? this.$pool.pop() : new Handler();
             handler.$id = 0;
             handler.setTo(caller, method, args, once);
             return handler;
