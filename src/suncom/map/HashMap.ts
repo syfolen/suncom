@@ -4,7 +4,7 @@ module suncom {
      * 哈希表，通常用于作为一个大量数据的集合，用于快速获取数据集中的某条数据
      * export
      */
-    export class HashMap<T> implements IHashMap<T> {
+    export class HashMap<T> {
         /**
          * 主键字段名，通过主键值来查询数据是最快的
          */
@@ -25,7 +25,10 @@ module suncom {
          * @primaryKey: 指定主键字段名，哈希表会使用主键值来作为数据索引，所以请确保主键值是恒值
          * export
          */
-        constructor(primaryKey: string) {
+        constructor(primaryKey: number | string) {
+            if (typeof primaryKey === "number") {
+                primaryKey = primaryKey + "";
+            }
             if (typeof primaryKey !== "string") {
                 throw Error("非法的主键字段名：" + primaryKey);
             }
@@ -49,7 +52,7 @@ module suncom {
         /**
          * 获取数据在数据源中的索引
          */
-        private $getIndexByValue(key: string, value: any): number {
+        private $getIndexByValue(key: number | string, value: any): number {
             if (value === void 0) {
                 return -1;
             }
@@ -85,7 +88,7 @@ module suncom {
          * 根据键值返回数据
          * export
          */
-        getByValue(key: string, value: any): T {
+        getByValue(key: number | string, value: any): T {
             if (key === this.$primaryKey) {
                 return this.getByPrimaryValue(value);
             }
@@ -120,7 +123,7 @@ module suncom {
          * 根据键值移除数据
          * export
          */
-        removeByValue(key: string, value: any): T {
+        removeByValue(key: number | string, value: any): T {
             if (key === this.$primaryKey) {
                 return this.removeByPrimaryValue(value);
             }
