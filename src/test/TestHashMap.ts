@@ -6,7 +6,7 @@ module test {
         constructor() {
             console.log("TestHashMap");
 
-            const hashMap: suncom.IHashMap<any> = new suncom.HashMap("id");
+            const hashMap: suncom.HashMap<any> = new suncom.HashMap("id");
 
             const x = { id: 9, name: "yes" };
             const y = { id: 11, name: "no" };

@@ -3,11 +3,11 @@ module suncom {
     /**
      * 期望异常测试类
      */
-    export class Expect implements IExpect {
+    export class Expect {
         /**
          * 实际值
          */
-        private $value: any;
+        private $value: any = void 0;
 
         /**
          * 是否期望相反
@@ -39,7 +39,7 @@ module suncom {
         /**
          * 解释异常
          */
-        interpret(str: string): IExpect {
+        interpret(str: string): Expect {
             this.$interpretation = str;
             return this;
         }
@@ -272,9 +272,9 @@ module suncom {
         /**
          * 期望相反
          */
-        get not(): IExpect {
+        get not(): Expect {
             this.$asNot = true;
-            return this as any;
+            return this;
         }
     }
 }

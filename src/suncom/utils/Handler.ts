@@ -4,26 +4,52 @@ module suncom {
      * 事件处理器
      * export
      */
-    export class Handler implements IHandler {
+    export class Handler {
+        /**
+         * 标识种子
+         */
+        private static $gid: number = 0;
+
+        /**
+         * 回收站
+         */
+        private static $recycle: Handler[] = [];
+
+        /**
+         * 唯一标识
+         */
+        private $id: number = 0;
+
         /**
          * 参数列表
          */
-        private $args: any[];
+        private $args: any[] = void 0;
 
         /**
          * 回调对象
          */
-        private $caller: Object;
+        private $caller: Object = null;
 
         /**
          * 回调方法
          */
-        private $method: Function;
+        private $method: Function = null;
 
-        constructor(caller: Object, method: Function, args?: any[]) {
+        /**
+         * 是否为一次性的
+         */
+        private $once: boolean = false;
+
+        setTo(caller: Object, method: Function, args?: any[], once: boolean = true): Handler {
+            if (this.$id === -1) {
+                throw Error("Handler己被回收");
+            }
+            this.$id = ++Handler.$gid;
+            this.$caller = caller || null;
+            this.$method = method || null;
             this.$args = args;
-            this.$caller = caller;
-            this.$method = method;
+            this.$once = once;
+            return this;
         }
 
         /**
@@ -31,10 +57,10 @@ module suncom {
          * export
          */
         run(): any {
-            if (this.$args === void 0) {
-                return this.$method.call(this.$caller);
-            }
-            return this.$method.apply(this.$caller, this.$args);
+            const id: number = this.$id;
+            const res: any = this.$method.apply(this.$caller, this.$args);
+            id === this.$id && this.$once === true && this.recover();
+            return res;
         }
 
         /**
@@ -43,13 +69,31 @@ module suncom {
          * export
          */
         runWith(args: any): any {
-            if (this.$args === void 0) {
-                if (args instanceof Array) {
-                    return this.$method.apply(this.$caller, args);
-                }
-                return this.$method.call(this.$caller, args);
+            const id: number = this.$id;
+            let res: any;
+            if (this.$args !== void 0) {
+                res = this.$method.apply(this.$caller, this.$args.concat(args));
             }
-            return this.$method.apply(this.$caller, this.$args.concat(args));
+            else if (args instanceof Array) {
+                res = this.$method.apply(this.$caller, args);
+            }
+            else {
+                res = this.$method.call(this.$caller, args);
+            }
+            id === this.$id && this.$once === true && this.recover();
+            return res;
+        }
+
+        /**
+         * 回收对象
+         * export
+         */
+        recover(): void {
+            if (this.$id > -1) {
+                this.$id = -1;
+                this.$method = null;
+                Handler.$recycle.push(this);
+            }
         }
 
         /**
@@ -72,8 +116,11 @@ module suncom {
          * 创建Handler的简单工厂方法
          * export
          */
-        static create(caller: Object, method: Function, args?: any[]): IHandler {
-            return new Handler(caller, method, args);
+        static create(caller: Object, method: Function, args?: any[], once?: boolean): Handler {
+            const handler: Handler = this.$recycle.length > 0 ? this.$recycle.pop() : new Handler();
+            handler.$id = 0;
+            handler.setTo(caller, method, args, once);
+            return handler;
         }
     }
 }

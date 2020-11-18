@@ -4,15 +4,18 @@ module suncom {
      * 自定义事件系统
      * export
      */
-    export class EventSystem implements IEventSystem {
+    export class EventSystem {
         /**
          * 事件对象集合（内置属性，请勿操作）
-         * 为避免注册与注销对正在派发的事件列表产生干扰：
-         * NOTE: 每个列表首个元素为布尔类型，默认为 false
-         * NOTE: 若该列表的事件类型正在派发，则其值为 true
          * export
          */
-        private $events: IDictionary<Array<boolean | EventInfo>> = {};
+        private $events: IDictionary<EventInfo[]> = {};
+
+        /**
+         * 避免注册与注销对正在派发的事件列表产生干扰（内置属性，请勿操作）
+         * export
+         */
+        private $workings: IDictionary<boolean> = {};
 
         /**
          * 己执行的一次性事件对象列表（内置属性，请勿操作）
@@ -42,21 +45,21 @@ module suncom {
             if (caller === void 0) {
                 caller = null;
             }
-            let list: Array<boolean | EventInfo> = this.$events[type];
+            let list: EventInfo[] = this.$events[type];
 
             if (list === void 0) {
-                list = this.$events[type] = [false];
+                list = this.$events[type] = [];
             }
             // 复制数组以避免干扰
-            else if (list[0] === true) {
-                list = this.$events[type] = list.slice(0);
+            else if (this.$workings[type] === true) {
+                this.$events[type] = list = list.slice(0);
                 // 重置标记
-                list[0] = false;
+                this.$workings[type] = false;
             }
 
             let index: number = -1;
-            for (let i: number = 1; i < list.length; i++) {
-                const item: EventInfo = list[i] as EventInfo;
+            for (let i: number = 0; i < list.length; i++) {
+                const item: EventInfo = list[i];
                 if (item.method === method && item.caller === caller) {
                     return;
                 }
@@ -95,21 +98,21 @@ module suncom {
             if (caller === void 0) {
                 caller = null;
             }
-            let list: Array<boolean | EventInfo> = this.$events[type];
+            let list: EventInfo[] = this.$events[type];
 
             if (list === void 0) {
                 return;
             }
 
             // 复制数组以避免干扰
-            if (list[0] === true) {
-                list = this.$events[type] = list.slice(0);
+            if (this.$workings[type] === true) {
+                this.$events[type] = list = list.slice(0);
                 // 重置标记
-                list[0] = false;
+                this.$workings[type] = false;
             }
 
             for (let i: number = 0; i < list.length; i++) {
-                const event: EventInfo = list[i] as EventInfo;
+                const event: EventInfo = list[i];
                 if (event.method === method && event.caller === caller) {
                     list.splice(i, 1);
                     Laya.Pool.recover("suncom.EventInfo", event);
@@ -120,6 +123,7 @@ module suncom {
             // 移除空列表
             if (list.length === 1) {
                 delete this.$events[type];
+                delete this.$workings[type];
             }
         }
 
@@ -141,21 +145,21 @@ module suncom {
             if (Common.isStringNullOrEmpty(type) === true) {
                 throw Error("派发无效事件！！！");
             }
-            const list: Array<boolean | EventInfo> = this.$events[type];
+            const list: EventInfo[] = this.$events[type];
 
             if (list === void 0) {
                 return;
             }
             // 标记禁止直接更新
-            list[0] = true;
+            this.$workings[type] = true;
 
             // 记录历史事件状态
             const isCanceled: boolean = this.$isCanceled;
             // 标记当前事件未取消
             this.$isCanceled = false;
 
-            for (let i: number = 1; i < list.length; i++) {
-                const event: EventInfo = list[i] as EventInfo;
+            for (let i: number = 0; i < list.length; i++) {
+                const event: EventInfo = list[i];
                 // 一次性事件入栈
                 if (event.receiveOnce === true) {
                     this.$onceList.push(event);
@@ -180,7 +184,7 @@ module suncom {
             // 回归历史事件状态
             this.$isCanceled = isCanceled;
             // 标记允许直接更新
-            list[0] = false;
+            this.$workings[type] = false;
 
             // 注销一次性事件
             while (this.$onceList.length > 0) {

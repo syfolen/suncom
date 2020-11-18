@@ -20,13 +20,13 @@ module suncom {
         /**
          * 全局唯一
          */
-        let $expect: IExpect = null;
+        let $expect: Expect = null;
 
         /**
          * 期望测试
          * export
          */
-        export function expect(value: any, description?: string): IExpect {
+        export function expect(value: any, description?: string): Expect {
             if (Global.debugMode & DebugMode.TEST) {
                 return new Expect(description).expect(value);
             }
