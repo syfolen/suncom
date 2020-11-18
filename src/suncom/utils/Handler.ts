@@ -42,7 +42,7 @@ module suncom {
 
         setTo(caller: Object, method: Function, args?: any[], once: boolean = true): Handler {
             if (this.$id === -1) {
-                throw Error("Handler己被回收");
+                throw Error(`Handler己被回收`);
             }
             this.$id = ++Handler.$gid;
             this.$caller = caller || null;

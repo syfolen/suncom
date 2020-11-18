@@ -137,7 +137,7 @@ module suncom {
          * 1. tmpValue值的计算会因精度问题存在误差
          */
         export function $round(value: number, n: number = 0): number {
-            Logger.warn(DebugMode.ANY, "此接口己弃用：suncom.Common.$round(value: number, n: number = 0);");
+            Logger.warn(DebugMode.ANY, `此接口己弃用：suncom.Common.$round(value: number, n: number = 0);`);
             let tmpValue: number = Math.floor(value * Math.pow(10, n + 2));
 
             let floatValue: number = tmpValue % 100;

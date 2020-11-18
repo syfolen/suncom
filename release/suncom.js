@@ -53,10 +53,10 @@ var suncom;
             if (receiveOnce === void 0) { receiveOnce = false; }
             if (priority === void 0) { priority = EventPriorityEnum.MID; }
             if (Common.isStringNullOrEmpty(type) === true) {
-                throw Error("注册无效事件！！！");
+                throw Error("\u6CE8\u518C\u65E0\u6548\u4E8B\u4EF6\uFF01\uFF01\uFF01");
             }
             if (method === void 0 || method === null) {
-                throw Error("注册无效的事件回调！！！");
+                throw Error("\u6CE8\u518C\u65E0\u6548\u7684\u4E8B\u4EF6\u56DE\u8C03\uFF01\uFF01\uFF01");
             }
             if (caller === void 0) {
                 caller = null;
@@ -94,10 +94,10 @@ var suncom;
         };
         EventSystem.prototype.removeEventListener = function (type, method, caller) {
             if (Common.isStringNullOrEmpty(type) === true) {
-                throw Error("移除无效的事件！！！");
+                throw Error("\u79FB\u9664\u65E0\u6548\u7684\u4E8B\u4EF6\uFF01\uFF01\uFF01");
             }
             if (method === void 0 || method === null) {
-                throw Error("移除无效的事件回调！！！");
+                throw Error("\u79FB\u9664\u65E0\u6548\u7684\u4E8B\u4EF6\u56DE\u8C03\uFF01\uFF01\uFF01");
             }
             if (caller === void 0) {
                 caller = null;
@@ -129,7 +129,7 @@ var suncom;
         EventSystem.prototype.dispatchEvent = function (type, args, cancelable) {
             if (cancelable === void 0) { cancelable = true; }
             if (Common.isStringNullOrEmpty(type) === true) {
-                throw Error("派发无效事件！！！");
+                throw Error("\u6D3E\u53D1\u65E0\u6548\u4E8B\u4EF6\uFF01\uFF01\uFF01");
             }
             var list = this.$events[type];
             if (list === void 0) {
@@ -153,7 +153,7 @@ var suncom;
                     if (cancelable === true) {
                         break;
                     }
-                    console.error("尝试取消不可被取消的事件：" + type);
+                    console.error("\u5C1D\u8BD5\u53D6\u6D88\u4E0D\u53EF\u88AB\u53D6\u6D88\u7684\u4E8B\u4EF6\uFF1A" + type);
                     this.$isCanceled = false;
                 }
             }
@@ -351,7 +351,7 @@ var suncom;
         Handler.prototype.setTo = function (caller, method, args, once) {
             if (once === void 0) { once = true; }
             if (this.$id === -1) {
-                throw Error("Handler己被回收");
+                throw Error("Handler\u5DF1\u88AB\u56DE\u6536");
             }
             this.$id = ++Handler.$gid;
             this.$caller = caller || null;
@@ -422,10 +422,10 @@ var suncom;
                 primaryKey = primaryKey + "";
             }
             if (typeof primaryKey !== "string") {
-                throw Error("非法的主键字段名：" + primaryKey);
+                throw Error("\u975E\u6CD5\u7684\u4E3B\u952E\u5B57\u6BB5\u540D\uFF1A" + primaryKey);
             }
             if (primaryKey.length === 0) {
-                throw Error("无效的主键字段名字长度：" + primaryKey.length);
+                throw Error("\u65E0\u6548\u7684\u4E3B\u952E\u5B57\u6BB5\u540D\u5B57\u957F\u5EA6\uFF1A" + primaryKey.length);
             }
             this.$primaryKey = primaryKey;
         }
@@ -451,14 +451,14 @@ var suncom;
         HashMap.prototype.put = function (data) {
             var value = data[this.$primaryKey];
             if (Common.isStringNullOrEmpty(value) === true) {
-                throw Error("无效的主键的值，" + ("type:" + typeof value + ", value:" + value));
+                throw Error("\u65E0\u6548\u7684\u4E3B\u952E\u7684\u503C\uFF0Ctype:" + typeof value + ", value:" + value);
             }
             if (this.getByPrimaryValue(value) === null) {
                 this.source.push(data);
                 this.dataMap[value] = data;
             }
             else {
-                throw Error("重复的主键值：" + ("[" + this.$primaryKey + "]" + value));
+                throw Error("\u91CD\u590D\u7684\u4E3B\u952E\u503C\uFF1A[" + this.$primaryKey + "]" + value);
             }
             return data;
         };
@@ -1238,7 +1238,7 @@ var suncom;
         Mathf.round = round;
         function $round(value, n) {
             if (n === void 0) { n = 0; }
-            Logger.warn(DebugMode.ANY, "此接口己弃用：suncom.Common.$round(value: number, n: number = 0);");
+            Logger.warn(DebugMode.ANY, "\u6B64\u63A5\u53E3\u5DF1\u5F03\u7528\uFF1Asuncom.Common.$round(value: number, n: number = 0);");
             var tmpValue = Math.floor(value * Math.pow(10, n + 2));
             var floatValue = tmpValue % 100;
             var intValue = (tmpValue - floatValue) / 100;
@@ -1344,7 +1344,7 @@ var suncom;
         function seed(value) {
             if (value < 1) {
                 value = 1;
-                Logger.warn(DebugMode.ANY, "随机种子不允许小于1");
+                Logger.warn(DebugMode.ANY, "\u968F\u673A\u79CD\u5B50\u4E0D\u5141\u8BB8\u5C0F\u4E8E1");
             }
             $r = value;
         }

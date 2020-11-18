@@ -37,10 +37,10 @@ module suncom {
          */
         addEventListener(type: string, method: Function, caller: Object, receiveOnce: boolean = false, priority: EventPriorityEnum = EventPriorityEnum.MID): void {
             if (Common.isStringNullOrEmpty(type) === true) {
-                throw Error("注册无效事件！！！");
+                throw Error(`注册无效事件！！！`);
             }
             if (method === void 0 || method === null) {
-                throw Error("注册无效的事件回调！！！");
+                throw Error(`注册无效的事件回调！！！`);
             }
             if (caller === void 0) {
                 caller = null;
@@ -90,10 +90,10 @@ module suncom {
          */
         removeEventListener(type: string, method: Function, caller: Object): void {
             if (Common.isStringNullOrEmpty(type) === true) {
-                throw Error("移除无效的事件！！！");
+                throw Error(`移除无效的事件！！！`);
             }
             if (method === void 0 || method === null) {
-                throw Error("移除无效的事件回调！！！");
+                throw Error(`移除无效的事件回调！！！`);
             }
             if (caller === void 0) {
                 caller = null;
@@ -143,7 +143,7 @@ module suncom {
          */
         dispatchEvent(type: string, args?: any, cancelable: boolean = true): void {
             if (Common.isStringNullOrEmpty(type) === true) {
-                throw Error("派发无效事件！！！");
+                throw Error(`派发无效事件！！！`);
             }
             const list: EventInfo[] = this.$events[type];
 
@@ -176,7 +176,7 @@ module suncom {
                     if (cancelable === true) {
                         break;
                     }
-                    console.error("尝试取消不可被取消的事件：" + type);
+                    console.error(`尝试取消不可被取消的事件：${type}`);
                     this.$isCanceled = false;
                 }
             }
