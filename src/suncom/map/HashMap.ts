@@ -19,7 +19,7 @@ module suncom {
         /**
          * 哈希表（请勿直接操作其中的数据）
          */
-        dataMap: IDictionary<T> = {};
+        dataMap: { [key: string]: T } = {};
 
         /**
          * @primaryKey: 指定主键字段名，哈希表会使用主键值来作为数据索引，所以请确保主键值是恒值

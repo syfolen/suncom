@@ -15,7 +15,7 @@ module suncom {
 		/**
 		 * 数据表
 		 */
-		export const $table: IDictionaryI<any> = {};
+		export const $table: { [id: number]: any } = {};
 
 		/**
 		 * 获取数据

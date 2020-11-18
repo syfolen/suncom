@@ -9,13 +9,13 @@ module suncom {
          * 事件对象集合（内置属性，请勿操作）
          * export
          */
-        private $events: IDictionary<EventInfo[]> = {};
+        private $events: { [type: string]: EventInfo[] } = {};
 
         /**
          * 避免注册与注销对正在派发的事件列表产生干扰（内置属性，请勿操作）
          * export
          */
-        private $workings: IDictionary<boolean> = {};
+        private $workings: { [type: string]: boolean } = {};
 
         /**
          * 己执行的一次性事件对象列表（内置属性，请勿操作）

@@ -8,7 +8,7 @@ module suncom {
         /**
          * 对象集合
          */
-        const $pool: IDictionary<any[]> = {};
+        const $pool: { [sign: string]: any[] } = {};
 
         /**
          * 根据标识从池中获取对象，获取失败时返回null
