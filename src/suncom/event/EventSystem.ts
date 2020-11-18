@@ -4,7 +4,7 @@ module suncom {
      * 自定义事件系统
      * export
      */
-    export class EventSystem {
+    export class EventSystem implements IEventSystem {
         /**
          * 事件对象集合（内置属性，请勿操作）
          * 为避免注册与注销对正在派发的事件列表产生干扰：
