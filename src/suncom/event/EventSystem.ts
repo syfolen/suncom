@@ -121,7 +121,7 @@ module suncom {
             }
 
             // 移除空列表
-            if (list.length === 1) {
+            if (list.length === 0) {
                 delete this.$events[type];
                 delete this.$workings[type];
             }
