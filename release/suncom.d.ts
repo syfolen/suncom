@@ -195,6 +195,129 @@ declare module suncom {
     }
 
     /**
+     * 期望异常测试类
+     */
+    class Expect {
+
+        /**
+         * 指定期望值
+         */
+        expect(value: any): Expect;
+
+        /**
+         * 解释异常
+         */
+        interpret(str: string): Expect;
+
+        /**
+         * 测试执行接口，若测试未通过，则输出description
+         */
+        test(pass: boolean, message: string): void;
+
+        /**
+         * 期望为任意值，但不为null和undefined
+         */
+        anything(): void;
+
+        /**
+         * 期望数组中包含
+         */
+        arrayContaining<T>(array: T[]): void;
+
+        /**
+         * 期望字符串中含有value
+         */
+        stringContaining(value: string): void;
+
+        /**
+         * 期望字符串被包含
+         */
+        stringMatching(value: string): void;
+
+        /**
+         * 期望存在属性
+         * @value: 若不为void 0，则同时校验值
+         */
+        toHaveProperty(key: string, value?: any): void;
+
+        /**
+         * 期望值为：value
+         */
+        toBe(value: any): void;
+
+        /**
+         * 期望值为：null
+         */
+        toBeNull(): void;
+
+        /**
+         * 期望值为：undefined
+         */
+        toBeUndefined(): void;
+
+        /**
+         * 期望为：布尔类型
+         */
+        toBeBoolean(): void;
+
+        /**
+         * 期望对象类型为：cls
+         */
+        toBeInstanceOf(cls: new () => any): void;
+
+        /**
+         * 期望在不关心类型的情况下，值在布尔上下文中为假
+         */
+        toBeFalsy(value: any): void;
+
+        /**
+         * 期望在不关心类型的情况下，值在布尔上下文中为真
+         */
+        toBeTruthy(value: any): void;
+
+        /**
+         * 期望两个数字是否相等
+         * @deviation: 误差，默认为：0
+         */
+        toBeCloseTo(value: number, deviation?: number): void;
+
+        /**
+         * 期望数字大于
+         */
+        toBeGreaterThan(value: number): void;
+
+        /**
+         * 期望数字大于或等于
+         */
+        toBeGreaterOrEqualThan(value: number): void;
+
+        /**
+         * 期望数字小于
+         */
+        toBeLessThan(value: number): void;
+
+        /**
+         * 期望数字小于或等于
+         */
+        toBeLessOrEqualThan(value: number): void;
+
+        /**
+         * 深度相等
+         */
+        toEqual(value: any): void;
+
+        /**
+         * 深度相等且类型一致
+         */
+        toStrictEqual(value: any): void;
+
+        /**
+         * 期望相反
+         */
+        readonly not: Expect;
+    }
+
+    /**
      * 事件处理器
      */
     class Handler {
