@@ -6,16 +6,6 @@ module suncom {
      */
     export class Handler {
         /**
-         * 标识种子
-         */
-        private static $gid: number = 0;
-
-        /**
-         * 回收站
-         */
-        private static $pool: Handler[] = [];
-
-        /**
          * 唯一标识
          */
         private $id: number = 0;
@@ -40,11 +30,15 @@ module suncom {
          */
         private $once: boolean = false;
 
+        constructor() {
+            Pool.setKeyValue("suncom.Handler", "$id", -1, 0);
+        }
+
         setTo(caller: Object, method: Function, args: any[] = null, once: boolean = true): Handler {
             if (this.$id === -1) {
                 throw Error(`Handler己被回收`);
             }
-            this.$id = ++Handler.$gid;
+            this.$id = Common.createHashId();
             this.$caller = caller || null;
             this.$method = method || null;
             this.$args = args;
@@ -89,10 +83,8 @@ module suncom {
          * export
          */
         recover(): void {
-            if (this.$id > -1) {
-                this.$id = -1;
+            if (Pool.recover("suncom.Handler", this) === true) {
                 this.$method = null;
-                Handler.$pool.push(this);
             }
         }
 
@@ -117,10 +109,7 @@ module suncom {
          * export
          */
         static create(caller: Object, method: Function, args?: any[], once?: boolean): Handler {
-            const handler: Handler = this.$pool.length > 0 ? this.$pool.pop() : new Handler();
-            handler.$id = 0;
-            handler.setTo(caller, method, args, once);
-            return handler;
+            return Pool.getItemByClass<Handler>("suncom.Handler", Handler).setTo(caller, method, args, once);
         }
     }
 }

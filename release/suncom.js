@@ -347,6 +347,7 @@ var suncom;
             this.$caller = null;
             this.$method = null;
             this.$once = false;
+            Pool.setKeyValue("suncom.Handler", "$id", -1, 0);
         }
         Handler.prototype.setTo = function (caller, method, args, once) {
             if (args === void 0) { args = null; }
@@ -354,7 +355,7 @@ var suncom;
             if (this.$id === -1) {
                 throw Error("Handler\u5DF1\u88AB\u56DE\u6536");
             }
-            this.$id = ++Handler.$gid;
+            this.$id = Common.createHashId();
             this.$caller = caller || null;
             this.$method = method || null;
             this.$args = args;
@@ -383,10 +384,8 @@ var suncom;
             return res;
         };
         Handler.prototype.recover = function () {
-            if (this.$id > -1) {
-                this.$id = -1;
+            if (Pool.recover("suncom.Handler", this) === true) {
                 this.$method = null;
-                Handler.$pool.push(this);
             }
         };
         Object.defineProperty(Handler.prototype, "caller", {
@@ -404,13 +403,8 @@ var suncom;
             configurable: true
         });
         Handler.create = function (caller, method, args, once) {
-            var handler = this.$pool.length > 0 ? this.$pool.pop() : new Handler();
-            handler.$id = 0;
-            handler.setTo(caller, method, args, once);
-            return handler;
+            return Pool.getItemByClass("suncom.Handler", Handler).setTo(caller, method, args, once);
         };
-        Handler.$gid = 0;
-        Handler.$pool = [];
         return Handler;
     }());
     suncom.Handler = Handler;
@@ -1283,13 +1277,23 @@ var suncom;
     var Pool;
     (function (Pool) {
         var $pool = {};
+        var $inPoolValueMap = {};
         function getItem(sign) {
             var array = $pool[sign];
             if (array === void 0 || array.length === 0) {
                 return null;
             }
             var item = array.pop();
-            delete item["__suncom__$__inPool__"];
+            var ipv = $inPoolValueMap[sign];
+            if (ipv === void 0) {
+                delete item["__suncom__$__inPool__"];
+            }
+            else if (item[ipv.key] !== ipv.inPoolValue) {
+                throw Error("\u5BF9\u8C61[" + Common.getQualifiedClassName(item) + "]\u7684\u5C5E\u6027{" + ipv.key + "}\u7684\u503C\u5728\u88AB\u5BF9\u8C61\u6C60\u56DE\u6536\u4E4B\u540E\u53D1\u751F\u8FC7\u53D8\u66F4\uFF01");
+            }
+            else {
+                item[ipv.key] = ipv.defaultValue;
+            }
             return item;
         }
         Pool.getItem = getItem;
@@ -1311,15 +1315,28 @@ var suncom;
                         cls.call(item, args);
                     }
                 }
+                var ipv = $inPoolValueMap[sign];
+                if (ipv !== void 0 && ipv.defaultValue !== void 0) {
+                    item[ipv.key] = ipv.defaultValue;
+                }
             }
             return item;
         }
         Pool.getItemByClass = getItemByClass;
         function recover(sign, item) {
-            if (item["__suncom__$__inPool__"] === true) {
-                return;
+            var ipv = $inPoolValueMap[sign];
+            if (ipv === void 0) {
+                if (item["__suncom__$__inPool__"] === true) {
+                    return false;
+                }
+                item["__suncom__$__inPool__"] = true;
             }
-            item["__suncom__$__inPool__"] = true;
+            else {
+                if (item[ipv.key] === ipv.inPoolValue) {
+                    return false;
+                }
+                item[ipv.key] = ipv.inPoolValue;
+            }
             var array = $pool[sign];
             if (array === void 0) {
                 $pool[sign] = [item];
@@ -1327,6 +1344,7 @@ var suncom;
             else {
                 array.push(item);
             }
+            return true;
         }
         Pool.recover = recover;
         function clear(sign) {
@@ -1335,6 +1353,21 @@ var suncom;
             }
         }
         Pool.clear = clear;
+        function setKeyValue(sign, key, inPoolValue, defaultValue) {
+            if ($inPoolValueMap[sign] !== void 0) {
+                return;
+            }
+            if (inPoolValue === defaultValue) {
+                throw Error("\u4E0D\u53EF\u6307\u5B9A\u76F8\u540C\u7684\u5C5E\u6027\u503C");
+            }
+            var ipv = {
+                key: key,
+                inPoolValue: inPoolValue,
+                defaultValue: defaultValue
+            };
+            $inPoolValueMap[sign] = ipv;
+        }
+        Pool.setKeyValue = setKeyValue;
     })(Pool = suncom.Pool || (suncom.Pool = {}));
     var Random;
     (function (Random) {
