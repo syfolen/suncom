@@ -71,7 +71,7 @@ module suncom {
                 }
             }
 
-            const event: EventInfo = Laya.Pool.getItemByClass("suncom.EventInfo", EventInfo);
+            const event: EventInfo = Pool.getItemByClass("suncom.EventInfo", EventInfo);
             event.type = type;
             event.caller = caller;
             event.method = method;
@@ -114,7 +114,7 @@ module suncom {
                 const event: EventInfo = list[i];
                 if (event.method === method && event.caller === caller) {
                     list.splice(i, 1);
-                    Laya.Pool.recover("suncom.EventInfo", event);
+                    Pool.recover("suncom.EventInfo", event);
                     break;
                 }
             }

@@ -19,12 +19,12 @@ module suncom {
          * 根据标识从池中获取对象，获取失败时返回null
          * export
          */
-        export function getItem<T>(sign: string): T {
-            const array: T[] = $pool[sign];
+        export function getItem(sign: string): any {
+            const array: any[] = $pool[sign];
             if (array === void 0 || array.length === 0) {
                 return null;
             }
-            const item: T = array.pop();
+            const item: any = array.pop();
             const ipv: IPoolItemKeyValue = $inPoolValueMap[sign];
             // 若InPoolValue不存在，则仅移除简单标记
             if (ipv === void 0) {
@@ -47,7 +47,7 @@ module suncom {
          * 1. 通过此方法创建的对象，通过setKeyValue指定的属性亦会被重置为defaultValue
          * export
          */
-        export function getItemByClass<T>(sign: string, cls: any, args?: any): T {
+        export function getItemByClass(sign: string, cls: any, args?: any): any {
             let item: any = Pool.getItem(sign);
             if (item === null) {
                 if (Laya.Prefab !== void 0 && cls === Laya.Prefab) {

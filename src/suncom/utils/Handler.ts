@@ -109,7 +109,7 @@ module suncom {
          * export
          */
         static create(caller: Object, method: Function, args?: any[], once?: boolean): Handler {
-            return Pool.getItemByClass<Handler>("suncom.Handler", Handler).setTo(caller, method, args, once);
+            return Pool.getItemByClass("suncom.Handler", Handler).setTo(caller, method, args, once);
         }
     }
 }
