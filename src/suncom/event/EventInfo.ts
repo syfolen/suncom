@@ -1,7 +1,7 @@
 
 module suncom {
     /**
-     * 自定义事件系统中的事件信息
+     * 自定义事件系统中的事件信息（内置对象，请勿在外部持有）
      * export
      */
     export class EventInfo {

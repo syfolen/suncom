@@ -45,7 +45,7 @@ var suncom;
     var EventSystem = (function () {
         function EventSystem() {
             this.$events = {};
-            this.$workings = {};
+            this.$lockers = {};
             this.$onceList = [];
             this.$isCanceled = false;
         }
@@ -65,9 +65,9 @@ var suncom;
             if (list === void 0) {
                 list = this.$events[type] = [];
             }
-            else if (this.$workings[type] === true) {
+            else if (this.$lockers[type] === true) {
                 this.$events[type] = list = list.slice(0);
-                this.$workings[type] = false;
+                this.$lockers[type] = false;
             }
             var index = -1;
             for (var i = 0; i < list.length; i++) {
@@ -106,9 +106,9 @@ var suncom;
             if (list === void 0) {
                 return;
             }
-            if (this.$workings[type] === true) {
+            if (this.$lockers[type] === true) {
                 this.$events[type] = list = list.slice(0);
-                this.$workings[type] = false;
+                this.$lockers[type] = false;
             }
             for (var i = 0; i < list.length; i++) {
                 var event_1 = list[i];
@@ -120,13 +120,10 @@ var suncom;
             }
             if (list.length === 0) {
                 delete this.$events[type];
-                delete this.$workings[type];
+                delete this.$lockers[type];
             }
         };
-        EventSystem.prototype.dispatchCancel = function () {
-            this.$isCanceled = true;
-        };
-        EventSystem.prototype.dispatchEvent = function (type, args, cancelable) {
+        EventSystem.prototype.dispatchEvent = function (type, data, cancelable) {
             if (cancelable === void 0) { cancelable = true; }
             if (Common.isStringNullOrEmpty(type) === true) {
                 throw Error("\u6D3E\u53D1\u65E0\u6548\u4E8B\u4EF6\uFF01\uFF01\uFF01");
@@ -135,7 +132,7 @@ var suncom;
             if (list === void 0) {
                 return;
             }
-            this.$workings[type] = true;
+            this.$lockers[type] = true;
             var isCanceled = this.$isCanceled;
             this.$isCanceled = false;
             for (var i = 0; i < list.length; i++) {
@@ -143,11 +140,11 @@ var suncom;
                 if (event_2.receiveOnce === true) {
                     this.$onceList.push(event_2);
                 }
-                if (args instanceof Array) {
-                    event_2.method.apply(event_2.caller, args);
+                if (data instanceof Array) {
+                    event_2.method.apply(event_2.caller, data);
                 }
                 else {
-                    event_2.method.call(event_2.caller, args);
+                    event_2.method.call(event_2.caller, data);
                 }
                 if (this.$isCanceled) {
                     if (cancelable === true) {
@@ -158,11 +155,14 @@ var suncom;
                 }
             }
             this.$isCanceled = isCanceled;
-            this.$workings[type] = false;
+            this.$lockers[type] = false;
             while (this.$onceList.length > 0) {
                 var event_3 = this.$onceList.pop();
                 this.removeEventListener(event_3.type, event_3.method, event_3.caller);
             }
+        };
+        EventSystem.prototype.dispatchCancel = function () {
+            this.$isCanceled = true;
         };
         return EventSystem;
     }());
@@ -343,12 +343,13 @@ var suncom;
     var Handler = (function () {
         function Handler() {
             this.$id = 0;
-            this.$args = void 0;
+            this.$args = null;
             this.$caller = null;
             this.$method = null;
             this.$once = false;
         }
         Handler.prototype.setTo = function (caller, method, args, once) {
+            if (args === void 0) { args = null; }
             if (once === void 0) { once = true; }
             if (this.$id === -1) {
                 throw Error("Handler\u5DF1\u88AB\u56DE\u6536");
@@ -369,7 +370,7 @@ var suncom;
         Handler.prototype.runWith = function (args) {
             var id = this.$id;
             var res;
-            if (this.$args !== void 0) {
+            if (this.$args !== null) {
                 res = this.$method.apply(this.$caller, this.$args.concat(args));
             }
             else if (args instanceof Array) {
@@ -385,7 +386,7 @@ var suncom;
             if (this.$id > -1) {
                 this.$id = -1;
                 this.$method = null;
-                Handler.$recycle.push(this);
+                Handler.$pool.push(this);
             }
         };
         Object.defineProperty(Handler.prototype, "caller", {
@@ -403,13 +404,13 @@ var suncom;
             configurable: true
         });
         Handler.create = function (caller, method, args, once) {
-            var handler = this.$recycle.length > 0 ? this.$recycle.pop() : new Handler();
+            var handler = this.$pool.length > 0 ? this.$pool.pop() : new Handler();
             handler.$id = 0;
             handler.setTo(caller, method, args, once);
             return handler;
         };
         Handler.$gid = 0;
-        Handler.$recycle = [];
+        Handler.$pool = [];
         return Handler;
     }());
     suncom.Handler = Handler;

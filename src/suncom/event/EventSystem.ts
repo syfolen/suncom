@@ -15,7 +15,7 @@ module suncom {
          * 避免注册与注销对正在派发的事件列表产生干扰（内置属性，请勿操作）
          * export
          */
-        private $workings: { [type: string]: boolean } = {};
+        private $lockers: { [type: string]: boolean } = {};
 
         /**
          * 己执行的一次性事件对象列表（内置属性，请勿操作）
@@ -33,6 +33,9 @@ module suncom {
          * 事件注册
          * @receiveOnce: 是否只响应一次，默认为false
          * @priority: 事件优先级，优先级高的先被执行，默认为：EventPriorityEnum.MID
+         * @args[]: 回调参数列表，默认为: null
+         * 说明：
+         * 1. 若需覆盖参数，请先调用removeEventListener移除事件后再重新注册
          * export
          */
         addEventListener(type: string, method: Function, caller: Object, receiveOnce: boolean = false, priority: EventPriorityEnum = EventPriorityEnum.MID): void {
@@ -46,15 +49,14 @@ module suncom {
                 caller = null;
             }
             let list: EventInfo[] = this.$events[type];
-
+            // 若列表不存在，则新建
             if (list === void 0) {
                 list = this.$events[type] = [];
             }
-            // 复制数组以避免干扰
-            else if (this.$workings[type] === true) {
+            // 解锁并复制被锁定的列表
+            else if (this.$lockers[type] === true) {
                 this.$events[type] = list = list.slice(0);
-                // 重置标记
-                this.$workings[type] = false;
+                this.$lockers[type] = false;
             }
 
             let index: number = -1;
@@ -99,16 +101,13 @@ module suncom {
                 caller = null;
             }
             let list: EventInfo[] = this.$events[type];
-
             if (list === void 0) {
                 return;
             }
-
-            // 复制数组以避免干扰
-            if (this.$workings[type] === true) {
+            // 解锁并复制被锁定的列表
+            if (this.$lockers[type] === true) {
                 this.$events[type] = list = list.slice(0);
-                // 重置标记
-                this.$workings[type] = false;
+                this.$lockers[type] = false;
             }
 
             for (let i: number = 0; i < list.length; i++) {
@@ -123,35 +122,26 @@ module suncom {
             // 移除空列表
             if (list.length === 0) {
                 delete this.$events[type];
-                delete this.$workings[type];
+                delete this.$lockers[type];
             }
-        }
-
-        /**
-         * 取消当前正在派发的事件
-         * export
-         */
-        dispatchCancel(): void {
-            this.$isCanceled = true;
         }
 
         /**
          * 事件派发
-         * @args: 参数列表，允许为任意类型的数据
-         * @cancelable: 事件是否允许被中断，默认为: true
+         * @data: 参数对象，允许为任意类型的数据，传递多个参数时可指定其为数组，若需要传递的data本身就是数组，则需要传递[data]
+         * @cancelable: 通知是否允许被取消，默认为: true
          * export
          */
-        dispatchEvent(type: string, args?: any, cancelable: boolean = true): void {
+        dispatchEvent(type: string, data?: any, cancelable: boolean = true): void {
             if (Common.isStringNullOrEmpty(type) === true) {
                 throw Error(`派发无效事件！！！`);
             }
             const list: EventInfo[] = this.$events[type];
-
             if (list === void 0) {
                 return;
             }
-            // 标记禁止直接更新
-            this.$workings[type] = true;
+            // 锁定列表
+            this.$lockers[type] = true;
 
             // 记录历史事件状态
             const isCanceled: boolean = this.$isCanceled;
@@ -164,11 +154,11 @@ module suncom {
                 if (event.receiveOnce === true) {
                     this.$onceList.push(event);
                 }
-                if (args instanceof Array) {
-                    event.method.apply(event.caller, args);
+                if (data instanceof Array) {
+                    event.method.apply(event.caller, data);
                 }
                 else {
-                    event.method.call(event.caller, args);
+                    event.method.call(event.caller, data);
                 }
                 // 事件被取消
                 if (this.$isCanceled) {
@@ -184,13 +174,21 @@ module suncom {
             // 回归历史事件状态
             this.$isCanceled = isCanceled;
             // 标记允许直接更新
-            this.$workings[type] = false;
+            this.$lockers[type] = false;
 
             // 注销一次性事件
             while (this.$onceList.length > 0) {
                 const event: EventInfo = this.$onceList.pop();
                 this.removeEventListener(event.type, event.method, event.caller);
             }
+        }
+
+        /**
+         * 取消当前正在派发的事件
+         * export
+         */
+        dispatchCancel(): void {
+            this.$isCanceled = true;
         }
     }
 }

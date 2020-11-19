@@ -140,7 +140,7 @@ declare module suncom {
     }
 
     /**
-     * 自定义事件系统中的事件信息
+     * 自定义事件系统中的事件信息（内置对象，请勿在外部持有）
      */
     class EventInfo {
     }
@@ -157,7 +157,7 @@ declare module suncom {
         /**
          * 避免注册与注销对正在派发的事件列表产生干扰（内置属性，请勿操作）
          */
-        private $workings: { [type: string]: boolean };
+        private $lockers: { [type: string]: boolean };
 
         /**
          * 己执行的一次性事件对象列表（内置属性，请勿操作）
@@ -173,6 +173,9 @@ declare module suncom {
          * 事件注册
          * @receiveOnce: 是否只响应一次，默认为false
          * @priority: 事件优先级，优先级高的先被执行，默认为：EventPriorityEnum.MID
+         * @args[]: 回调参数列表，默认为: null
+         * 说明：
+         * 1. 若需覆盖参数，请先调用removeEventListener移除事件后再重新注册
          */
         addEventListener(type: string, method: Function, caller: Object, receiveOnce?: boolean, priority?: EventPriorityEnum): void;
 
@@ -182,16 +185,16 @@ declare module suncom {
         removeEventListener(type: string, method: Function, caller: Object): void;
 
         /**
+         * 事件派发
+         * @data: 参数对象，允许为任意类型的数据，传递多个参数时可指定其为数组，若需要传递的data本身就是数组，则需要传递[data]
+         * @cancelable: 通知是否允许被取消，默认为: true
+         */
+        dispatchEvent(type: string, data?: any, cancelable?: boolean): void;
+
+        /**
          * 取消当前正在派发的事件
          */
         dispatchCancel(): void;
-
-        /**
-         * 事件派发
-         * @args: 参数列表，允许为任意类型的数据
-         * @cancelable: 事件是否允许被中断，默认为: true
-         */
-        dispatchEvent(type: string, args?: any, cancelable?: boolean): void;
     }
 
     /**

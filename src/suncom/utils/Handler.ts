@@ -23,7 +23,7 @@ module suncom {
         /**
          * 参数列表
          */
-        private $args: any[] = void 0;
+        private $args: any[] = null;
 
         /**
          * 回调对象
@@ -40,7 +40,7 @@ module suncom {
          */
         private $once: boolean = false;
 
-        setTo(caller: Object, method: Function, args?: any[], once: boolean = true): Handler {
+        setTo(caller: Object, method: Function, args: any[] = null, once: boolean = true): Handler {
             if (this.$id === -1) {
                 throw Error(`Handler己被回收`);
             }
@@ -71,7 +71,7 @@ module suncom {
         runWith(args: any): any {
             const id: number = this.$id;
             let res: any;
-            if (this.$args !== void 0) {
+            if (this.$args !== null) {
                 res = this.$method.apply(this.$caller, this.$args.concat(args));
             }
             else if (args instanceof Array) {
