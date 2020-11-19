@@ -83,12 +83,14 @@ module suncom {
             // 若InPoolValue不存在，则仅进行简单标记
             if (ipv === void 0) {
                 if (item["__suncom__$__inPool__"] === true) {
+                    Logger.warn(DebugMode.ANY, `对象重复回收！！！`);
                     return false;
                 }
                 item["__suncom__$__inPool__"] = true;
             }
             else {
                 if (item[ipv.key] === ipv.inPoolValue) {
+                    Logger.warn(DebugMode.ANY, `对象重复回收！！！`);
                     return false;
                 }
                 item[ipv.key] = ipv.inPoolValue;

@@ -1327,12 +1327,14 @@ var suncom;
             var ipv = $inPoolValueMap[sign];
             if (ipv === void 0) {
                 if (item["__suncom__$__inPool__"] === true) {
+                    Logger.warn(DebugMode.ANY, "\u5BF9\u8C61\u91CD\u590D\u56DE\u6536\uFF01\uFF01\uFF01");
                     return false;
                 }
                 item["__suncom__$__inPool__"] = true;
             }
             else {
                 if (item[ipv.key] === ipv.inPoolValue) {
+                    Logger.warn(DebugMode.ANY, "\u5BF9\u8C61\u91CD\u590D\u56DE\u6536\uFF01\uFF01\uFF01");
                     return false;
                 }
                 item[ipv.key] = ipv.inPoolValue;
