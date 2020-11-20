@@ -106,7 +106,9 @@ module suncom {
          * export
          */
         static create(caller: Object, method: Function, args?: any[], once?: boolean): Handler {
-            return Pool.getItemByClass("suncom.Handler", Handler).setTo(caller, method, args, once);
+            const handler: Handler = Pool.getItemByClass("suncom.Handler", Handler);
+            handler.$id = 0;
+            return handler.setTo(caller, method, args, once);
         }
     }
 }
