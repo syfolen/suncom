@@ -30,13 +30,9 @@ module suncom {
          */
         private $once: boolean = false;
 
-        constructor() {
-            Pool.setKeyValue("suncom.Handler", "$id", -1, 0);
-        }
-
         setTo(caller: Object, method: Function, args: any[] = null, once: boolean = true): Handler {
             if (this.$id === -1) {
-                throw Error(`Handler己被回收`);
+                throw Error(`Handler己被回收！！！`);
             }
             this.$id = Common.createHashId();
             this.$caller = caller || null;
@@ -79,11 +75,12 @@ module suncom {
         }
 
         /**
-         * 回收对象
+         * 回收到对象池
          * export
          */
         recover(): void {
             if (Pool.recover("suncom.Handler", this) === true) {
+                this.$id = -1;
                 this.$method = null;
             }
         }
