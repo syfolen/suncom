@@ -113,8 +113,7 @@ module suncom {
             for (let i: number = 0; i < list.length; i++) {
                 const event: EventInfo = list[i];
                 if (event.method === method && event.caller === caller) {
-                    list.splice(i, 1);
-                    Pool.recover("suncom.EventInfo", event);
+                    Pool.recover("suncom.EventInfo", list.splice(i, 1)[0]);
                     break;
                 }
             }
