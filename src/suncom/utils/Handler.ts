@@ -81,6 +81,8 @@ module suncom {
         recover(): void {
             if (Pool.recover("suncom.Handler", this) === true) {
                 this.$id = -1;
+                this.$args = null;
+                this.$caller = null;
                 this.$method = null;
             }
         }
