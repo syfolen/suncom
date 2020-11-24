@@ -31,10 +31,9 @@ module suncom {
         receiveOnce: boolean = false;
 
         recover(): void {
-            if (Pool.recover("suncom.EventInfo", this) === true) {
-                this.caller = null;
-                this.method = null;
-            }
+            this.caller = null;
+            this.method = null;
+            Pool.recover("suncom.EventInfo", this);
         }
     }
 }
