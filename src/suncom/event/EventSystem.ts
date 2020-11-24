@@ -6,28 +6,24 @@ module suncom {
      */
     export class EventSystem {
         /**
-         * 事件对象集合（内置属性，请勿操作）
-         * export
+         * 事件对象集合
          */
-        private $events: { [type: string]: EventInfo[] } = {};
+        private $_events: { [type: string]: EventInfo[] } = {};
 
         /**
-         * 避免注册与注销对正在派发的事件列表产生干扰（内置属性，请勿操作）
-         * export
+         * 避免注册与注销对正在派发的事件列表产生干扰
          */
-        private $lockers: { [type: string]: boolean } = {};
+        private $_lockers: { [type: string]: boolean } = {};
 
         /**
-         * 己执行的一次性事件对象列表（内置属性，请勿操作）
-         * export
+         * 己执行的一次性事件对象列表
          */
-        private $onceList: EventInfo[] = [];
+        private $_onceList: EventInfo[] = [];
 
         /**
-         * 事件是否己取消（内置属性，请勿操作）
-         * export
+         * 事件是否己取消
          */
-        private $isCanceled: boolean = false;
+        private $_isCanceled: boolean = false;
 
         /**
          * 事件注册
@@ -48,15 +44,15 @@ module suncom {
             if (caller === void 0) {
                 caller = null;
             }
-            let list: EventInfo[] = this.$events[type];
+            let list: EventInfo[] = this.$_events[type];
             // 若列表不存在，则新建
             if (list === void 0) {
-                list = this.$events[type] = [];
+                list = this.$_events[type] = [];
             }
             // 解锁并复制被锁定的列表
-            else if (this.$lockers[type] === true) {
-                this.$events[type] = list = list.slice(0);
-                this.$lockers[type] = false;
+            else if (this.$_lockers[type] === true) {
+                this.$_events[type] = list = list.slice(0);
+                this.$_lockers[type] = false;
             }
 
             let index: number = -1;
@@ -100,14 +96,14 @@ module suncom {
             if (caller === void 0) {
                 caller = null;
             }
-            let list: EventInfo[] = this.$events[type];
+            let list: EventInfo[] = this.$_events[type];
             if (list === void 0) {
                 return;
             }
             // 解锁并复制被锁定的列表
-            if (this.$lockers[type] === true) {
-                this.$events[type] = list = list.slice(0);
-                this.$lockers[type] = false;
+            if (this.$_lockers[type] === true) {
+                this.$_events[type] = list = list.slice(0);
+                this.$_lockers[type] = false;
             }
 
             for (let i: number = 0; i < list.length; i++) {
@@ -120,8 +116,8 @@ module suncom {
 
             // 移除空列表
             if (list.length === 0) {
-                delete this.$events[type];
-                delete this.$lockers[type];
+                delete this.$_events[type];
+                delete this.$_lockers[type];
             }
         }
 
@@ -135,23 +131,23 @@ module suncom {
             if (Common.isStringNullOrEmpty(type) === true) {
                 throw Error(`派发无效事件！！！`);
             }
-            const list: EventInfo[] = this.$events[type];
+            const list: EventInfo[] = this.$_events[type];
             if (list === void 0) {
                 return;
             }
             // 锁定列表
-            this.$lockers[type] = true;
+            this.$_lockers[type] = true;
 
             // 记录历史事件状态
-            const isCanceled: boolean = this.$isCanceled;
+            const isCanceled: boolean = this.$_isCanceled;
             // 标记当前事件未取消
-            this.$isCanceled = false;
+            this.$_isCanceled = false;
 
             for (let i: number = 0; i < list.length; i++) {
                 const event: EventInfo = list[i];
                 // 一次性事件入栈
                 if (event.receiveOnce === true) {
-                    this.$onceList.push(event);
+                    this.$_onceList.push(event);
                 }
                 if (data instanceof Array) {
                     event.method.apply(event.caller, data);
@@ -160,24 +156,24 @@ module suncom {
                     event.method.call(event.caller, data);
                 }
                 // 事件被取消
-                if (this.$isCanceled) {
+                if (this.$_isCanceled) {
                     // 事件允许被取消
                     if (cancelable === true) {
                         break;
                     }
                     console.error(`尝试取消不可被取消的事件：${type}`);
-                    this.$isCanceled = false;
+                    this.$_isCanceled = false;
                 }
             }
 
             // 回归历史事件状态
-            this.$isCanceled = isCanceled;
+            this.$_isCanceled = isCanceled;
             // 标记允许直接更新
-            this.$lockers[type] = false;
+            this.$_lockers[type] = false;
 
             // 注销一次性事件
-            while (this.$onceList.length > 0) {
-                const event: EventInfo = this.$onceList.pop();
+            while (this.$_onceList.length > 0) {
+                const event: EventInfo = this.$_onceList.pop();
                 this.removeEventListener(event.type, event.method, event.caller);
             }
         }
@@ -187,7 +183,7 @@ module suncom {
          * export
          */
         dispatchCancel(): void {
-            this.$isCanceled = true;
+            this.$_isCanceled = true;
         }
     }
 }

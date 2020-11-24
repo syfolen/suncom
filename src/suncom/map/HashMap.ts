@@ -8,18 +8,18 @@ module suncom {
         /**
          * 主键字段名，通过主键值来查询数据是最快的
          */
-        private $primaryKey: number | string = null;
+        private $_primaryKey: number | string = null;
+
+        /**
+         * 哈希表（请勿直接操作其中的数据）
+         */
+        private $_dataMap: { [key: string]: T } = {};
 
         /**
          * 数据源（请勿直接操作其中的数据）
          * export
          */
         source: T[] = [];
-
-        /**
-         * 哈希表（请勿直接操作其中的数据）
-         */
-        dataMap: { [key: string]: T } = {};
 
         /**
          * @primaryKey: 指定主键字段名，哈希表会使用主键值来作为数据索引，所以请确保主键值是恒值
@@ -35,24 +35,24 @@ module suncom {
             if (primaryKey.length === 0) {
                 throw Error(`无效的主键字段名字长度：${primaryKey.length}`);
             }
-            this.$primaryKey = primaryKey;
+            this.$_primaryKey = primaryKey;
         }
 
         /**
          * 根据数据在数据源中的索引来移除数据
          */
-        private $removeByIndex(index: number): T {
+        private $_removeByIndex(index: number): T {
             const data: T = this.source[index];
             this.source.splice(index, 1);
-            const value: string = data[this.$primaryKey];
-            delete this.dataMap[value];
+            const value: string = data[this.$_primaryKey];
+            delete this.$_dataMap[value];
             return data;
         }
 
         /**
          * 获取数据在数据源中的索引
          */
-        private $getIndexByValue(key: number | string, value: any): number {
+        private $_getIndexByValue(key: number | string, value: any): number {
             if (value === void 0) {
                 return -1;
             }
@@ -70,16 +70,16 @@ module suncom {
          * export
          */
         put(data: T): T {
-            let value: any = data[this.$primaryKey];
+            let value: any = data[this.$_primaryKey];
             if (Common.isStringNullOrEmpty(value) === true) {
                 throw Error(`无效的主键的值，type:${typeof value}, value:${value}`);
             }
             if (this.getByPrimaryValue(value) === null) {
                 this.source.push(data);
-                this.dataMap[value] = data;
+                this.$_dataMap[value] = data;
             }
             else {
-                throw Error(`重复的主键值：[${this.$primaryKey}]${value}`);
+                throw Error(`重复的主键值：[${this.$_primaryKey}]${value}`);
             }
             return data;
         }
@@ -89,10 +89,10 @@ module suncom {
          * export
          */
         getByValue(key: number | string, value: any): T {
-            if (key === this.$primaryKey) {
+            if (key === this.$_primaryKey) {
                 return this.getByPrimaryValue(value);
             }
-            const index: number = this.$getIndexByValue(key, value);
+            const index: number = this.$_getIndexByValue(key, value);
             if (index === -1) {
                 return null;
             }
@@ -104,7 +104,7 @@ module suncom {
          * export
          */
         getByPrimaryValue(value: number | string): T {
-            return this.dataMap[value.toString()] || null;
+            return this.$_dataMap[value.toString()] || null;
         }
 
         /**
@@ -116,7 +116,7 @@ module suncom {
             if (index === -1) {
                 return data;
             }
-            return this.$removeByIndex(index);
+            return this.$_removeByIndex(index);
         }
 
         /**
@@ -124,14 +124,14 @@ module suncom {
          * export
          */
         removeByValue(key: number | string, value: any): T {
-            if (key === this.$primaryKey) {
+            if (key === this.$_primaryKey) {
                 return this.removeByPrimaryValue(value);
             }
-            const index: number = this.$getIndexByValue(key, value);
+            const index: number = this.$_getIndexByValue(key, value);
             if (index === -1) {
                 return null;
             }
-            return this.$removeByIndex(index);
+            return this.$_removeByIndex(index);
         }
 
         /**

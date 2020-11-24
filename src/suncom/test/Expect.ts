@@ -8,17 +8,17 @@ module suncom {
         /**
          * 实际值
          */
-        private $value: any = void 0;
+        private $_value: any = void 0;
 
         /**
          * 是否期望相反
          */
-        private $asNot: boolean = false;
+        private $_asNot: boolean = false;
 
         /**
          * 对异常的解释说明
          */
-        private $interpretation: string = null;
+        private $_interpretation: string = null;
 
         /**
          * 测试描述
@@ -34,7 +34,7 @@ module suncom {
          * export
          */
         expect(value: any): Expect {
-            this.$value = value;
+            this.$_value = value;
             return this;
         }
 
@@ -43,7 +43,7 @@ module suncom {
          * export
          */
         interpret(str: string): Expect {
-            this.$interpretation = str;
+            this.$_interpretation = str;
             return this;
         }
 
@@ -52,10 +52,10 @@ module suncom {
          * export
          */
         test(pass: boolean, message: string): void {
-            if ((this.$asNot === false && pass === false) || (this.$asNot === true && pass === true)) {
+            if ((this.$_asNot === false && pass === false) || (this.$_asNot === true && pass === true)) {
                 Test.ASSERT_FAILED = true;
                 message !== null && Logger.error(DebugMode.ANY, message);
-                this.$interpretation !== null && Logger.error(DebugMode.ANY, this.$interpretation);
+                this.$_interpretation !== null && Logger.error(DebugMode.ANY, this.$_interpretation);
                 if (Test.ASSERT_BREAKPOINT === true) {
                     debugger;
                 }
@@ -69,8 +69,8 @@ module suncom {
          */
         anything(): void {
             if (Global.debugMode & DebugMode.TEST) {
-                const pass: boolean = this.$value !== null && this.$value !== void 0;
-                const message: string = `期望值${this.$asNot === false ? "" : "不为"}：null or undefined, 实际值：${Common.toDisplayString(this.$value)}`;
+                const pass: boolean = this.$_value !== null && this.$_value !== void 0;
+                const message: string = `期望值${this.$_asNot === false ? "" : "不为"}：null or undefined, 实际值：${Common.toDisplayString(this.$_value)}`;
                 this.test(pass, message);
             }
         }
@@ -84,12 +84,12 @@ module suncom {
                 let pass: boolean = true;
                 for (let i: number = 0; i < array.length; i++) {
                     const value: T = array[i];
-                    if (this.$value.indexOf(value) < 0) {
+                    if (this.$_value.indexOf(value) < 0) {
                         pass = false;
                         break;
                     }
                 }
-                const message: string = `期望${this.$asNot === false ? "" : "不"}包含：${Common.toDisplayString(array)}, 实际值：${Common.toDisplayString(this.$value)}`;
+                const message: string = `期望${this.$_asNot === false ? "" : "不"}包含：${Common.toDisplayString(array)}, 实际值：${Common.toDisplayString(this.$_value)}`;
                 this.test(pass, message);
             }
         }
@@ -100,8 +100,8 @@ module suncom {
          */
         stringContaining(value: string): void {
             if (Global.debugMode & DebugMode.TEST) {
-                const pass: boolean = this.$value.indexOf(value) > -1;
-                const message: string = `期望${this.$asNot === false ? "" : "不"}包含：${value}, 实际值：${this.$value}`;
+                const pass: boolean = this.$_value.indexOf(value) > -1;
+                const message: string = `期望${this.$_asNot === false ? "" : "不"}包含：${value}, 实际值：${this.$_value}`;
                 this.test(pass, message);
             }
         }
@@ -112,8 +112,8 @@ module suncom {
          */
         stringMatching(value: string): void {
             if (Global.debugMode & DebugMode.TEST) {
-                const pass: boolean = value.indexOf(this.$value) > -1;
-                const message: string = `期望${this.$asNot === false ? "" : "不"}被包含：${value}, 实际值：${this.$value}`;
+                const pass: boolean = value.indexOf(this.$_value) > -1;
+                const message: string = `期望${this.$_asNot === false ? "" : "不"}被包含：${value}, 实际值：${this.$_value}`;
                 this.test(pass, message);
             }
         }
@@ -125,8 +125,8 @@ module suncom {
          */
         toHaveProperty(key: string, value?: any): void {
             if (Global.debugMode & DebugMode.TEST) {
-                const pass: boolean = value === void 0 ? this.$value[key] !== void 0 : this.$value[key] === value;
-                const message: string = `期望${this.$asNot === false ? "" : "不"}存在属性：${key}, 实际值：${this.$value}`;
+                const pass: boolean = value === void 0 ? this.$_value[key] !== void 0 : this.$_value[key] === value;
+                const message: string = `期望${this.$_asNot === false ? "" : "不"}存在属性：${key}, 实际值：${this.$_value}`;
                 this.test(pass, message);
             }
         }
@@ -137,8 +137,8 @@ module suncom {
          */
         toBe(value: any): void {
             if (Global.debugMode & DebugMode.TEST) {
-                const pass: boolean = this.$value === value;
-                const message: string = `期望值${this.$asNot === false ? "" : "不为"}：${Common.toDisplayString(value)}, 实际值：${Common.toDisplayString(this.$value)}`;
+                const pass: boolean = this.$_value === value;
+                const message: string = `期望值${this.$_asNot === false ? "" : "不为"}：${Common.toDisplayString(value)}, 实际值：${Common.toDisplayString(this.$_value)}`;
                 this.test(pass, message);
             }
         }
@@ -165,8 +165,8 @@ module suncom {
          */
         toBeBoolean(): void {
             if (Global.debugMode & DebugMode.TEST) {
-                const pass: boolean = typeof this.$value === "boolean";
-                const message: string = `期望${this.$asNot === false ? "为" : "不为"}：布尔类型, 实际为：${typeof this.$value}`;
+                const pass: boolean = typeof this.$_value === "boolean";
+                const message: string = `期望${this.$_asNot === false ? "为" : "不为"}：布尔类型, 实际为：${typeof this.$_value}`;
                 this.test(pass, message);
             }
         }
@@ -177,8 +177,8 @@ module suncom {
          */
         toBeInstanceOf(cls: new () => any): void {
             if (Global.debugMode & DebugMode.TEST) {
-                const pass: boolean = this.$value instanceof cls;
-                const message: string = `期望 ${Common.getQualifiedClassName(this.$value)} 的类型${this.$asNot === false ? "" : "不"}为 ${Common.getClassName(cls)}`;
+                const pass: boolean = this.$_value instanceof cls;
+                const message: string = `期望 ${Common.getQualifiedClassName(this.$_value)} 的类型${this.$_asNot === false ? "" : "不"}为 ${Common.getClassName(cls)}`;
                 this.test(pass, message);
             }
         }
@@ -190,7 +190,7 @@ module suncom {
         toBeFalsy(value: any): void {
             if (Global.debugMode & DebugMode.TEST) {
                 const pass: boolean = value ? false : true;
-                const message: string = `期望 ${Common.toDisplayString(value)} ${this.$asNot === false ? "" : "不"}为假, 实际值：${Common.toDisplayString(this.$value)}`;
+                const message: string = `期望 ${Common.toDisplayString(value)} ${this.$_asNot === false ? "" : "不"}为假, 实际值：${Common.toDisplayString(this.$_value)}`;
                 this.test(pass, message);
             }
         }
@@ -202,7 +202,7 @@ module suncom {
         toBeTruthy(value: any): void {
             if (Global.debugMode & DebugMode.TEST) {
                 const pass: boolean = value ? true : false;
-                const message: string = `期望 ${Common.toDisplayString(value)} ${this.$asNot === false ? "" : "不"}为假, 实际值：${Common.toDisplayString(this.$value)}`;
+                const message: string = `期望 ${Common.toDisplayString(value)} ${this.$_asNot === false ? "" : "不"}为假, 实际值：${Common.toDisplayString(this.$_value)}`;
                 this.test(pass, message);
             }
         }
@@ -214,8 +214,8 @@ module suncom {
          */
         toBeCloseTo(value: number, deviation: number = 0): void {
             if (Global.debugMode & DebugMode.TEST) {
-                const pass: boolean = Math.abs(this.$value - value) <= Math.abs(deviation);
-                const message: string = `期望与${value}的误差${this.$asNot === true ? "" : "不"}超过${deviation}，实际值：${this.$value}`;
+                const pass: boolean = Math.abs(this.$_value - value) <= Math.abs(deviation);
+                const message: string = `期望与${value}的误差${this.$_asNot === true ? "" : "不"}超过${deviation}，实际值：${this.$_value}`;
                 this.test(pass, message);
             }
         }
@@ -226,8 +226,8 @@ module suncom {
          */
         toBeGreaterThan(value: number): void {
             if (Global.debugMode & DebugMode.TEST) {
-                const pass: boolean = this.$value > value;
-                const message: string = `期望${this.$asNot === true ? "" : "不"}大于 ${value}，实际值：${this.$value}`;
+                const pass: boolean = this.$_value > value;
+                const message: string = `期望${this.$_asNot === true ? "" : "不"}大于 ${value}，实际值：${this.$_value}`;
                 this.test(pass, message);
             }
         }
@@ -238,8 +238,8 @@ module suncom {
          */
         toBeGreaterOrEqualThan(value: number): void {
             if (Global.debugMode & DebugMode.TEST) {
-                const pass: boolean = this.$value >= value;
-                const message: string = `期望${this.$asNot === true ? "" : "不"}大于等于 ${value}，实际值：${this.$value}`;
+                const pass: boolean = this.$_value >= value;
+                const message: string = `期望${this.$_asNot === true ? "" : "不"}大于等于 ${value}，实际值：${this.$_value}`;
                 this.test(pass, message);
             }
         }
@@ -250,8 +250,8 @@ module suncom {
          */
         toBeLessThan(value: number): void {
             if (Global.debugMode & DebugMode.TEST) {
-                const pass: boolean = this.$value < value;
-                const message: string = `期望${this.$asNot === true ? "" : "不"}小于 ${value}，实际值：${this.$value}`;
+                const pass: boolean = this.$_value < value;
+                const message: string = `期望${this.$_asNot === true ? "" : "不"}小于 ${value}，实际值：${this.$_value}`;
                 this.test(pass, message);
             }
         }
@@ -262,8 +262,8 @@ module suncom {
          */
         toBeLessOrEqualThan(value: number): void {
             if (Global.debugMode & DebugMode.TEST) {
-                const pass: boolean = this.$value <= value;
-                const message: string = `期望${this.$asNot === true ? "" : "不"}小于等于 ${value}，实际值：${this.$value}`;
+                const pass: boolean = this.$_value <= value;
+                const message: string = `期望${this.$_asNot === true ? "" : "不"}小于等于 ${value}，实际值：${this.$_value}`;
                 this.test(pass, message);
             }
         }
@@ -274,8 +274,8 @@ module suncom {
          */
         toEqual(value: any): void {
             if (Global.debugMode & DebugMode.TEST) {
-                const pass: boolean = Common.isEqual(this.$value, value, false);
-                const message: string = `期望相等：${Common.toDisplayString(value)}，实际值：${Common.toDisplayString(this.$value)}`;
+                const pass: boolean = Common.isEqual(this.$_value, value, false);
+                const message: string = `期望相等：${Common.toDisplayString(value)}，实际值：${Common.toDisplayString(this.$_value)}`;
                 this.test(pass, message);
             }
         }
@@ -286,8 +286,8 @@ module suncom {
          */
         toStrictEqual(value: any): void {
             if (Global.debugMode & DebugMode.TEST) {
-                const pass: boolean = Common.isEqual(this.$value, value, true);
-                const message: string = `期望相等：${Common.toDisplayString(value)}，实际值：${Common.toDisplayString(this.$value)}`;
+                const pass: boolean = Common.isEqual(this.$_value, value, true);
+                const message: string = `期望相等：${Common.toDisplayString(value)}，实际值：${Common.toDisplayString(this.$_value)}`;
                 this.test(pass, message);
             }
         }
@@ -297,7 +297,7 @@ module suncom {
          * export
          */
         get not(): Expect {
-            this.$asNot = true;
+            this.$_asNot = true;
             return this;
         }
     }
