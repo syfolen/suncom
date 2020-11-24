@@ -8,37 +8,37 @@ module suncom {
         /**
          * 唯一标识
          */
-        private $_id: number = 0;
+        private $var_id: number = 0;
 
         /**
          * 参数列表
          */
-        private $_args: any[] = null;
+        private $var_args: any[] = null;
 
         /**
          * 回调对象
          */
-        private $_caller: Object = null;
+        private $var_caller: Object = null;
 
         /**
          * 回调方法
          */
-        private $_method: Function = null;
+        private $var_method: Function = null;
 
         /**
          * 是否为一次性的
          */
-        private $_once: boolean = false;
+        private $var_once: boolean = false;
 
         setTo(caller: Object, method: Function, args: any[] = null, once: boolean = true): Handler {
-            if (this.$_id === -1) {
+            if (this.$var_id === -1) {
                 throw Error(`Handler己被回收！！！`);
             }
-            this.$_id = Common.createHashId();
-            this.$_caller = caller || null;
-            this.$_method = method || null;
-            this.$_args = args;
-            this.$_once = once;
+            this.$var_id = Common.createHashId();
+            this.$var_caller = caller || null;
+            this.$var_method = method || null;
+            this.$var_args = args;
+            this.$var_once = once;
             return this;
         }
 
@@ -47,9 +47,9 @@ module suncom {
          * export
          */
         run(): any {
-            const id: number = this.$_id;
-            const res: any = this.$_method.apply(this.$_caller, this.$_args);
-            id === this.$_id && this.$_once === true && this.recover();
+            const id: number = this.$var_id;
+            const res: any = this.$var_method.apply(this.$var_caller, this.$var_args);
+            id === this.$var_id && this.$var_once === true && this.recover();
             return res;
         }
 
@@ -59,18 +59,18 @@ module suncom {
          * export
          */
         runWith(args: any): any {
-            const id: number = this.$_id;
+            const id: number = this.$var_id;
             let res: any;
-            if (this.$_args !== null) {
-                res = this.$_method.apply(this.$_caller, this.$_args.concat(args));
+            if (this.$var_args !== null) {
+                res = this.$var_method.apply(this.$var_caller, this.$var_args.concat(args));
             }
             else if (args instanceof Array) {
-                res = this.$_method.apply(this.$_caller, args);
+                res = this.$var_method.apply(this.$var_caller, args);
             }
             else {
-                res = this.$_method.call(this.$_caller, args);
+                res = this.$var_method.call(this.$var_caller, args);
             }
-            id === this.$_id && this.$_once === true && this.recover();
+            id === this.$var_id && this.$var_once === true && this.recover();
             return res;
         }
 
@@ -80,10 +80,10 @@ module suncom {
          */
         recover(): void {
             if (Pool.recover("suncom.Handler", this) === true) {
-                this.$_id = -1;
-                this.$_args = null;
-                this.$_caller = null;
-                this.$_method = null;
+                this.$var_id = -1;
+                this.$var_args = null;
+                this.$var_caller = null;
+                this.$var_method = null;
             }
         }
 
@@ -92,7 +92,7 @@ module suncom {
          * export
          */
         get caller(): Object {
-            return this.$_caller;
+            return this.$var_caller;
         }
 
         /**
@@ -100,7 +100,7 @@ module suncom {
          * export
          */
         get method(): Function {
-            return this.$_method;
+            return this.$var_method;
         }
 
         /**
@@ -109,7 +109,7 @@ module suncom {
          */
         static create(caller: Object, method: Function, args?: any[], once?: boolean): Handler {
             const handler: Handler = Pool.getItemByClass("suncom.Handler", Handler);
-            handler.$_id = 0;
+            handler.$var_id = 0;
             return handler.setTo(caller, method, args, once);
         }
     }
