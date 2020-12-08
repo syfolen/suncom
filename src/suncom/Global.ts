@@ -46,5 +46,11 @@ module suncom {
          * export
          */
         export let VERSION: string = "1.0.0";
+
+        /**
+         * 全局数据中心
+         * export
+         */
+        export const dataMap: { [key: string]: any } = {};
     }
 }
