@@ -414,11 +414,11 @@ module suncom {
          * 从数组中查找数据
          * @array: 数据源
          * @method: 查询规则，返回true表示与规则匹配
-         * @out: 若不为null，则返回查询到的所有数据
+         * @out: 若不为null，则返回查询到的所有数据，默认为: null
          * @return: 若out为null，则只返回查询到的第一条数据，否则返回null
          * export
          */
-        export function findFromArray<T>(array: T[], method: (data: T) => boolean, out: T[] = null): T {
+        export function findInArray<T>(array: T[], method: (data: T) => boolean, out: T[] = null): T {
             for (let i: number = 0; i < array.length; i++) {
                 const item: T = array[i];
                 if (method(item) === true) {
