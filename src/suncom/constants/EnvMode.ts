@@ -21,6 +21,11 @@ module suncom {
          * 网页版
          * export
          */
-        WEB
+        WEB,
+
+        /**
+         * 原生平台
+         */
+        NATIVE
     }
 }
