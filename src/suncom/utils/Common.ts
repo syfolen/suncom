@@ -20,6 +20,14 @@ module suncom {
         }
 
         /**
+         * 判断属性是否为 null 或未定义
+         * export
+         */
+        export function isNullOrUndefined(value: any): boolean {
+            return value === void 0 || value === null;
+        }
+
+        /**
          * 获取类名
          * @cls: 指定类型
          * export
@@ -43,7 +51,7 @@ module suncom {
             if (prototype === null) {
                 return type;
             }
-            return Common.getClassName(prototype.constructor);
+            return this.getClassName(prototype.constructor);
         }
 
         /**
@@ -53,7 +61,7 @@ module suncom {
          */
         export function getMethodName(method: Function, caller: Object = null): string {
             if (caller === null) {
-                return Common.getClassName(method);
+                return this.getClassName(method);
             }
             for (const key in caller) {
                 if (caller[key] === method) {
@@ -77,43 +85,53 @@ module suncom {
 
         /**
          * 去除字符串的头尾空格
+         * 说明：
+         * 1. 当 str 为无效字符串时返回 null
          * export
          */
-        export function trim(str: string = null): string {
-            if (str === null) {
+        export function trim(str: string): string {
+            if (this.isNullOrUndefined(str) === true) {
                 return null;
             }
             const chrs: string[] = ["\r", "\n", "\t", " "];
-            while (str.length > 0) {
-                const length: number = str.length;
-                for (let i: number = 0; i < chrs.length; i++) {
-                    const chr: string = chrs[i];
-                    if (str.charAt(0) === chr) {
-                        str = str.substr(1);
-                        break;
-                    }
-                    const index: number = str.length - 1;
-                    if (str.charAt(index) === chr) {
-                        str = str.substr(0, index);
-                        break;
-                    }
-                }
-                if (str.length === length) {
+
+            let from: number = 0;
+            while (from < str.length) {
+                const chr: string = str.charAt(from);
+                const index: number = chrs.indexOf(chr);
+                if (index === -1) {
                     break;
                 }
+                from++;
             }
-            return str;
+
+            let to: number = str.length - 1;
+            while (to > from) {
+                const chr: string = str.charAt(to);
+                const index: number = chrs.indexOf(chr);
+                if (index === -1) {
+                    break;
+                }
+                to--;
+            }
+
+            return str.substring(from, to + 1);
         }
 
         /**
          * 判断字符串是否为空
+         * 说明：
+         * 1. 当 value 为数字且不为 NaN 时返回 true
+         * 2. 当 value 为字符串且不为 "" 时返回 true
+         * 3. 否则返回 false
          * export
          */
-        export function isStringNullOrEmpty(str: string | number): boolean {
-            if (typeof str === "number") {
-                return false;
+        export function isStringNullOrEmpty(value: string | number): boolean {
+            if (typeof value === "number") {
+                // 排除NaN
+                return isNaN(value);
             }
-            if (typeof str === "string" && str !== "") {
+            if (typeof value === "string" && value !== "") {
                 return false;
             }
             return true;
@@ -124,49 +142,14 @@ module suncom {
          * export
          */
         export function formatString(str: string, args: any[]): string {
-            const signs: string[] = ["%d", "%s"];
-
-            let index: number = 0;
-            while (args.length > 0) {
-                let key: string = null;
-                let indexOfReplace: number = -1;
-                for (let i: number = 0; i < signs.length; i++) {
-                    const sign: string = signs[i];
-                    const indexOfSign: number = str.indexOf(sign, index);
-                    if (indexOfSign === -1) {
-                        continue;
-                    }
-                    if (indexOfReplace === -1 || indexOfSign < indexOfReplace) {
-                        key = sign;
-                        indexOfReplace = indexOfSign;
-                    }
-                }
-                if (indexOfReplace === -1) {
-                    Logger.warn(DebugMode.ANY, "字符串替换未完成 " + `str:${str}`);
-                    break;
-                }
-                const suffix: string = str.substr(indexOfReplace + key.length);
-                str = str.substr(0, indexOfReplace) + args.shift() + suffix;
-                index = str.length - suffix.length;
-            }
-            return str;
-        }
-
-        /**
-         * 格式化字符串
-         * export
-         */
-        export function formatString$(str: string, args: any[]): string {
-            let index: number = 0;
-            while (args.length > 0) {
-                const indexOfSign: number = str.indexOf("{$}", index);
+            let length: number = str.length;
+            for (let i: number = 0; i < args.length; i++) {
+                const flag: string = `{${i}}`;
+                const index: number = str.indexOf(flag, str.length - length);
                 if (index === -1) {
-                    Logger.warn(DebugMode.ANY, "字符串替换未完成 " + `str:${str}`);
                     break;
                 }
-                const suffix: string = str.substr(indexOfSign + 3);
-                str = str.substr(0, indexOfSign) + args.shift() + suffix;
-                index = str.length - suffix.length;
+                str = str.substr(0, index) + args[i] + str.substr(index + 3);
             }
             return str;
         }
@@ -218,7 +201,7 @@ module suncom {
          * export
          */
         export function dateAdd(datepart: string, increment: number, time: string | number | Date): number {
-            const date: Date = Common.convertToDate(time);
+            const date: Date = this.convertToDate(time);
 
             //计算增量毫秒数
             if (datepart === "yy") {
@@ -275,8 +258,8 @@ module suncom {
          * export
          */
         export function dateDiff(datepart: string, date: string | number | Date, date2: string | number | Date): number {
-            const d1: Date = Common.convertToDate(date);
-            const d2: Date = Common.convertToDate(date2);
+            const d1: Date = this.convertToDate(date);
+            const d2: Date = this.convertToDate(date2);
 
             let t1: number = d1.valueOf();
             let t2: number = d2.valueOf();
@@ -327,7 +310,7 @@ module suncom {
          * export
          */
         export function formatDate(str: string, time: string | number | Date): string {
-            const date: Date = Common.convertToDate(time);
+            const date: Date = this.convertToDate(time);
             str = str.replace("MS", ("00" + (date.getMilliseconds()).toString()).substr(-3));
             str = str.replace("ms", (date.getMilliseconds()).toString());
             str = str.replace("yyyy", date.getFullYear().toString());
@@ -346,11 +329,22 @@ module suncom {
         }
 
         /**
-         * 返回MD5加密后的串
+         * 返回 md5 加密后的串
          * export
          */
         export function md5(str: string): string {
             throw Error("未实现的接口！！！");
+        }
+
+        /**
+         * 获取 Url 参数值
+         * export
+         */
+        export function getQueryString(name: string, param?: string): string {
+            const reg: RegExp = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+            const str: string = param || window.location.search;
+            const array: RegExpMatchArray = str.substr(1).match(reg) || null;
+            return array === null ? null : decodeURIComponent(array[2]);
         }
 
         /**
@@ -367,7 +361,7 @@ module suncom {
                 }
             }
             array.push(`key=${key}`);
-            return Common.md5(array.join("&"));
+            return this.md5(array.join("&"));
         }
 
         /**
@@ -379,7 +373,7 @@ module suncom {
             if (index > -1) {
                 path = path.substr(index + 1);
             }
-            const suffix: string = Common.getFileExtension(path);
+            const suffix: string = this.getFileExtension(path);
             if (suffix === null) {
                 return path;
             }
@@ -450,7 +444,7 @@ module suncom {
          */
         export function removeItemsFromArray<T>(items: T[], array: T[]): void {
             for (let i: number = 0; i < items.length; i++) {
-                Common.removeItemFromArray(items[i], array);
+                this.removeItemFromArray(items[i], array);
             }
         }
 
@@ -465,7 +459,7 @@ module suncom {
                 else {
                     const array: any[] = [];
                     for (let i: number = 0; i < data.length; i++) {
-                        array.push(Common.copy(data[i], deep));
+                        array.push(this.copy(data[i], deep));
                     }
                     return array;
                 }
@@ -479,7 +473,7 @@ module suncom {
                 }
                 else {
                     for (const key in data) {
-                        newData[key] = Common.copy(data[key], deep);
+                        newData[key] = this.copy(data[key], deep);
                     }
                 }
                 return newData;
@@ -535,7 +529,7 @@ module suncom {
                 }
                 // 类型为数组并且数组长度相同
                 for (let i: number = 0; i < oldData.length; i++) {
-                    if (Common.isEqual(oldData[i], newData[i], strict) === false) {
+                    if (this.isEqual(oldData[i], newData[i], strict) === false) {
                         return false;
                     }
                 }
@@ -546,7 +540,7 @@ module suncom {
                     return false;
                 }
                 for (const key in oldData) {
-                    if (oldData.hasOwnProperty(key) === true && Common.isEqual(oldData[key], newData[key], strict) === false) {
+                    if (oldData.hasOwnProperty(key) === true && this.isEqual(oldData[key], newData[key], strict) === false) {
                         return false;
                     }
                 }
@@ -573,7 +567,7 @@ module suncom {
             if (data instanceof Array) {
                 const array: string[] = [];
                 for (let i: number = 0; i < data.length; i++) {
-                    array.push(Common.toDisplayString(data[i]));
+                    array.push(this.toDisplayString(data[i]));
                 }
                 return `[${array.join(",")}]`;
             }
@@ -582,7 +576,7 @@ module suncom {
                     str = JSON.stringify(data);
                 }
                 catch (error) {
-                    str = `[${Common.getQualifiedClassName(data)}]`;
+                    str = `[${this.getQualifiedClassName(data)}]`;
                 }
             }
 

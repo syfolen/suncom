@@ -44,12 +44,9 @@ module test {
             suncom.Test.assertTrue(suncom.Common.isStringNullOrEmpty(void 0));
             suncom.Test.assertTrue(suncom.Common.isStringNullOrEmpty(abc as any));
 
-            suncom.Test.expect(suncom.Common.formatString("%s%d", ["a", 3])).toBe("a3");
-            suncom.Test.expect(suncom.Common.formatString$("{$}{$}", ["a", 3])).toBe("a3");
-            suncom.Test.expect(suncom.Common.formatString("%s%d", ["%d", 3])).toBe("%d3");
-            suncom.Test.expect(suncom.Common.formatString$("{$}{$}", ["{$}", 3])).toBe("{$}3");
-            suncom.Test.expect(suncom.Common.formatString("%s%d%s", ["a", 3])).toBe("a3%s");
-            suncom.Test.expect(suncom.Common.formatString$("{$}{$}{$}", ["{$}", 3])).toBe("{$}3{$}");
+            suncom.Test.expect(suncom.Common.formatString("{0}{1}", ["a", 3])).toBe("a3");
+            suncom.Test.expect(suncom.Common.formatString("{0}{1}", ["{1}", 3])).toBe("{0}3");
+            suncom.Test.expect(suncom.Common.formatString("{0}{1}{2}", ["{1}", 3])).toBe("{1}3{3}");
 
             suncom.Test.expect(suncom.Mathf.clamp(0, 2, 5)).toBe(2);
             suncom.Test.expect(suncom.Mathf.clamp(3, 2, 5)).toBe(3);
