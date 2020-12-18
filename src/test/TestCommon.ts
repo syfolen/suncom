@@ -147,7 +147,7 @@ module test {
 
             const array: number[] = [1, 3, 5, 6, 7];
 
-            const x: number = suncom.Common.findFromArray(array, (i) => {
+            const x: number = suncom.Common.findInArray(array, (i) => {
                 if (i === 1) {
                     return true;
                 }
@@ -156,7 +156,7 @@ module test {
             suncom.Test.expect(x).toBe(1)
 
             const out: number[] = [];
-            suncom.Common.findFromArray(array, (i) => {
+            suncom.Common.findInArray(array, (i) => {
                 if (i % 2 === 1) {
                     return true;
                 }

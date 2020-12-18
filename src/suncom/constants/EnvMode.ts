@@ -25,6 +25,7 @@ module suncom {
 
         /**
          * 原生平台
+         * export
          */
         NATIVE
     }
