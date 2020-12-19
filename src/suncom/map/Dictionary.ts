@@ -6,7 +6,7 @@ module suncom {
      * 1. 字典的主键值只允许为数字或字符串类型
      * export
      */
-    export class Dictionary<T> {
+    export class Dictionary<T> implements IDictionary<T>{
         /**
          * 主键字段名，通过主键值来查询数据是最快的
          */

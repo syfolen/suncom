@@ -4,7 +4,7 @@ module suncom {
      * 自定义事件系统
      * export
      */
-    export class EventSystem {
+    export class EventSystem implements IEventSystem {
         /**
          * 事件对象集合
          */

@@ -4,7 +4,7 @@ module suncom {
      * 事件处理器
      * export
      */
-    export class Handler {
+    export class Handler implements IHandler {
         /**
          * 唯一标识
          */
@@ -30,7 +30,7 @@ module suncom {
          */
         private $var_once: boolean = false;
 
-        setTo(caller: Object, method: Function, args: any[] = null, once: boolean = true): Handler {
+        setTo(caller: Object, method: Function, args: any[] = null, once: boolean = true): IHandler {
             if (this.$var_id === -1) {
                 throw Error(`Handler己被回收！！！`);
             }
@@ -107,7 +107,7 @@ module suncom {
          * 创建Handler的简单工厂方法
          * export
          */
-        static create(caller: Object, method: Function, args?: any[], once?: boolean): Handler {
+        static create(caller: Object, method: Function, args?: any[], once?: boolean): IHandler {
             const handler: Handler = Pool.getItemByClass("suncom.Handler", Handler);
             handler.$var_id = 0;
             return handler.setTo(caller, method, args, once);

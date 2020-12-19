@@ -6,7 +6,7 @@ module test {
         constructor() {
             console.log("TestEventSystem");
             
-            const system: suncom.EventSystem = new suncom.EventSystem();
+            const system: suncom.IEventSystem = new suncom.EventSystem();
             system.addEventListener("TEST", this.$func, this);
 
             const data: IData = { msg: 0 };
@@ -40,7 +40,7 @@ module test {
             data.msg = msg;
         }
 
-        private $func3(data: IData, msg: number, system: suncom.EventSystem): void {
+        private $func3(data: IData, msg: number, system: suncom.IEventSystem): void {
             data.msg = 0;
             system.dispatchCancel();
         }

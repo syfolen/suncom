@@ -4,7 +4,7 @@ setTimeout(() => {
     suncom.Global.debugMode = 0xFFFFFF;
     new test.TestDBService();
     new test.TestEventSystem();
-    new test.TestHashMap();
+    new test.TestDictionary();
     new test.TestRandom();
     new test.TestHandler();
     new test.TestPool();

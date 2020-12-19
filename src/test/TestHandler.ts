@@ -10,7 +10,7 @@ module test {
             const b = new B();
             const data: IData = { msg: 0 };
 
-            let handler: suncom.Handler = suncom.Handler.create(a, a.test, [data]);
+            let handler: suncom.IHandler = suncom.Handler.create(a, a.test, [data]);
             handler.run();
             suncom.Test.expect(data.msg).toBe(1);
 

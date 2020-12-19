@@ -6,7 +6,7 @@ module suncom {
      * 1. 哈希表的主键值允许为任意类型
      * export
      */
-    export class HashMap<K, V> {
+    export class HashMap<K, V> implements IHashMap<K, V> {
         /**
          * 下一条数据的哈希ID
          */

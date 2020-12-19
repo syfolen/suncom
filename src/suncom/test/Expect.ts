@@ -4,7 +4,7 @@ module suncom {
      * 期望异常测试类
      * export
      */
-    export class Expect {
+    export class Expect implements IExpect {
         /**
          * 实际值
          */
@@ -33,7 +33,7 @@ module suncom {
          * 指定期望值
          * export
          */
-        expect(value: any): Expect {
+        expect(value: any): IExpect {
             this.$var_value = value;
             return this;
         }
@@ -42,7 +42,7 @@ module suncom {
          * 解释异常
          * export
          */
-        interpret(str: string): Expect {
+        interpret(str: string): IExpect {
             this.$var_interpretation = str;
             return this;
         }
@@ -296,7 +296,7 @@ module suncom {
          * 期望相反
          * export
          */
-        get not(): Expect {
+        get not(): IExpect {
             this.$var_asNot = true;
             return this;
         }
