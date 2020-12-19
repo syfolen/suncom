@@ -1,7 +1,6 @@
 
 module suncom {
     /**
-     * 期望异常测试类
      * export
      */
     export class Expect implements IExpect {
@@ -30,7 +29,6 @@ module suncom {
         }
 
         /**
-         * 指定期望值
          * export
          */
         expect(value: any): IExpect {
@@ -39,7 +37,6 @@ module suncom {
         }
 
         /**
-         * 解释异常
          * export
          */
         interpret(str: string): IExpect {
@@ -48,7 +45,6 @@ module suncom {
         }
 
         /**
-         * 测试执行接口，若测试未通过，则输出description
          * export
          */
         test(pass: boolean, message: string): void {
@@ -64,7 +60,6 @@ module suncom {
         }
 
         /**
-         * 期望为任意值，但不为null和undefined
          * export
          */
         anything(): void {
@@ -76,7 +71,6 @@ module suncom {
         }
 
         /**
-         * 期望数组中包含
          * export
          */
         arrayContaining<T>(array: T[]): void {
@@ -95,7 +89,6 @@ module suncom {
         }
 
         /**
-         * 期望字符串中含有value
          * export
          */
         stringContaining(value: string): void {
@@ -107,7 +100,6 @@ module suncom {
         }
 
         /**
-         * 期望字符串被包含
          * export
          */
         stringMatching(value: string): void {
@@ -119,8 +111,6 @@ module suncom {
         }
 
         /**
-         * 期望存在属性
-         * @value: 若不为void 0，则同时校验值
          * export
          */
         toHaveProperty(key: string, value?: any): void {
@@ -132,7 +122,6 @@ module suncom {
         }
 
         /**
-         * 期望值为：value
          * export
          */
         toBe(value: any): void {
@@ -144,7 +133,6 @@ module suncom {
         }
 
         /**
-         * 期望值为：null
          * export
          */
         toBeNull(): void {
@@ -152,7 +140,6 @@ module suncom {
         }
 
         /**
-         * 期望值为：undefined
          * export
          */
         toBeUndefined(): void {
@@ -160,7 +147,6 @@ module suncom {
         }
 
         /**
-         * 期望为：布尔类型
          * export
          */
         toBeBoolean(): void {
@@ -172,7 +158,6 @@ module suncom {
         }
 
         /**
-         * 期望对象类型为：cls
          * export
          */
         toBeInstanceOf(cls: new () => any): void {
@@ -184,7 +169,6 @@ module suncom {
         }
 
         /**
-         * 期望在不关心类型的情况下，值在布尔上下文中为假
          * export
          */
         toBeFalsy(value: any): void {
@@ -196,7 +180,6 @@ module suncom {
         }
 
         /**
-         * 期望在不关心类型的情况下，值在布尔上下文中为真
          * export
          */
         toBeTruthy(value: any): void {
@@ -208,8 +191,6 @@ module suncom {
         }
 
         /**
-         * 期望两个数字是否相等
-         * @deviation: 误差，默认为：0
          * export
          */
         toBeCloseTo(value: number, deviation: number = 0): void {
@@ -221,7 +202,6 @@ module suncom {
         }
 
         /**
-         * 期望数字大于
          * export
          */
         toBeGreaterThan(value: number): void {
@@ -233,7 +213,6 @@ module suncom {
         }
 
         /**
-         * 期望数字大于或等于
          * export
          */
         toBeGreaterOrEqualThan(value: number): void {
@@ -245,7 +224,6 @@ module suncom {
         }
 
         /**
-         * 期望数字小于
          * export
          */
         toBeLessThan(value: number): void {
@@ -257,7 +235,6 @@ module suncom {
         }
 
         /**
-         * 期望数字小于或等于
          * export
          */
         toBeLessOrEqualThan(value: number): void {
@@ -269,7 +246,6 @@ module suncom {
         }
 
         /**
-         * 深度相等
          * export
          */
         toEqual(value: any): void {
@@ -281,7 +257,6 @@ module suncom {
         }
 
         /**
-         * 深度相等且类型一致
          * export
          */
         toStrictEqual(value: any): void {
@@ -293,7 +268,6 @@ module suncom {
         }
 
         /**
-         * 期望相反
          * export
          */
         get not(): IExpect {
