@@ -1,8 +1,6 @@
 
 module suncom {
-    /**
-     * export
-     */
+
     export class Expect implements IExpect {
         /**
          * 实际值
@@ -28,25 +26,16 @@ module suncom {
             }
         }
 
-        /**
-         * export
-         */
         expect(value: any): IExpect {
             this.$var_value = value;
             return this;
         }
 
-        /**
-         * export
-         */
         interpret(str: string): IExpect {
             this.$var_interpretation = str;
             return this;
         }
 
-        /**
-         * export
-         */
         test(pass: boolean, message: string): void {
             if ((this.$var_asNot === false && pass === false) || (this.$var_asNot === true && pass === true)) {
                 Test.ASSERT_FAILED = true;
@@ -59,9 +48,6 @@ module suncom {
             }
         }
 
-        /**
-         * export
-         */
         anything(): void {
             if (Global.debugMode & DebugMode.TEST) {
                 const pass: boolean = this.$var_value !== null && this.$var_value !== void 0;
@@ -70,9 +56,6 @@ module suncom {
             }
         }
 
-        /**
-         * export
-         */
         arrayContaining<T>(array: T[]): void {
             if (Global.debugMode & DebugMode.TEST) {
                 let pass: boolean = true;
@@ -88,9 +71,6 @@ module suncom {
             }
         }
 
-        /**
-         * export
-         */
         stringContaining(value: string): void {
             if (Global.debugMode & DebugMode.TEST) {
                 const pass: boolean = this.$var_value.indexOf(value) > -1;
@@ -99,9 +79,6 @@ module suncom {
             }
         }
 
-        /**
-         * export
-         */
         stringMatching(value: string): void {
             if (Global.debugMode & DebugMode.TEST) {
                 const pass: boolean = value.indexOf(this.$var_value) > -1;
@@ -110,9 +87,6 @@ module suncom {
             }
         }
 
-        /**
-         * export
-         */
         toHaveProperty(key: string, value?: any): void {
             if (Global.debugMode & DebugMode.TEST) {
                 const pass: boolean = value === void 0 ? this.$var_value[key] !== void 0 : this.$var_value[key] === value;
@@ -121,9 +95,6 @@ module suncom {
             }
         }
 
-        /**
-         * export
-         */
         toBe(value: any): void {
             if (Global.debugMode & DebugMode.TEST) {
                 const pass: boolean = this.$var_value === value;
@@ -132,23 +103,14 @@ module suncom {
             }
         }
 
-        /**
-         * export
-         */
         toBeNull(): void {
             this.toBe(null);
         }
 
-        /**
-         * export
-         */
         toBeUndefined(): void {
             this.toBe(void 0);
         }
 
-        /**
-         * export
-         */
         toBeBoolean(): void {
             if (Global.debugMode & DebugMode.TEST) {
                 const pass: boolean = typeof this.$var_value === "boolean";
@@ -157,9 +119,6 @@ module suncom {
             }
         }
 
-        /**
-         * export
-         */
         toBeInstanceOf(cls: new () => any): void {
             if (Global.debugMode & DebugMode.TEST) {
                 const pass: boolean = this.$var_value instanceof cls;
@@ -168,9 +127,6 @@ module suncom {
             }
         }
 
-        /**
-         * export
-         */
         toBeFalsy(value: any): void {
             if (Global.debugMode & DebugMode.TEST) {
                 const pass: boolean = value ? false : true;
@@ -179,9 +135,6 @@ module suncom {
             }
         }
 
-        /**
-         * export
-         */
         toBeTruthy(value: any): void {
             if (Global.debugMode & DebugMode.TEST) {
                 const pass: boolean = value ? true : false;
@@ -190,9 +143,6 @@ module suncom {
             }
         }
 
-        /**
-         * export
-         */
         toBeCloseTo(value: number, deviation: number = 0): void {
             if (Global.debugMode & DebugMode.TEST) {
                 const pass: boolean = Math.abs(this.$var_value - value) <= Math.abs(deviation);
@@ -201,9 +151,6 @@ module suncom {
             }
         }
 
-        /**
-         * export
-         */
         toBeGreaterThan(value: number): void {
             if (Global.debugMode & DebugMode.TEST) {
                 const pass: boolean = this.$var_value > value;
@@ -212,9 +159,6 @@ module suncom {
             }
         }
 
-        /**
-         * export
-         */
         toBeGreaterOrEqualThan(value: number): void {
             if (Global.debugMode & DebugMode.TEST) {
                 const pass: boolean = this.$var_value >= value;
@@ -223,9 +167,6 @@ module suncom {
             }
         }
 
-        /**
-         * export
-         */
         toBeLessThan(value: number): void {
             if (Global.debugMode & DebugMode.TEST) {
                 const pass: boolean = this.$var_value < value;
@@ -234,9 +175,6 @@ module suncom {
             }
         }
 
-        /**
-         * export
-         */
         toBeLessOrEqualThan(value: number): void {
             if (Global.debugMode & DebugMode.TEST) {
                 const pass: boolean = this.$var_value <= value;
@@ -245,9 +183,6 @@ module suncom {
             }
         }
 
-        /**
-         * export
-         */
         toEqual(value: any): void {
             if (Global.debugMode & DebugMode.TEST) {
                 const pass: boolean = Common.isEqual(this.$var_value, value, false);
@@ -256,9 +191,6 @@ module suncom {
             }
         }
 
-        /**
-         * export
-         */
         toStrictEqual(value: any): void {
             if (Global.debugMode & DebugMode.TEST) {
                 const pass: boolean = Common.isEqual(this.$var_value, value, true);
@@ -267,9 +199,6 @@ module suncom {
             }
         }
 
-        /**
-         * export
-         */
         get not(): IExpect {
             this.$var_asNot = true;
             return this;

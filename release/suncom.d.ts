@@ -463,55 +463,6 @@ declare module suncom {
         dispatchCancel(): void;
     }
 
-    class Expect implements IExpect {
-
-        expect(value: any): IExpect;
-
-        interpret(str: string): IExpect;
-
-        test(pass: boolean, message: string): void;
-
-        anything(): void;
-
-        arrayContaining<T>(array: T[]): void;
-
-        stringContaining(value: string): void;
-
-        stringMatching(value: string): void;
-
-        toHaveProperty(key: string, value?: any): void;
-
-        toBe(value: any): void;
-
-        toBeNull(): void;
-
-        toBeUndefined(): void;
-
-        toBeBoolean(): void;
-
-        toBeInstanceOf(cls: new () => any): void;
-
-        toBeFalsy(value: any): void;
-
-        toBeTruthy(value: any): void;
-
-        toBeCloseTo(value: number, deviation?: number): void;
-
-        toBeGreaterThan(value: number): void;
-
-        toBeGreaterOrEqualThan(value: number): void;
-
-        toBeLessThan(value: number): void;
-
-        toBeLessOrEqualThan(value: number): void;
-
-        toEqual(value: any): void;
-
-        toStrictEqual(value: any): void;
-
-        readonly not: IExpect;
-    }
-
     /**
      * 事件处理器
      */
