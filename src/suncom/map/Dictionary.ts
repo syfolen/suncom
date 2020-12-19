@@ -3,7 +3,7 @@ module suncom {
     /**
      * export
      */
-    export class Dictionary<T> implements IDictionary<T>{
+    export class Dictionary<T> implements IDictionary<T> {
         /**
          * 主键字段名，通过主键值来查询数据是最快的
          */
