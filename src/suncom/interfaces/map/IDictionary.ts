@@ -4,6 +4,7 @@ module suncom {
      * 字典，通常用于作为一个大量数据的集合，用于快速获取数据集中的某条数据
      * 说明：
      * 1. 字典的主键值只允许为数字或字符串类型
+     * 2. 仅允许存储 Object 类型的数据
      * export
      */
     export interface IDictionary<T> {

@@ -4,12 +4,14 @@ module suncom {
      * 哈希表，通常用于作为一个大量数据的集合
      * 说明：
      * 1. 哈希表的主键值允许为任意类型
+     * 2. 允许被存储的值为 null 或 undefined
      * export
      */
     export interface IHashMap<K, V> {
 
         /**
          * 返回字典中的条目数量
+         * export
          */
         size(): number;
 

@@ -30,7 +30,12 @@ module suncom {
          */
         private $var_once: boolean = false;
 
-        setTo(caller: Object, method: Function, args: any[] = null, once: boolean = true): IHandler {
+        /**
+         * 设置指定属性值
+         * @args: 参数列表，默认为: null
+         * @once: 是否为一次性事件处理器，默认为: true
+         */
+        private $func_setTo(caller: Object, method: Function, args: any[] = null, once: boolean = true): IHandler {
             if (this.$var_id === -1) {
                 throw Error(`Handler己被回收！！！`);
             }
@@ -43,7 +48,6 @@ module suncom {
         }
 
         /**
-         * 执行处理器
          * export
          */
         run(): any {
@@ -54,8 +58,6 @@ module suncom {
         }
 
         /**
-         * 执行处理器，携带额外的参数
-         * @args 参数列表，允许为任意类型的数据
          * export
          */
         runWith(args: any): any {
@@ -75,7 +77,6 @@ module suncom {
         }
 
         /**
-         * 回收到对象池
          * export
          */
         recover(): void {
@@ -88,7 +89,6 @@ module suncom {
         }
 
         /**
-         * 回调对象
          * export
          */
         get caller(): Object {
@@ -96,7 +96,6 @@ module suncom {
         }
 
         /**
-         * 回调方法
          * export
          */
         get method(): Function {
@@ -110,7 +109,7 @@ module suncom {
         static create(caller: Object, method: Function, args?: any[], once?: boolean): IHandler {
             const handler: Handler = Pool.getItemByClass("suncom.Handler", Handler);
             handler.$var_id = 0;
-            return handler.setTo(caller, method, args, once);
+            return handler.$func_setTo(caller, method, args, once);
         }
     }
 }

@@ -7,13 +7,6 @@ module suncom {
     export interface IHandler {
 
         /**
-         * 设置指定属性值
-         * @args: 参数列表，默认为: null
-         * @once: 是否为一次性事件处理器，默认为: true
-         */
-        setTo(caller: Object, method: Function, args?: any[], once?: boolean): IHandler;
-
-        /**
          * 执行处理器
          * export
          */
