@@ -1,161 +1,145 @@
 
 module suncom {
     /**
-     * 哈希表，通常用于作为一个大量数据的集合，用于快速获取数据集中的某条数据
+     * 哈希表，通常用于作为一个大量数据的集合
+     * 说明：
+     * 1. 哈希表的主键值允许为任意类型
      * export
      */
-    export class HashMap<T> {
+    export class HashMap<K, V> {
         /**
-         * 主键字段名，通过主键值来查询数据是最快的
+         * 下一条数据的哈希ID
          */
-        private $var_primaryKey: number | string = null;
+        private $var_nextId: number = 0;
 
         /**
-         * 哈希表（请勿直接操作其中的数据）
+         * ID列表
          */
-        private $var_dataMap: { [key: string]: T } = {};
+        private $var_ids: number[] = [];
 
         /**
-         * 数据源（请勿直接操作其中的数据）
-         * export
+         * 主键列表
          */
-        source: T[] = [];
+        private $var_keys: K[] = [];
 
         /**
-         * @primaryKey: 指定主键字段名，哈希表会使用主键值来作为数据索引，所以请确保主键值是恒值
-         * export
+         * 值列表
          */
-        constructor(primaryKey: number | string) {
-            if (typeof primaryKey === "number") {
-                primaryKey = primaryKey + "";
+        private $var_id2value: { [id: number]: V } = {};
+
+        /**
+         * 部分键值需要转化成内置的键值
+         */
+        private $toInnerKey(key: any): any {
+            if (key === void 0) {
+                return `__suncom_hashMap_innerKey__undefined__`;
             }
-            if (typeof primaryKey !== "string") {
-                throw Error(`非法的主键字段名：${primaryKey}`);
+            if (key === null) {
+                return `__suncom_hashMap_innerKey__null__`;
             }
-            if (primaryKey.length === 0) {
-                throw Error(`无效的主键字段名字长度：${primaryKey.length}`);
+            if (typeof key === "number" && isNaN(key) === true) {
+                return `__suncom_hashMap_innerKey__isNaN__`;
             }
-            this.$var_primaryKey = primaryKey;
+            return key;
         }
 
         /**
-         * 根据数据在数据源中的索引来移除数据
+         * 获取主键的内置索引
          */
-        private $func_removeByIndex(index: number): T {
-            const data: T = this.source[index];
-            this.source.splice(index, 1);
-            const value: string = data[this.$var_primaryKey];
-            delete this.$var_dataMap[value];
-            return data;
+        private $getInnerIndex(key: any): number {
+            const rkey: any = this.$toInnerKey(key);
+            return this.$var_keys.indexOf(rkey);
         }
 
         /**
-         * 获取数据在数据源中的索引
+         * 返回字典中的条目数量
          */
-        private $func_getIndexByValue(key: number | string, value: any): number {
-            if (value === void 0) {
-                return -1;
-            }
-            for (let i: number = 0; i < this.source.length; i++) {
-                const data: T = this.source[i];
-                if (data[key] === value) {
-                    return i;
-                }
-            }
-            return -1;
+        size(): number {
+            return this.$var_keys.length;
         }
 
         /**
-         * 添加数据
+         * 是否存在从 key 到值的映射
          * export
          */
-        put(data: T): T {
-            let value: any = data[this.$var_primaryKey];
-            if (Common.isStringNullOrEmpty(value) === true) {
-                throw Error(`无效的主键的值，type:${typeof value}, value:${value}`);
-            }
-            if (this.getByPrimaryValue(value) === null) {
-                this.source.push(data);
-                this.$var_dataMap[value] = data;
+        exist(key: any): boolean {
+            return this.$getInnerIndex(key) > -1;
+        }
+
+        /**
+         * 设置 key 所映射的值
+         * export
+         */
+        set(key: K, value: V): V {
+            const index: number = this.$getInnerIndex(key);
+
+            let id: number;
+            if (index === -1) {
+                id = this.$var_nextId++;
+                this.$var_ids.push(id);
+                this.$var_keys.push(this.$toInnerKey(key));
             }
             else {
-                throw Error(`重复的主键值：[${this.$var_primaryKey}]${value}`);
+                id = this.$var_ids[index];
             }
-            return data;
+
+            this.$var_id2value[id] = value;
+            return value;
         }
 
         /**
-         * 根据键值返回数据
+         * 获取 key 所映射的值
          * export
          */
-        getByValue(key: number | string, value: any): T {
-            if (key === this.$var_primaryKey) {
-                return this.getByPrimaryValue(value);
-            }
-            const index: number = this.$func_getIndexByValue(key, value);
+        get(key: K): V {
+            const index: number = this.$getInnerIndex(key);
             if (index === -1) {
                 return null;
             }
-            return this.source[index];
+            const id: number = this.$var_ids[index];
+            return this.$var_id2value[id];
         }
 
         /**
-         * 根据主键值快速返回数据
+         * 移除 key 及其所映射的值
          * export
          */
-        getByPrimaryValue(value: number | string): T {
-            return this.$var_dataMap[value.toString()] || null;
-        }
-
-        /**
-         * 移除数据
-         * export
-         */
-        remove(data: T): T {
-            const index: number = this.source.indexOf(data);
-            if (index === -1) {
-                return data;
-            }
-            return this.$func_removeByIndex(index);
-        }
-
-        /**
-         * 根据键值移除数据
-         * export
-         */
-        removeByValue(key: number | string, value: any): T {
-            if (key === this.$var_primaryKey) {
-                return this.removeByPrimaryValue(value);
-            }
-            const index: number = this.$func_getIndexByValue(key, value);
+        remove(key: K): V {
+            const index: number = this.$getInnerIndex(key);
             if (index === -1) {
                 return null;
             }
-            return this.$func_removeByIndex(index);
+            const id: number = this.$var_ids[index];
+            const value: V = this.$var_id2value[index];
+
+            this.$var_ids.splice(index, 1);
+            this.$var_keys.splice(index, 1);
+            delete this.$var_id2value[id];
+
+            return value;
         }
 
         /**
-         * 根据主键值移除数据
+         * 清除所有数据
          * export
          */
-        removeByPrimaryValue(value: number | string): T {
-            const data: T = this.getByPrimaryValue(value);
-            if (data === null) {
-                return null;
-            }
-            return this.remove(data);
+        clear(): void {
+            this.$var_ids.length = 0;
+            this.$var_keys.length = 0;
+            this.$var_id2value = {};
         }
 
         /**
          * 为每个数据执行方法
          * 说明：
          * 1. 若method返回true，则会中断遍历
-         * 2. 谨慎在此方法中新增或移除数据
+         * 2. 请勿在此方法中新增或移除数据
          * export
          */
-        forEach(method: (data: T) => any): void {
-            for (let i: number = 0; i < this.source.length; i++) {
-                if (method(this.source[i]) === true) {
+        forEach(method: (value: V, key?: K) => any): void {
+            for (let i: number = 0; i < this.$var_ids.length; i++) {
+                const id: number = this.$var_ids[i];
+                if (method(this.$var_id2value[id], this.$var_keys[id]) === true) {
                     break;
                 }
             }
