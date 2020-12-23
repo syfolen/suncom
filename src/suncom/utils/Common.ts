@@ -33,6 +33,9 @@ module suncom {
          * export
          */
         export function getClassName(cls: any): string {
+            if (cls instanceof Function && Common.isStringNullOrEmpty(cls.name) === false) {
+                return cls.name;
+            }
             const classString: string = cls.toString().trim();
             const index: number = classString.indexOf("(");
             return cls.name || classString.substring(9, index);
@@ -450,6 +453,8 @@ module suncom {
 
         /**
          * 复制数据对象
+         * @deep: 默认为: false
+         * export
          */
         export function copy(data: any, deep: boolean = false): any {
             if (data instanceof Array) {
