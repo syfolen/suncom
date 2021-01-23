@@ -145,13 +145,14 @@ module suncom {
          * export
          */
         export function formatString(str: string, args: any[]): string {
-            let length: number = str.length;
+            let remain: number = str.length;
             for (let i: number = 0; i < args.length; i++) {
                 const flag: string = `{${i}}`;
-                const index: number = str.indexOf(flag, str.length - length);
+                const index: number = str.indexOf(flag, str.length - remain);
                 if (index === -1) {
                     break;
                 }
+                remain = str.length - index - 3;
                 str = str.substr(0, index) + args[i] + str.substr(index + 3);
             }
             return str;
