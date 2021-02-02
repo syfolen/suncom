@@ -141,6 +141,14 @@ module suncom {
         /**
          * export
          */
+        clear(): void {
+            this.source.length = 0;
+            this.$var_dataMap = {};
+        }
+
+        /**
+         * export
+         */
         forEach(method: (data: T) => any): void {
             for (let i: number = 0; i < this.source.length; i++) {
                 if (method(this.source[i]) === true) {

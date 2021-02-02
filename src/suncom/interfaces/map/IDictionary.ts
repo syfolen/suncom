@@ -51,6 +51,12 @@ module suncom {
         removeByPrimaryValue(value: number | string): T;
 
         /**
+         * 清除所有数据
+         * export
+         */
+        clear(): void;
+
+        /**
          * 为每个数据执行方法
          * 说明：
          * 1. 若method返回true，则会中断遍历
