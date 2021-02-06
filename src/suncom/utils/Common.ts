@@ -20,14 +20,6 @@ module suncom {
         }
 
         /**
-         * 判断属性是否为 null 或未定义
-         * export
-         */
-        export function isNullOrUndefined(value: any): boolean {
-            return value === void 0 || value === null;
-        }
-
-        /**
          * 获取类名
          * @cls: 指定类型
          * export
