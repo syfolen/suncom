@@ -171,7 +171,7 @@ module suncom {
          * export
          */
         export function random(min: number, max: number): number {
-            const value: number = Random.random() * (max - min);
+            const value: number = Math.random() * (max - min);
             return Math.floor(value) + min;
         }
 
