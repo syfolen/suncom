@@ -27,7 +27,6 @@ module test {
 
             const abc = new Abc();
             suncom.Test.expect(suncom.Common.getMethodName(abc.func, abc)).toBe("func");
-            suncom.Test.expect(suncom.Common.convertEnumToString(TestEnum.A_0, TestEnum)).toBe("A_0");
 
             suncom.Test.assertFalse(suncom.Mathf.isNumber("a"));
             suncom.Test.assertTrue(suncom.Mathf.isNumber("0x01"));

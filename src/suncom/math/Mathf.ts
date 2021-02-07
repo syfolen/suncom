@@ -129,44 +129,6 @@ module suncom {
         }
 
         /**
-         * 返回四舍五入后的结果
-         * @n: 保留小数位数，默认为0
-         * 说明：
-         * 1. 因各个平台实现的版本可能不一致，故自定义了此方法
-         * 己弃用，原因：
-         * 1. tmpValue值的计算会因精度问题存在误差
-         */
-        export function $round(value: number, n: number = 0): number {
-            Logger.warn(DebugMode.ANY, `此接口己弃用：suncom.Common.$round(value: number, n: number = 0);`);
-            let tmpValue: number = Math.floor(value * Math.pow(10, n + 2));
-
-            let floatValue: number = tmpValue % 100;
-            let intValue: number = (tmpValue - floatValue) / 100;
-
-            // 若整数值为负，且小数值有效，则需要修正小数值
-            if (floatValue < 0 && floatValue > 0) {
-                intValue -= 1;
-                floatValue += 100;
-            }
-
-            const a: number = floatValue % 10;
-            const b: number = (floatValue - a) / 10;
-
-            // 四舍六入五成双
-            if (b > 5) {
-                intValue += 1;
-            }
-            else if (b === 5) {
-                const modValue: number = a % 2;
-                if (modValue === 1 || modValue === -1) {
-                    intValue += 1;
-                }
-            }
-            // 还原小数点，并返回
-            return intValue / Math.pow(10, n);
-        }
-
-        /**
          * 返回>=min且<max的随机整数
          * export
          */
@@ -181,7 +143,7 @@ module suncom {
          */
         export function isNumber(str: string | number): boolean {
             if (typeof str === "number") {
-                return true;
+                return isNaN(str) === false;
             }
             if (typeof str === "string") {
                 if (str === "") {

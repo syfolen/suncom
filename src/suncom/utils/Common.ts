@@ -33,7 +33,7 @@ module suncom {
          * export
          */
         export function getClassName(cls: any): string {
-            if (cls instanceof Function && Common.isStringNullOrEmpty(cls.name) === false) {
+            if (cls instanceof Function && this.isStringNullOrEmpty(cls.name) === false) {
                 return cls.name;
             }
             const classString: string = cls.toString().trim();
@@ -68,18 +68,6 @@ module suncom {
             }
             for (const key in caller) {
                 if (caller[key] === method) {
-                    return key;
-                }
-            }
-            return null;
-        }
-
-        /**
-         * 将枚举转化成字符串
-         */
-        export function convertEnumToString(value: number, oEnum: any): string {
-            for (const key in oEnum) {
-                if (oEnum[key] === value) {
                     return key;
                 }
             }
@@ -189,7 +177,7 @@ module suncom {
                         dates[1] = (dt.getMonth() + 1).toString();
                         dates[2] = dt.getDate().toString();
                     }
-                    return new Date(Number(dates[0]), Number(dates[1]) - 1, Number(dates[2]), Number(times[0]), Number(times[1]), Number(times[2]));
+                    return new Date(+dates[0], +dates[1] - 1, +dates[2], +times[0], +times[1], +times[2]);
                 }
                 return new Date(date);
             }
@@ -330,14 +318,6 @@ module suncom {
             str = str.replace("m", (date.getMinutes()).toString());
             str = str.replace("s", (date.getSeconds()).toString());
             return str;
-        }
-
-        /**
-         * 返回 md5 加密后的串
-         * export
-         */
-        export function md5(str: string): string {
-            throw Error("未实现的接口！！！");
         }
 
         /**
@@ -607,14 +587,11 @@ module suncom {
             }
             const array: string[] = ver.split(".");
             const array2: string[] = Global.VERSION.split(".");
+            const length: number = Math.max(array.length, array2.length);
 
-            let length: number = array.length > array2.length ? array.length : array2.length;
-
-            while (array.length < length) {
-                array.push("0");
-            }
-            while (array2.length < length) {
-                array2.push("0");
+            for (let i: number = 0; i < length; i ++) {
+                array.length === i && array.push("0");
+                array2.length === i && array2.push("0");
             }
 
             let error: number = 0;
@@ -624,11 +601,9 @@ module suncom {
                 const s1: string = array2[i];
                 if (Mathf.isNumber(s0) === false) {
                     error |= 0x01;
-                    array[i] = "0";
                 }
                 if (Mathf.isNumber(s1) === false) {
                     error |= 0x02;
-                    array2[i] = "0";
                 }
             }
 
@@ -643,8 +618,8 @@ module suncom {
             }
 
             for (let i: number = 0; i < length; i++) {
-                const reg0: number = Number(array[i]);
-                const reg1: number = Number(array2[i]);
+                const reg0: number = +array[i];
+                const reg1: number = +array2[i];
                 if (reg0 < reg1) {
                     return 1;
                 }
