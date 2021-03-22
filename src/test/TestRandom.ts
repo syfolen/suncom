@@ -6,38 +6,39 @@ module test {
         constructor() {
             console.log("TestRandom");
 
-            suncom.Random.seed(1);
+            const rand1: suncom.IRandom = new suncom.Random(1);
 
             const array = [
-                suncom.Random.random(),
-                suncom.Random.random(),
-                suncom.Random.random(),
-                suncom.Random.random(),
-                suncom.Random.random(),
-                suncom.Random.random(),
-                suncom.Random.random(),
-                suncom.Random.random()
+                rand1.random(),
+                rand1.random(),
+                rand1.random(),
+                rand1.random(),
+                rand1.random(),
+                rand1.random(),
+                rand1.random(),
+                rand1.random()
             ];
 
-            suncom.Random.seed(1);
+            rand1.seed(1);
             const array2 = [
-                suncom.Random.random(),
-                suncom.Random.random(),
-                suncom.Random.random(),
-                suncom.Random.random(),
-                suncom.Random.random(),
-                suncom.Random.random(),
-                suncom.Random.random(),
-                suncom.Random.random()
+                rand1.random(),
+                rand1.random(),
+                rand1.random(),
+                rand1.random(),
+                rand1.random(),
+                rand1.random(),
+                rand1.random(),
+                rand1.random()
             ];
             suncom.Test.expect(array).toEqual(array2);
 
-            // console.log(array.join(","));
+            console.log(array.join(","));
+            console.log(array2.join(","));
 
             // for (let i = 0; i < 10000000; i ++){
-            //     suncom.Random.random();
+            //     rand1.random();
             // }
-            // console.log(suncom.Random.random());
+            // console.log(rand1.random());
         }
     }
 }

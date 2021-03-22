@@ -129,7 +129,7 @@ module suncom {
         }
 
         /**
-         * 返回>=min且<max的随机整数
+         * 返回 >= min 且 < max 的随机整数
          * export
          */
         export function random(min: number, max: number): number {
