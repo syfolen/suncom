@@ -27,7 +27,7 @@ module suncom {
          * export
          */
         export function expect(value: any, description?: string): IExpect {
-            if (Global.debugMode & DebugMode.TEST) {
+            if (Global.debugMode & DebugMode.DEBUG) {
                 return new Expect(description).expect(value);
             }
             if ($expect === null) {
@@ -41,7 +41,7 @@ module suncom {
          * export
          */
         export function notExpected(message?: string): void {
-            if (Global.debugMode & DebugMode.TEST) {
+            if (Global.debugMode & DebugMode.DEBUG) {
                 Test.expect(true).interpret(`Test.notExpected 期望之外的`).toBe(false);
             }
         }
@@ -51,7 +51,7 @@ module suncom {
          * export
          */
         export function assertTrue(value: boolean, message?: string): void {
-            if (Global.debugMode & DebugMode.TEST) {
+            if (Global.debugMode & DebugMode.DEBUG) {
                 Test.expect(value).interpret(message || `Test.assertTrue error，实际值：${Common.toDisplayString(value)}`).toBe(true);
             }
         }
@@ -61,7 +61,7 @@ module suncom {
          * export
          */
         export function assertFalse(value: boolean, message?: string): void {
-            if (Global.debugMode & DebugMode.TEST) {
+            if (Global.debugMode & DebugMode.DEBUG) {
                 Test.expect(value).interpret(message || `Test.assertFalse error，实际值：${Common.toDisplayString(value)}`).toBe(false);
             }
         }

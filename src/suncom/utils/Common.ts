@@ -298,7 +298,7 @@ module suncom {
         }
 
         /**
-         * 格式化时间，支持：yy-MM-dd hh:mm:ss MS|ms
+         * 格式化时间，支持：yyyy-MM-dd hh:mm:ss.MS or yy-M-d h-m-s.ms
          * export
          */
         export function formatDate(str: string, time: string | number | Date): string {
@@ -578,18 +578,18 @@ module suncom {
          */
         export function compareVersion(ver: string): number {
             if (typeof ver !== "string") {
-                Logger.error(DebugMode.ANY, "参数版本号无效");
+                Logger.error("参数版本号无效");
                 return 0;
             }
             if (typeof Global.VERSION !== "string") {
-                Logger.error(DebugMode.ANY, "版本号未设置");
+                Logger.error("版本号未设置");
                 return 0;
             }
             const array: string[] = ver.split(".");
             const array2: string[] = Global.VERSION.split(".");
             const length: number = Math.max(array.length, array2.length);
 
-            for (let i: number = 0; i < length; i ++) {
+            for (let i: number = 0; i < length; i++) {
                 array.length === i && array.push("0");
                 array2.length === i && array2.push("0");
             }
@@ -608,10 +608,10 @@ module suncom {
             }
 
             if (error & 0x1) {
-                Logger.error(DebugMode.ANY, "参数版本号无效 " + `ver:${ver}`);
+                Logger.error("参数版本号无效 " + `ver:${ver}`);
             }
             if (error & 0x2) {
-                Logger.error(DebugMode.ANY, "当前版本号无效 " + `ver:${Global.VERSION}`);
+                Logger.error("当前版本号无效 " + `ver:${Global.VERSION}`);
             }
             if (error > 0) {
                 return 0;

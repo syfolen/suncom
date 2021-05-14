@@ -12,12 +12,6 @@ module suncom {
         DEVELOP = 0,
 
         /**
-         * 调试模式
-         * export
-         */
-        DEBUG,
-
-        /**
          * 网页版
          * export
          */
