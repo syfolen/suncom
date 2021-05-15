@@ -48,19 +48,19 @@ module suncom {
                 this.$var_lockers[type] = false;
             }
 
-            let index: number = -1;
-            for (let i: number = 0; i < list.length; i++) {
-                const item: EventInfo = list[i];
-                if (item.method === method && item.caller === caller) {
+            let i: number, event: EventInfo, index: number = -1;
+            for (i = 0; i < list.length; i++) {
+                event = list[i];
+                if (event.method === method && event.caller === caller) {
                     return;
                 }
                 // 优先级高的事件先执行
-                if (index === -1 && item.priority < priority) {
+                if (index === -1 && event.priority < priority) {
                     index = i;
                 }
             }
 
-            const event: EventInfo = Pool.getItemByClass("suncom.EventInfo", EventInfo);
+            event = Pool.getItemByClass("suncom.EventInfo", EventInfo);
             event.type = type;
             event.caller = caller;
             event.method = method;
@@ -98,8 +98,9 @@ module suncom {
                 this.$var_lockers[type] = false;
             }
 
-            for (let i: number = 0; i < list.length; i++) {
-                const event: EventInfo = list[i];
+            let i: number, event: EventInfo;
+            for (i = 0; i < list.length; i++) {
+                event = list[i];
                 if (event.method === method && event.caller === caller) {
                     list.splice(i, 1)[0].recover();
                     break;
@@ -132,8 +133,9 @@ module suncom {
             // 标记当前事件未取消
             this.$var_isCanceled = false;
 
-            for (let i: number = 0; i < list.length; i++) {
-                const event: EventInfo = list[i];
+            let i: number, event: EventInfo;
+            for (i = 0; i < list.length; i++) {
+                event = list[i];
                 // 一次性事件入栈
                 if (event.receiveOnce === true) {
                     this.$var_onceList.push(event);
@@ -162,7 +164,7 @@ module suncom {
 
             // 注销一次性事件
             while (this.$var_onceList.length > 0) {
-                const event: EventInfo = this.$var_onceList.pop();
+                event = this.$var_onceList.pop();
                 this.removeEventListener(event.type, event.method, event.caller);
             }
         }

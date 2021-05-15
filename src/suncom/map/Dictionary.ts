@@ -54,8 +54,9 @@ module suncom {
             if (value === void 0) {
                 return -1;
             }
-            for (let i: number = 0; i < this.source.length; i++) {
-                const data: T = this.source[i];
+            let i: number, data: T;
+            for (i = 0; i < this.source.length; i++) {
+                data = this.source[i];
                 if (data[key] === value) {
                     return i;
                 }
@@ -150,7 +151,8 @@ module suncom {
          * export
          */
         forEach(method: (data: T) => any): void {
-            for (let i: number = 0; i < this.source.length; i++) {
+            let i: number;
+            for (i = 0; i < this.source.length; i++) {
                 if (method(this.source[i]) === true) {
                     break;
                 }

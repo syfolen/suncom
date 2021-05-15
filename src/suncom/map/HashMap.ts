@@ -125,8 +125,9 @@ module suncom {
          * export
          */
         forEach(method: (value: V, key?: K) => any): void {
-            for (let i: number = 0; i < this.$var_ids.length; i++) {
-                const id: number = this.$var_ids[i];
+            let i: number, id: number;
+            for (i = 0; i < this.$var_ids.length; i++) {
+                id = this.$var_ids[i];
                 if (method(this.$var_id2value[id], this.$var_keys[id]) === true) {
                     break;
                 }

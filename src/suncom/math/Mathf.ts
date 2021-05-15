@@ -100,6 +100,7 @@ module suncom {
             // 被修约参考值
             const reg1: number = parseInt(s3.charAt(1));
 
+            let modValue: number;
             // 四舍六入
             if (reg0 > 5) {
                 intValue += 1;
@@ -111,7 +112,7 @@ module suncom {
                 }
                 // 当五后面无有效数字时，若五前为奇数，则进一
                 else {
-                    const modValue: number = intValue % 2;
+                    modValue = intValue % 2;
                     if (modValue === 1 || modValue === -1) {
                         intValue += 1;
                     }
