@@ -88,7 +88,7 @@ module suncom {
             const chrs: string[] = ["\r", "\n", "\t", " "];
 
             let chr: string, index: number;
-            
+
             let from: number = 0;
             while (from < str.length) {
                 chr = str.charAt(from);
@@ -136,8 +136,8 @@ module suncom {
          * export
          */
         export function formatString(str: string, args: any[]): string {
-            let flag: string, index: number, remain: number = str.length;
-            for (let i: number = 0; i < args.length; i++) {
+            let i: number, flag: string, index: number, remain: number = str.length;
+            for (i = 0; i < args.length; i++) {
                 flag = `{${i}}`;
                 index = str.indexOf(flag, str.length - remain);
                 if (index === -1) {
@@ -173,7 +173,7 @@ module suncom {
                 const array: string[] = date.split(" ");
                 const dates: string[] = array.length === 1 ? [] : array.shift().split("-");
                 const times: string[] = array[0].split(":");
-                
+
                 let dt: Date;
                 if (times.length === 3) {
                     if (dates.length === 0) {
@@ -405,7 +405,7 @@ module suncom {
          * export
          */
         export function findInArray<T>(array: T[], method: (data: T) => boolean, out: T[] = null): T {
-            let i:number, item: T;
+            let i: number, item: T;
             for (i = 0; i < array.length; i++) {
                 item = array[i];
                 if (method(item) === true) {
@@ -608,11 +608,11 @@ module suncom {
                 array2.length === i && array2.push("0");
             }
 
-            let error: number = 0;
+            let s0: string, s1: string, error: number = 0;
 
             for (i = 0; i < length; i++) {
-                const s0: string = array[i];
-                const s1: string = array2[i];
+                s0 = array[i];
+                s1 = array2[i];
                 if (Mathf.isNumber(s0) === false) {
                     error |= 0x01;
                 }
@@ -631,9 +631,10 @@ module suncom {
                 return 0;
             }
 
-            for (let i: number = 0; i < length; i++) {
-                const reg0: number = +array[i];
-                const reg1: number = +array2[i];
+            let reg0: number, reg1: number;
+            for (i = 0; i < length; i++) {
+                reg0 = +array[i];
+                reg1 = +array2[i];
                 if (reg0 < reg1) {
                     return 1;
                 }
