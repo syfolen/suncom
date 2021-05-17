@@ -6,10 +6,16 @@ module suncom {
      */
     export enum EnvMode {
         /**
+         * 本地环境（无局域网模式）
+         * export
+         */
+        LOCAL = 0,
+
+        /**
          * 开发环境
          * export
          */
-        DEVELOP = 0,
+        DEVELOP,
 
         /**
          * 网页版
