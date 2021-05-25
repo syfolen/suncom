@@ -7,11 +7,11 @@ module suncom {
         /**
          * export
          */
-        arg1: number;
+        arg0: number;
 
         /**
          * export
          */
-        arg2: number;
+        arg1: number;
     }
 }

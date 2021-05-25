@@ -3,15 +3,10 @@ module suncom {
     /**
      * export
      */
-    export interface IPCMIntString {
+    export interface IPCMInt {
         /**
          * export
          */
         arg0: number;
-
-        /**
-         * export
-         */
-        arg1: string;
     }
 }
