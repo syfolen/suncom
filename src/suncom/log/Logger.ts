@@ -10,9 +10,9 @@ module suncom {
          * 普通日志
          * export
          */
-        export function log(...args: any[]): void {
+        export function log(str: string): void {
             if (Global.debugMode & DebugMode.NORMAL) {
-                console.log(`${Common.formatDate("yyyy-MM-dd hh:mm:ss.MS", Date.now())} ${args.join(" ")}`);
+                console.log(`${Common.formatDate("yyyy-MM-dd hh:mm:ss.MS", Date.now())} ${str}`);
             }
         }
 
@@ -20,9 +20,9 @@ module suncom {
          * 调试日志
          * export
          */
-        export function debug(...args: any[]): void {
+        export function debug(str: string): void {
             if (Global.debugMode & DebugMode.DEBUG) {
-                console.log(`%c${Common.formatDate("yyyy-MM-dd hh:mm:ss.MS", Date.now())} ${args.join(" ")}`, "color:#999999");
+                console.log(`%c${Common.formatDate("yyyy-MM-dd hh:mm:ss.MS", Date.now())} ${str}`, "color:#999999");
             }
         }
 
@@ -30,7 +30,7 @@ module suncom {
          * 追踪日志
          * export
          */
-        export function trace(str: string, callback: (str) => void): void {
+        export function trace(str: string, callback: (str: string) => void): void {
             if (Global.debugMode & DebugMode.NORMAL) {
                 callback(`${Common.formatDate("yyyy-MM-dd hh:mm:ss.MS", Date.now())} ${str}`);
             }
@@ -40,9 +40,9 @@ module suncom {
          * 信息日志（框架）
          * export
          */
-        export function info(...args: any[]): void {
+        export function info(str: string): void {
             if (Global.debugMode & DebugMode.INFO) {
-                console.info(`${Common.formatDate("yyyy-MM-dd hh:mm:ss.MS", Date.now())} ${args.join(" ")}`);
+                console.info(`${Common.formatDate("yyyy-MM-dd hh:mm:ss.MS", Date.now())} ${str}`);
             }
         }
 
@@ -50,9 +50,9 @@ module suncom {
          * 文件日志
          * export
          */
-        export function log2f(...args: any[]): void {
+        export function log2f(str: string): void {
             if (Global.debugMode & DebugMode.LOG2F) {
-                console.info(`%c${Common.formatDate("yyyy-MM-dd hh:mm:ss.MS", Date.now())} ${args.join(" ")}`, "color:#0000FF");
+                console.info(`%c${Common.formatDate("yyyy-MM-dd hh:mm:ss.MS", Date.now())} ${str}`, "color:#0000FF");
             }
         }
 
@@ -60,9 +60,9 @@ module suncom {
          * 警告日志
          * export
          */
-        export function warn(...args: any[]): void {
+        export function warn(str: string): void {
             if (Global.debugMode & DebugMode.WARN) {
-                console.warn(`${Common.formatDate("yyyy-MM-dd hh:mm:ss.MS", Date.now())} ${args.join(" ")}`);
+                console.warn(`${Common.formatDate("yyyy-MM-dd hh:mm:ss.MS", Date.now())} ${str}`);
             }
         }
 
@@ -70,9 +70,9 @@ module suncom {
          * 错误日志
          * export
          */
-        export function error(...args: any[]): void {
+        export function error(str: string): void {
             if (Global.debugMode & DebugMode.ERROR) {
-                console.error(`${Common.formatDate("yyyy-MM-dd hh:mm:ss.MS", Date.now())} ${args.join(" ")}`);
+                console.error(`${Common.formatDate("yyyy-MM-dd hh:mm:ss.MS", Date.now())} ${str}`);
             }
         }
     }
