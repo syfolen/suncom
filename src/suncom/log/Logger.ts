@@ -12,7 +12,7 @@ module suncom {
          */
         export function log(...args: any[]): void {
             if (Global.debugMode & DebugMode.NORMAL) {
-                args.unshift(suncom.Common.formatDate("yyyy-MM-dd hh:mm:ss.MS", Date.now()));
+                args.unshift(Common.formatDate("yyyy-MM-dd hh:mm:ss.MS", Date.now()));
                 console.log.apply(console, args);
             }
         }
@@ -23,9 +23,19 @@ module suncom {
          */
         export function debug(...args: any[]): void {
             if (Global.debugMode & DebugMode.DEBUG) {
-                args.unshift(suncom.Common.formatDate("yyyy-MM-dd hh:mm:ss.MS", Date.now()));
+                args.unshift(Common.formatDate("yyyy-MM-dd hh:mm:ss.MS", Date.now()));
                 args.push("color:#00FFFF");
                 console.log.apply(console, args);
+            }
+        }
+
+        /**
+         * 追踪日志
+         * export
+         */
+        export function trace(str: string, callback: (str: string) => void): void {
+            if (Global.debugMode & DebugMode.TRACE) {
+                callback(`${Common.formatDate("yyyy-MM-dd hh:mm:ss.MS", Date.now())} ${str}`);
             }
         }
 
@@ -35,7 +45,7 @@ module suncom {
          */
         export function info(...args: any[]): void {
             if (Global.debugMode & DebugMode.INFO) {
-                args.unshift(suncom.Common.formatDate("yyyy-MM-dd hh:mm:ss.MS", Date.now()));
+                args.unshift(Common.formatDate("yyyy-MM-dd hh:mm:ss.MS", Date.now()));
                 console.info.apply(console, args);
             }
         }
@@ -46,7 +56,7 @@ module suncom {
          */
         export function log2f(...args: any[]): void {
             if (Global.debugMode & DebugMode.LOG2F) {
-                args.unshift(suncom.Common.formatDate("yyyy-MM-dd hh:mm:ss.MS", Date.now()));
+                args.unshift(Common.formatDate("yyyy-MM-dd hh:mm:ss.MS", Date.now()));
                 args.push("color: #0000FF");
                 console.info.apply(console, args);
             }
@@ -58,7 +68,7 @@ module suncom {
          */
         export function warn(...args: any[]): void {
             if (Global.debugMode & DebugMode.WARN) {
-                args.unshift(suncom.Common.formatDate("yyyy-MM-dd hh:mm:ss.MS", Date.now()));
+                args.unshift(Common.formatDate("yyyy-MM-dd hh:mm:ss.MS", Date.now()));
                 console.warn.apply(console, args);
             }
         }
@@ -69,7 +79,7 @@ module suncom {
          */
         export function error(...args: any[]): void {
             if (Global.debugMode & DebugMode.ERROR) {
-                args.unshift(suncom.Common.formatDate("yyyy-MM-dd hh:mm:ss.MS", Date.now()));
+                args.unshift(Common.formatDate("yyyy-MM-dd hh:mm:ss.MS", Date.now()));
                 console.error.apply(console, args);
             }
         }
