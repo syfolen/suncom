@@ -622,10 +622,10 @@ module suncom {
             }
 
             if (error & 0x1) {
-                Logger.error("参数版本号无效 " + `ver:${ver}`);
+                Logger.error(`参数版本号无效 ver:${ver}`);
             }
             if (error & 0x2) {
-                Logger.error("当前版本号无效 " + `ver:${Global.VERSION}`);
+                Logger.error(`当前版本号无效 ver:${Global.VERSION}`);
             }
             if (error > 0) {
                 return 0;
