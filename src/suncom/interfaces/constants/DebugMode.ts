@@ -36,15 +36,9 @@ module suncom {
         DEBUG = 0x10,
 
         /**
-         * 追踪日志
-         * export
-         */
-        TRACE = 0x20,
-
-        /**
          * 普通
          * export
          */
-        NORMAL = 0x40
+        NORMAL = 0x20
     }
 }

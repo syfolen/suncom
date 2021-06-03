@@ -31,7 +31,7 @@ module suncom {
          * export
          */
         export function trace(str: string, callback: (str) => void): void {
-            if (Global.debugMode & DebugMode.TRACE) {
+            if (Global.debugMode & DebugMode.NORMAL) {
                 callback(`${Common.formatDate("yyyy-MM-dd hh:mm:ss.MS", Date.now())} ${str}`);
             }
         }
