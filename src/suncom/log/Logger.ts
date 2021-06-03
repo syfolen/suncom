@@ -42,7 +42,7 @@ module suncom {
          */
         export function info(...args: any[]): void {
             if (Global.debugMode & DebugMode.INFO) {
-                console.info(`%c${Common.formatDate("yyyy-MM-dd hh:mm:ss.MS", Date.now())} ${args.join(" ")}`);
+                console.info(`${Common.formatDate("yyyy-MM-dd hh:mm:ss.MS", Date.now())} ${args.join(" ")}`);
             }
         }
 
