@@ -146,7 +146,7 @@ module suncom {
         toBeCloseTo(value: number, deviation: number = 0): void {
             if (Global.debugMode > 0) {
                 const pass: boolean = Math.abs(this.$var_value - value) <= Math.abs(deviation);
-                const message: string = `期望与${value}的误差${this.$var_asNot === true ? "" : "不"}超过${deviation}，实际值：${this.$var_value}`;
+                const message: string = `期望与${value}的误差${this.$var_asNot === false ? "" : "不"}超过${deviation}，实际值：${this.$var_value}`;
                 this.test(pass, message);
             }
         }
@@ -154,7 +154,7 @@ module suncom {
         toBeGreaterThan(value: number): void {
             if (Global.debugMode > 0) {
                 const pass: boolean = this.$var_value > value;
-                const message: string = `期望${this.$var_asNot === true ? "" : "不"}大于 ${value}，实际值：${this.$var_value}`;
+                const message: string = `期望${this.$var_asNot === false ? "" : "不"}大于 ${value}，实际值：${this.$var_value}`;
                 this.test(pass, message);
             }
         }
@@ -162,7 +162,7 @@ module suncom {
         toBeGreaterOrEqualThan(value: number): void {
             if (Global.debugMode > 0) {
                 const pass: boolean = this.$var_value >= value;
-                const message: string = `期望${this.$var_asNot === true ? "" : "不"}大于等于 ${value}，实际值：${this.$var_value}`;
+                const message: string = `期望${this.$var_asNot === false ? "" : "不"}大于等于 ${value}，实际值：${this.$var_value}`;
                 this.test(pass, message);
             }
         }
@@ -170,7 +170,7 @@ module suncom {
         toBeLessThan(value: number): void {
             if (Global.debugMode > 0) {
                 const pass: boolean = this.$var_value < value;
-                const message: string = `期望${this.$var_asNot === true ? "" : "不"}小于 ${value}，实际值：${this.$var_value}`;
+                const message: string = `期望${this.$var_asNot === false ? "" : "不"}小于 ${value}，实际值：${this.$var_value}`;
                 this.test(pass, message);
             }
         }
@@ -178,7 +178,7 @@ module suncom {
         toBeLessOrEqualThan(value: number): void {
             if (Global.debugMode > 0) {
                 const pass: boolean = this.$var_value <= value;
-                const message: string = `期望${this.$var_asNot === true ? "" : "不"}小于等于 ${value}，实际值：${this.$var_value}`;
+                const message: string = `期望${this.$var_asNot === false ? "" : "不"}小于等于 ${value}，实际值：${this.$var_value}`;
                 this.test(pass, message);
             }
         }
