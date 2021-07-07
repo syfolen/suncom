@@ -511,8 +511,8 @@ module suncom {
             // 比较数组
             if (oldData instanceof Array && newData instanceof Array && oldData.length === newData.length) {
                 if (strict === false) {
-                    oldData = oldData.slice();
-                    newData = newData.slice();
+                    oldData = oldData.slice(0);
+                    newData = newData.slice(0);
                     oldData.sort();
                     newData.sort();
                 }
