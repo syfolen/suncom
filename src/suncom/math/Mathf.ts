@@ -100,7 +100,6 @@ module suncom {
             // 被修约参考值
             const reg1: number = parseInt(s3.charAt(1));
 
-            let modValue: number;
             // 四舍六入
             if (reg0 > 5) {
                 intValue += 1;
@@ -112,7 +111,7 @@ module suncom {
                 }
                 // 当五后面无有效数字时，若五前为奇数，则进一
                 else {
-                    modValue = intValue % 2;
+                    const modValue: number = intValue % 2;
                     if (modValue === 1 || modValue === -1) {
                         intValue += 1;
                     }
@@ -142,7 +141,7 @@ module suncom {
          * 判断是否为数字
          * export
          */
-        export function isNumber(str: string | number): boolean {
+        export function isNumber(str: NumberOrString): boolean {
             if (typeof str === "number") {
                 return isNaN(str) === false;
             }

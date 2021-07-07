@@ -8,7 +8,7 @@ module suncom {
         /**
          * 哈希种子
          */
-        let $hashId: number = 0;
+        export let $hashId: number = 0;
 
         /**
          * 获取全局唯一的哈希值
@@ -66,8 +66,7 @@ module suncom {
             if (caller === null) {
                 return this.getClassName(method);
             }
-            let key: string;
-            for (key in caller) {
+            for (const key in caller) {
                 if (caller[key] === method) {
                     return key;
                 }
@@ -87,12 +86,10 @@ module suncom {
             }
             const chrs: string[] = ["\r", "\n", "\t", " "];
 
-            let chr: string, index: number;
-
             let from: number = 0;
             while (from < str.length) {
-                chr = str.charAt(from);
-                index = chrs.indexOf(chr);
+                const chr: string = str.charAt(from);
+                const index: number = chrs.indexOf(chr);
                 if (index === -1) {
                     break;
                 }
@@ -101,8 +98,8 @@ module suncom {
 
             let to: number = str.length - 1;
             while (to > from) {
-                chr = str.charAt(to);
-                index = chrs.indexOf(chr);
+                const chr: string = str.charAt(to);
+                const index: number = chrs.indexOf(chr);
                 if (index === -1) {
                     break;
                 }
@@ -120,13 +117,13 @@ module suncom {
          * 3. 否则返回 false
          * export
          */
-        export function isStringNullOrEmpty(value: string | number): boolean {
+        export function isStringNullOrEmpty(value: NumberOrString): boolean {
+            if (typeof value === "string" && value !== "") {
+                return false;
+            }
             if (typeof value === "number") {
                 // 排除NaN
                 return isNaN(value);
-            }
-            if (typeof value === "string" && value !== "") {
-                return false;
             }
             return true;
         }
@@ -136,10 +133,10 @@ module suncom {
          * export
          */
         export function formatString(str: string, args: any[]): string {
-            let i: number, flag: string, index: number, remain: number = str.length;
-            for (i = 0; i < args.length; i++) {
-                flag = `{${i}}`;
-                index = str.indexOf(flag, str.length - remain);
+            let remain: number = str.length;
+            for (let i: number = 0; i < args.length; i++) {
+                const flag: string = `{${i}}`;
+                const index: number = str.indexOf(flag, str.length - remain);
                 if (index === -1) {
                     break;
                 }
@@ -159,7 +156,7 @@ module suncom {
          * 4. yyyy-MM-dd hh:mm:ss
          * export
          */
-        export function convertToDate(date: string | number | Date): Date {
+        export function convertToDate(date: NumberOrString | Date): Date {
             if (date instanceof Date) {
                 return date;
             }
@@ -174,10 +171,9 @@ module suncom {
                 const dates: string[] = array.length === 1 ? [] : array.shift().split("-");
                 const times: string[] = array[0].split(":");
 
-                let dt: Date;
                 if (times.length === 3) {
                     if (dates.length === 0) {
-                        dt = new Date();
+                        const dt: Date = new Date();
                         dates[0] = dt.getFullYear().toString();
                         dates[1] = (dt.getMonth() + 1).toString();
                         dates[2] = dt.getDate().toString();
@@ -197,7 +193,7 @@ module suncom {
          * @return: 时间戳
          * export
          */
-        export function dateAdd(datepart: string, increment: number, time: string | number | Date): number {
+        export function dateAdd(datepart: string, increment: number, time: NumberOrString | Date): number {
             const date: Date = this.convertToDate(time);
 
             //计算增量毫秒数
@@ -254,7 +250,7 @@ module suncom {
          * @return: 时间戳
          * export
          */
-        export function dateDiff(datepart: string, date: string | number | Date, date2: string | number | Date): number {
+        export function dateDiff(datepart: string, date: NumberOrString | Date, date2: NumberOrString | Date): number {
             const d1: Date = this.convertToDate(date);
             const d2: Date = this.convertToDate(date2);
 
@@ -306,7 +302,7 @@ module suncom {
          * 格式化时间，支持：yyyy-MM-dd hh:mm:ss.MS or yy-M-d h-m-s.ms
          * export
          */
-        export function formatDate(str: string, time: string | number | Date): string {
+        export function formatDate(str: string, time: NumberOrString | Date): string {
             const date: Date = this.convertToDate(time);
             str = str.replace("MS", ("00" + (date.getMilliseconds()).toString()).substr(-3));
             str = str.replace("ms", (date.getMilliseconds()).toString());
@@ -345,8 +341,7 @@ module suncom {
         export function createHttpSign(params: Object, sign: string, signKey: string = "sign"): string {
             const array: string[] = [];
 
-            let key: string;
-            for (key in params) {
+            for (const key in params) {
                 if (key !== signKey) {
                     array.push(`${key}=${params[key]}`);
                 }
@@ -405,9 +400,8 @@ module suncom {
          * export
          */
         export function findInArray<T>(array: T[], method: (data: T) => boolean, out: T[] = null): T {
-            let i: number, item: T;
-            for (i = 0; i < array.length; i++) {
-                item = array[i];
+            for (let i: number = 0; i < array.length; i++) {
+                const item: T = array[i];
                 if (method(item) === true) {
                     if (out === null) {
                         return item;
@@ -423,8 +417,7 @@ module suncom {
          * export
          */
         export function removeItemFromArray<T>(item: T, array: T[]): void {
-            let i: number;
-            for (i = 0; i < array.length; i++) {
+            for (let i: number = 0; i < array.length; i++) {
                 if (array[i] === item) {
                     array.splice(i, 1);
                     break;
@@ -437,8 +430,7 @@ module suncom {
          * export
          */
         export function removeItemsFromArray<T>(items: T[], array: T[]): void {
-            let i: number;
-            for (i = 0; i < items.length; i++) {
+            for (let i: number = 0; i < items.length; i++) {
                 this.removeItemFromArray(items[i], array);
             }
         }
@@ -449,28 +441,27 @@ module suncom {
          * export
          */
         export function copy(data: any, deep: boolean = false): any {
-            let i: number, key: string, array: any[], newData: any;
             if (data instanceof Array) {
                 if (deep === false) {
                     return data.slice(0);
                 }
                 else {
-                    array = [];
-                    for (i = 0; i < data.length; i++) {
+                    const array: any[] = [];
+                    for (let i: number = 0; i < data.length; i++) {
                         array.push(this.copy(data[i], deep));
                     }
                     return array;
                 }
             }
             else if (data instanceof Object) {
-                newData = {};
+                const newData: KVString2Object<any> = {};
                 if (deep === false) {
-                    for (key in data) {
+                    for (const key in data) {
                         newData[key] = data[key];
                     }
                 }
                 else {
-                    for (key in data) {
+                    for (const key in data) {
                         newData[key] = this.copy(data[key], deep);
                     }
                 }
@@ -483,9 +474,9 @@ module suncom {
          * 克隆数据结构
          */
         export function clone(data: any): any {
-            let key: string, value: any, newData: any = {};
-            for (key in data) {
-                value = data[key];
+            let newData: KVString2Object<any> = {};
+            for (const key in data) {
+                const value: any = data[key];
                 if (typeof value === "number") {
                     newData[key] = 0;
                 }
@@ -517,7 +508,6 @@ module suncom {
             if (typeof oldData === "number" && typeof newData === "number" && isNaN(oldData) && isNaN(newData)) {
                 return true;
             }
-            let i: number, key: string;
             // 比较数组
             if (oldData instanceof Array && newData instanceof Array && oldData.length === newData.length) {
                 if (strict === false) {
@@ -527,7 +517,7 @@ module suncom {
                     newData.sort();
                 }
                 // 类型为数组并且数组长度相同
-                for (i = 0; i < oldData.length; i++) {
+                for (let i: number = 0; i < oldData.length; i++) {
                     if (this.isEqual(oldData[i], newData[i], strict) === false) {
                         return false;
                     }
@@ -538,7 +528,7 @@ module suncom {
                 if (strict === true && oldData.constructor !== newData.constructor) {
                     return false;
                 }
-                for (key in oldData) {
+                for (const key in oldData) {
                     if (oldData.hasOwnProperty(key) === true && this.isEqual(oldData[key], newData[key], strict) === false) {
                         return false;
                     }
@@ -561,11 +551,11 @@ module suncom {
                 return data.toString();
             }
 
-            let i: number, str: string, array: string[];
+            let str: string;
 
             if (data instanceof Array) {
-                array = [];
-                for (i = 0; i < data.length; i++) {
+                const array: string[] = [];
+                for (let i: number = 0; i < data.length; i++) {
                     array.push(this.toDisplayString(data[i]));
                 }
                 return `[${array.join(",")}]`;
@@ -602,17 +592,16 @@ module suncom {
             const array2: string[] = Global.VERSION.split(".");
             const length: number = Math.max(array.length, array2.length);
 
-            let i: number;
-            for (i = 0; i < length; i++) {
+            for (let i: number = 0; i < length; i++) {
                 array.length === i && array.push("0");
                 array2.length === i && array2.push("0");
             }
 
-            let s0: string, s1: string, error: number = 0;
+            let error: number = 0;
 
-            for (i = 0; i < length; i++) {
-                s0 = array[i];
-                s1 = array2[i];
+            for (let i: number = 0; i < length; i++) {
+                const s0: string = array[i];
+                const s1: string = array2[i];
                 if (Mathf.isNumber(s0) === false) {
                     error |= 0x01;
                 }
@@ -631,10 +620,9 @@ module suncom {
                 return 0;
             }
 
-            let reg0: number, reg1: number;
-            for (i = 0; i < length; i++) {
-                reg0 = +array[i];
-                reg1 = +array2[i];
+            for (let i: number = 0; i < length; i++) {
+                const reg0: number = +array[i];
+                const reg1: number = +array2[i];
                 if (reg0 < reg1) {
                     return 1;
                 }

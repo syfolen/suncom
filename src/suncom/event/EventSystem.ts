@@ -7,12 +7,12 @@ module suncom {
         /**
          * 事件对象集合
          */
-        private $var_events: { [type: string]: EventInfo[] } = {};
+        private $var_events: KVString2Object<EventInfo[]> = {};
 
         /**
          * 避免注册与注销对正在派发的事件列表产生干扰
          */
-        private $var_lockers: { [type: string]: boolean } = {};
+        private $var_lockers: KVString2Boolean = {};
 
         /**
          * 己执行的一次性事件对象列表
@@ -23,6 +23,19 @@ module suncom {
          * 事件是否己取消
          */
         private $var_isCanceled: boolean = false;
+
+        /**
+         * 对象回收站
+         * 说明：
+         * 1. 事件派发过程中，所有回收的观察者会先进入回收站
+         * 2. 当事件派发彻底停止时，回收站中的的对象会被重置并进入对象池
+         */
+        private $var_recycles: EventInfo[] = [];
+
+        /**
+         * 事件派发接口调用次数
+         */
+        private $var_dispatchCount: number = 0;
 
         /**
          * export
@@ -48,9 +61,9 @@ module suncom {
                 this.$var_lockers[type] = false;
             }
 
-            let i: number, event: EventInfo, index: number = -1;
-            for (i = 0; i < list.length; i++) {
-                event = list[i];
+            let index: number = -1;
+            for (let i: number = 0; i < list.length; i++) {
+                const event: EventInfo = list[i];
                 if (event.method === method && event.caller === caller) {
                     return;
                 }
@@ -60,7 +73,7 @@ module suncom {
                 }
             }
 
-            event = Pool.getItemByClass("suncom.EventInfo", EventInfo);
+            const event: EventInfo = Pool.getItemByClass("suncom.EventInfo", EventInfo);
             event.type = type;
             event.caller = caller;
             event.method = method;
@@ -98,11 +111,10 @@ module suncom {
                 this.$var_lockers[type] = false;
             }
 
-            let i: number, event: EventInfo;
-            for (i = 0; i < list.length; i++) {
-                event = list[i];
+            for (let i: number = 0; i < list.length; i++) {
+                const event: EventInfo = list[i];
                 if (event.method === method && event.caller === caller) {
-                    list.splice(i, 1)[0].recover();
+                    this.$var_recycles.push(list.splice(i, 1)[0]);
                     break;
                 }
             }
@@ -132,10 +144,11 @@ module suncom {
             const isCanceled: boolean = this.$var_isCanceled;
             // 标记当前事件未取消
             this.$var_isCanceled = false;
+            // 事件派发次数 +1
+            this.$var_dispatchCount++;
 
-            let i: number, event: EventInfo;
-            for (i = 0; i < list.length; i++) {
-                event = list[i];
+            for (let i: number = 0; i < list.length; i++) {
+                const event: EventInfo = list[i];
                 // 一次性事件入栈
                 if (event.receiveOnce === true) {
                     this.$var_onceList.push(event);
@@ -162,10 +175,25 @@ module suncom {
             // 标记允许直接更新
             this.$var_lockers[type] = false;
 
+            // 事件派发次数 -1
+            this.$var_dispatchCount--;
+
             // 注销一次性事件
             while (this.$var_onceList.length > 0) {
-                event = this.$var_onceList.pop();
+                const event: EventInfo = this.$var_onceList.pop();
                 this.removeEventListener(event.type, event.method, event.caller);
+            }
+
+            // 若当前事件派发次数为 0 ，则回收站中的对象入池
+            if (this.$var_dispatchCount === 0) {
+                while (this.$var_recycles.length > 0) {
+                    const event: EventInfo = this.$var_recycles.pop();
+                    event.caller = null;
+                    event.method = null;
+                    event.priority = 0;
+                    event.receiveOnce = false;
+                    Pool.recover("suncom.EventInfo", event);
+                }
             }
         }
 

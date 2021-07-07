@@ -28,11 +28,5 @@ module suncom {
          * 是否只响应一次
          */
         receiveOnce: boolean = false;
-
-        recover(): void {
-            this.caller = null;
-            this.method = null;
-            Pool.recover("suncom.EventInfo", this);
-        }
     }
 }

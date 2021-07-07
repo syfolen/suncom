@@ -18,7 +18,7 @@ module suncom {
         WARN = 0x2,
 
         /**
-         * 日志文件
+         * 文件日志
          * export
          */
         LOG2F = 0x4,

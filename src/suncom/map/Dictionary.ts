@@ -7,23 +7,23 @@ module suncom {
         /**
          * 主键字段名，通过主键值来查询数据是最快的
          */
-        private $var_primaryKey: number | string = null;
+        private $var_primaryKey: NumberOrString = null;
 
         /**
          * 数据表（请勿直接操作其中的数据）
          */
-        private $var_dataMap: { [key: string]: T } = {};
+        private $var_dataMap: KVString2Object<T> = {};
 
         /**
          * export
          */
-        source: T[] = [];
+        readonly source: T[] = [];
 
         /**
          * @primaryKey: 指定主键字段名，字典会使用主键值来作为数据索引，所以请确保主键值是恒值
          * export
          */
-        constructor(primaryKey: number | string) {
+        constructor(primaryKey: NumberOrString) {
             if (typeof primaryKey === "number") {
                 primaryKey = primaryKey + "";
             }
@@ -50,13 +50,12 @@ module suncom {
         /**
          * 获取数据在数据源中的索引
          */
-        private $func_getIndexByValue(key: number | string, value: any): number {
-            if (value === void 0) {
+        private $func_getIndexByValue(key: NumberOrString, value: any): number {
+            if (value === void 0 || value === null) {
                 return -1;
             }
-            let i: number, data: T;
-            for (i = 0; i < this.source.length; i++) {
-                data = this.source[i];
+            for (let i: number = 0; i < this.source.length; i++) {
+                const data: T = this.source[i];
                 if (data[key] === value) {
                     return i;
                 }
@@ -85,7 +84,7 @@ module suncom {
         /**
          * export
          */
-        getByValue(key: number | string, value: any): T {
+        getByValue(key: NumberOrString, value: any): T {
             if (key === this.$var_primaryKey) {
                 return this.getByPrimaryValue(value);
             }
@@ -99,8 +98,8 @@ module suncom {
         /**
          * export
          */
-        getByPrimaryValue(value: number | string): T {
-            return this.$var_dataMap[value.toString()] || null;
+        getByPrimaryValue(value: NumberOrString): T {
+            return this.$var_dataMap[value] || null;
         }
 
         /**
@@ -117,7 +116,7 @@ module suncom {
         /**
          * export
          */
-        removeByValue(key: number | string, value: any): T {
+        removeByValue(key: NumberOrString, value: any): T {
             if (key === this.$var_primaryKey) {
                 return this.removeByPrimaryValue(value);
             }
@@ -131,7 +130,7 @@ module suncom {
         /**
          * export
          */
-        removeByPrimaryValue(value: number | string): T {
+        removeByPrimaryValue(value: NumberOrString): T {
             const data: T = this.getByPrimaryValue(value);
             if (data === null) {
                 return null;
@@ -151,8 +150,7 @@ module suncom {
          * export
          */
         forEach(method: (data: T) => any): void {
-            let i: number;
-            for (i = 0; i < this.source.length; i++) {
+            for (let i: number = 0; i < this.source.length; i++) {
                 if (method(this.source[i]) === true) {
                     break;
                 }

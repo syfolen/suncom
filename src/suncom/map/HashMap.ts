@@ -22,7 +22,7 @@ module suncom {
         /**
          * 值列表
          */
-        private $var_id2value: { [id: number]: V } = {};
+        private $var_id2value: KVNumber2Object<V> = {};
 
         /**
          * 部分键值需要转化成内置的键值
@@ -125,9 +125,8 @@ module suncom {
          * export
          */
         forEach(method: (value: V, key?: K) => any): void {
-            let i: number, id: number;
-            for (i = 0; i < this.$var_ids.length; i++) {
-                id = this.$var_ids[i];
+            for (let i: number = 0; i < this.$var_ids.length; i++) {
+                const id: number = this.$var_ids[i];
                 if (method(this.$var_id2value[id], this.$var_keys[id]) === true) {
                     break;
                 }

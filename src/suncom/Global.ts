@@ -6,12 +6,6 @@ module suncom {
      */
     export namespace Global {
         /**
-         * 运行环境，默认为：EnvMode.DEVELOP
-         * export
-         */
-        export let envMode: EnvMode = 0;
-
-        /**
          * 调试模式，默认为：0
          * export
          */
@@ -46,11 +40,5 @@ module suncom {
          * export
          */
         export let VERSION: string = "1.0.0";
-
-        /**
-         * 全局数据中心
-         * export
-         */
-        export const dataMap: { [key: string]: any } = {};
     }
 }

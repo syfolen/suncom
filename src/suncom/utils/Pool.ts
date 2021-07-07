@@ -8,14 +8,14 @@ module suncom {
         /**
          * 对象集合
          */
-        const $pool: { [sign: string]: any[] } = {};
+        export const $pool: KVString2Object<any> = {};
 
         /**
          * 根据标识从池中获取对象，获取失败时返回null
          * export
          */
         export function getItem(sign: string): any {
-            const array: any[] = $pool[sign];
+            const array: any[] = this.$pool[sign];
             if (array === void 0 || array.length === 0) {
                 return null;
             }
@@ -31,7 +31,7 @@ module suncom {
          * export
          */
         export function getItemByClass(sign: string, cls: any, args?: any): any {
-            let item: any = Pool.getItem(sign);
+            let item: any = this.getItem(sign);
             if (item === null) {
                 if (Laya.Prefab !== void 0 && cls === Laya.Prefab) {
                     const prefab: Laya.Prefab = new Laya.Prefab();
@@ -62,9 +62,9 @@ module suncom {
                 return false;
             }
             item["__suncom__$__inPool__"] = true;
-            const array: any[] = $pool[sign];
+            const array: any[] = this.$pool[sign];
             if (array === void 0) {
-                $pool[sign] = [item];
+                this.$pool[sign] = [item];
             }
             else {
                 array.push(item);
@@ -77,8 +77,8 @@ module suncom {
          * export
          */
         export function clear(sign: string): void {
-            if ($pool[sign] !== void 0) {
-                delete $pool[sign];
+            if (this.$pool[sign] !== void 0) {
+                delete this.$pool[sign];
             }
         }
     }

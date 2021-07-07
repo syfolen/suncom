@@ -9,12 +9,6 @@ module suncom {
      */
     export interface IDictionary<T> {
         /**
-         * 数据源（请勿直接操作其中的数据）
-         * export
-         */
-        source: T[];
-
-        /**
          * 添加数据
          * export
          */
@@ -24,13 +18,13 @@ module suncom {
          * 根据键值返回数据
          * export
          */
-        getByValue(key: number | string, value: any): T;
+        getByValue(key: NumberOrString, value: any): T;
 
         /**
          * 根据主键值快速返回数据
          * export
          */
-        getByPrimaryValue(value: number | string): T;
+        getByPrimaryValue(value: NumberOrString): T;
 
         /**
          * 移除数据
@@ -42,13 +36,13 @@ module suncom {
          * 根据键值移除数据
          * export
          */
-        removeByValue(key: number | string, value: any): T;
+        removeByValue(key: NumberOrString, value: any): T;
 
         /**
          * 根据主键值移除数据
          * export
          */
-        removeByPrimaryValue(value: number | string): T;
+        removeByPrimaryValue(value: NumberOrString): T;
 
         /**
          * 清除所有数据
@@ -64,5 +58,11 @@ module suncom {
          * export
          */
         forEach(method: (data: T) => any): void;
+
+        /**
+         * 数据源（请勿直接操作其中的数据）
+         * export
+         */
+        readonly source: T[];
     }
 }

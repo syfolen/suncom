@@ -58,10 +58,9 @@ module suncom {
 
         arrayContaining<T>(array: T[]): void {
             if (Global.debugMode > 0) {
-                let i: number, value: T, pass: boolean = true;
-                for (i = 0; i < array.length; i++) {
-                    value = array[i];
-                    if (this.$var_value.indexOf(value) < 0) {
+                let pass: boolean = true;
+                for (let i: number = 0; i < array.length; i++) {
+                    if (this.$var_value.indexOf(array[i]) < 0) {
                         pass = false;
                         break;
                     }

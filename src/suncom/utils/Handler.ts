@@ -16,6 +16,11 @@ module suncom {
         private $var_args: any[] = null;
 
         /**
+         * 是否为一次性的
+         */
+        private $var_once: boolean = false;
+
+        /**
          * 回调对象
          */
         private $var_caller: Object = null;
@@ -24,11 +29,6 @@ module suncom {
          * 回调方法
          */
         private $var_method: Function = null;
-
-        /**
-         * 是否为一次性的
-         */
-        private $var_once: boolean = false;
 
         /**
          * 设置指定属性值
@@ -40,10 +40,10 @@ module suncom {
                 throw Error(`Handler己被回收！！！`);
             }
             this.$var_id = Common.createHashId();
-            this.$var_caller = caller || null;
-            this.$var_method = method || null;
             this.$var_args = args;
             this.$var_once = once;
+            this.$var_caller = caller || null;
+            this.$var_method = method || null;
             return this;
         }
 
