@@ -64,7 +64,7 @@ module suncom {
             for (let i: number = 0; i < list.length; i++) {
                 const event: EventInfo = list[i];
                 if (event.method === method && event.caller === caller) {
-                    Global.debugMode > 0 && console.warn(`忽略重复注册的事件 name:${name}`);
+                    Logger.warn(`忽略重复注册的事件 name:${name}`);
                     return;
                 }
                 // 优先级高的事件先执行

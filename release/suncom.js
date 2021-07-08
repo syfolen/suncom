@@ -169,7 +169,7 @@ var suncom;
             for (var i = 0; i < list.length; i++) {
                 var event_1 = list[i];
                 if (event_1.method === method && event_1.caller === caller) {
-                    Global.debugMode > 0 && console.warn("\u5FFD\u7565\u91CD\u590D\u6CE8\u518C\u7684\u4E8B\u4EF6 name:" + name);
+                    Logger.warn("\u5FFD\u7565\u91CD\u590D\u6CE8\u518C\u7684\u4E8B\u4EF6 name:" + name);
                     return;
                 }
                 if (index === -1 && event_1.priority < priority) {
