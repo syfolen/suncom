@@ -40,15 +40,14 @@ module suncom {
         /**
          * export
          */
-        addEventListener(type: string, method: Function, caller: Object, receiveOnce: boolean = false, priority: EventPriorityEnum = EventPriorityEnum.MID): void {
+        addEventListener(type: string, method: Function, caller: Object, receiveOnce: boolean = false, priority: EventPriorityEnum = EventPriorityEnum.MID, args: any[] = null): void {
+            if (method === void 0) { method = null; }
+            if (caller === void 0) { caller = null; }
             if (Common.isStringNullOrEmpty(type) === true) {
                 throw Error(`注册无效事件！！！`);
             }
-            if (method === void 0 || method === null) {
+            if (method === null) {
                 throw Error(`注册无效的事件回调！！！`);
-            }
-            if (caller === void 0) {
-                caller = null;
             }
             let list: EventInfo[] = this.$var_events[type];
             // 若列表不存在，则新建
@@ -75,6 +74,7 @@ module suncom {
             }
 
             const event: EventInfo = Pool.getItemByClass("suncom.EventInfo", EventInfo);
+            event.args = args;
             event.type = type;
             event.caller = caller;
             event.method = method;
@@ -93,14 +93,13 @@ module suncom {
          * export
          */
         removeEventListener(type: string, method: Function, caller: Object): void {
+            if (method === void 0) { method = null; }
+            if (caller === void 0) { caller = null; }
             if (Common.isStringNullOrEmpty(type) === true) {
                 throw Error(`移除无效的事件！！！`);
             }
-            if (method === void 0 || method === null) {
+            if (method === null) {
                 throw Error(`移除无效的事件回调！！！`);
-            }
-            if (caller === void 0) {
-                caller = null;
             }
             let list: EventInfo[] = this.$var_events[type];
             if (list === void 0) {
@@ -130,9 +129,34 @@ module suncom {
         /**
          * export
          */
+        hasEventListener(name: string, method: Function, caller: Object): boolean {
+            if (method === void 0) { method = null; }
+            if (caller === void 0) { caller = null; }
+            if (suncom.Common.isStringNullOrEmpty(name) === true) {
+                throw Error(`查询无效的监听`);
+            }
+            if (method === null) {
+                throw Error(`查询无效的事件回调！！！`);
+            }
+            let events: EventInfo[] = this.$var_events[name];
+            if (events === void 0) {
+                return false;
+            }
+            for (let i: number = 0; i < events.length; i++) {
+                const event: EventInfo = events[i];
+                if (event.method === method && event.caller === caller) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        /**
+         * export
+         */
         dispatchEvent(type: string, data?: any, cancelable: boolean = true): void {
             if (Common.isStringNullOrEmpty(type) === true) {
-                throw Error(`派发无效事件！！！`);
+                throw Error(`派发无效的事件！！！`);
             }
             const list: EventInfo[] = this.$var_events[type];
             if (list === void 0) {
@@ -154,6 +178,7 @@ module suncom {
                 if (event.receiveOnce === true) {
                     this.$var_onceList.push(event);
                 }
+                const args: any = event.args === null ? data : event.args.concat(data);
                 if (data instanceof Array) {
                     event.method.apply(event.caller, data);
                 }
@@ -189,6 +214,7 @@ module suncom {
             if (this.$var_dispatchCount === 0) {
                 while (this.$var_recycles.length > 0) {
                     const event: EventInfo = this.$var_recycles.pop();
+                    event.args = null;
                     event.caller = null;
                     event.method = null;
                     event.priority = 0;

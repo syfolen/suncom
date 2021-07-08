@@ -122,6 +122,7 @@ var suncom;
     suncom.Dictionary = Dictionary;
     var EventInfo = (function () {
         function EventInfo() {
+            this.args = null;
             this.type = null;
             this.caller = null;
             this.method = null;
@@ -140,17 +141,21 @@ var suncom;
             this.$var_recycles = [];
             this.$var_dispatchCount = 0;
         }
-        EventSystem.prototype.addEventListener = function (type, method, caller, receiveOnce, priority) {
+        EventSystem.prototype.addEventListener = function (type, method, caller, receiveOnce, priority, args) {
             if (receiveOnce === void 0) { receiveOnce = false; }
             if (priority === void 0) { priority = EventPriorityEnum.MID; }
-            if (Common.isStringNullOrEmpty(type) === true) {
-                throw Error("\u6CE8\u518C\u65E0\u6548\u4E8B\u4EF6\uFF01\uFF01\uFF01");
-            }
-            if (method === void 0 || method === null) {
-                throw Error("\u6CE8\u518C\u65E0\u6548\u7684\u4E8B\u4EF6\u56DE\u8C03\uFF01\uFF01\uFF01");
+            if (args === void 0) { args = null; }
+            if (method === void 0) {
+                method = null;
             }
             if (caller === void 0) {
                 caller = null;
+            }
+            if (Common.isStringNullOrEmpty(type) === true) {
+                throw Error("\u6CE8\u518C\u65E0\u6548\u4E8B\u4EF6\uFF01\uFF01\uFF01");
+            }
+            if (method === null) {
+                throw Error("\u6CE8\u518C\u65E0\u6548\u7684\u4E8B\u4EF6\u56DE\u8C03\uFF01\uFF01\uFF01");
             }
             var list = this.$var_events[type];
             if (list === void 0) {
@@ -164,6 +169,7 @@ var suncom;
             for (var i = 0; i < list.length; i++) {
                 var event_1 = list[i];
                 if (event_1.method === method && event_1.caller === caller) {
+                    Global.debugMode > 0 && console.warn("\u5FFD\u7565\u91CD\u590D\u6CE8\u518C\u7684\u4E8B\u4EF6 name:" + name);
                     return;
                 }
                 if (index === -1 && event_1.priority < priority) {
@@ -171,6 +177,7 @@ var suncom;
                 }
             }
             var event = Pool.getItemByClass("suncom.EventInfo", EventInfo);
+            event.args = args;
             event.type = type;
             event.caller = caller;
             event.method = method;
@@ -184,14 +191,17 @@ var suncom;
             }
         };
         EventSystem.prototype.removeEventListener = function (type, method, caller) {
-            if (Common.isStringNullOrEmpty(type) === true) {
-                throw Error("\u79FB\u9664\u65E0\u6548\u7684\u4E8B\u4EF6\uFF01\uFF01\uFF01");
-            }
-            if (method === void 0 || method === null) {
-                throw Error("\u79FB\u9664\u65E0\u6548\u7684\u4E8B\u4EF6\u56DE\u8C03\uFF01\uFF01\uFF01");
+            if (method === void 0) {
+                method = null;
             }
             if (caller === void 0) {
                 caller = null;
+            }
+            if (Common.isStringNullOrEmpty(type) === true) {
+                throw Error("\u79FB\u9664\u65E0\u6548\u7684\u4E8B\u4EF6\uFF01\uFF01\uFF01");
+            }
+            if (method === null) {
+                throw Error("\u79FB\u9664\u65E0\u6548\u7684\u4E8B\u4EF6\u56DE\u8C03\uFF01\uFF01\uFF01");
             }
             var list = this.$var_events[type];
             if (list === void 0) {
@@ -213,10 +223,35 @@ var suncom;
                 delete this.$var_lockers[type];
             }
         };
+        EventSystem.prototype.hasEventListener = function (name, method, caller) {
+            if (method === void 0) {
+                method = null;
+            }
+            if (caller === void 0) {
+                caller = null;
+            }
+            if (suncom.Common.isStringNullOrEmpty(name) === true) {
+                throw Error("\u67E5\u8BE2\u65E0\u6548\u7684\u76D1\u542C");
+            }
+            if (method === null) {
+                throw Error("\u67E5\u8BE2\u65E0\u6548\u7684\u4E8B\u4EF6\u56DE\u8C03\uFF01\uFF01\uFF01");
+            }
+            var events = this.$var_events[name];
+            if (events === void 0) {
+                return false;
+            }
+            for (var i = 0; i < events.length; i++) {
+                var event_3 = events[i];
+                if (event_3.method === method && event_3.caller === caller) {
+                    return true;
+                }
+            }
+            return false;
+        };
         EventSystem.prototype.dispatchEvent = function (type, data, cancelable) {
             if (cancelable === void 0) { cancelable = true; }
             if (Common.isStringNullOrEmpty(type) === true) {
-                throw Error("\u6D3E\u53D1\u65E0\u6548\u4E8B\u4EF6\uFF01\uFF01\uFF01");
+                throw Error("\u6D3E\u53D1\u65E0\u6548\u7684\u4E8B\u4EF6\uFF01\uFF01\uFF01");
             }
             var list = this.$var_events[type];
             if (list === void 0) {
@@ -227,15 +262,16 @@ var suncom;
             this.$var_isCanceled = false;
             this.$var_dispatchCount++;
             for (var i = 0; i < list.length; i++) {
-                var event_3 = list[i];
-                if (event_3.receiveOnce === true) {
-                    this.$var_onceList.push(event_3);
+                var event_4 = list[i];
+                if (event_4.receiveOnce === true) {
+                    this.$var_onceList.push(event_4);
                 }
+                var args = event_4.args === null ? data : event_4.args.concat(data);
                 if (data instanceof Array) {
-                    event_3.method.apply(event_3.caller, data);
+                    event_4.method.apply(event_4.caller, data);
                 }
                 else {
-                    event_3.method.call(event_3.caller, data);
+                    event_4.method.call(event_4.caller, data);
                 }
                 if (this.$var_isCanceled) {
                     if (cancelable === true) {
@@ -249,17 +285,18 @@ var suncom;
             this.$var_lockers[type] = false;
             this.$var_dispatchCount--;
             while (this.$var_onceList.length > 0) {
-                var event_4 = this.$var_onceList.pop();
-                this.removeEventListener(event_4.type, event_4.method, event_4.caller);
+                var event_5 = this.$var_onceList.pop();
+                this.removeEventListener(event_5.type, event_5.method, event_5.caller);
             }
             if (this.$var_dispatchCount === 0) {
                 while (this.$var_recycles.length > 0) {
-                    var event_5 = this.$var_recycles.pop();
-                    event_5.caller = null;
-                    event_5.method = null;
-                    event_5.priority = 0;
-                    event_5.receiveOnce = false;
-                    Pool.recover("suncom.EventInfo", event_5);
+                    var event_6 = this.$var_recycles.pop();
+                    event_6.args = null;
+                    event_6.caller = null;
+                    event_6.method = null;
+                    event_6.priority = 0;
+                    event_6.receiveOnce = false;
+                    Pool.recover("suncom.EventInfo", event_6);
                 }
             }
         };
@@ -988,8 +1025,8 @@ var suncom;
             }
             if (oldData instanceof Array && newData instanceof Array && oldData.length === newData.length) {
                 if (strict === false) {
-                    oldData = oldData.slice();
-                    newData = newData.slice();
+                    oldData = oldData.slice(0);
+                    newData = newData.slice(0);
                     oldData.sort();
                     newData.sort();
                 }

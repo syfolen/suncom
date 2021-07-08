@@ -5,6 +5,11 @@ module suncom {
      */
     export class EventInfo {
         /**
+         * 参数列表
+         */
+        args: any[] = null;
+
+        /**
          * 事件类型
          */
         type: string = null;

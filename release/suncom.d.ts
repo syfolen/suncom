@@ -149,12 +149,17 @@ declare module suncom {
          * 说明：
          * 1. 若需覆盖参数，请先调用removeEventListener移除事件后再重新注册
          */
-        addEventListener(type: string, method: Function, caller: Object, receiveOnce?: boolean, priority?: EventPriorityEnum): void;
+        addEventListener(type: string, method: Function, caller: Object, receiveOnce?: boolean, priority?: EventPriorityEnum, args?: any[]): void;
 
         /**
          * 移除事件
          */
         removeEventListener(type: string, method: Function, caller: Object): void;
+
+        /**
+         * 查询事件是否己注册
+         */
+        hasEventListener(name: string, method: Function, caller: Object): boolean;
 
         /**
          * 事件派发
@@ -446,9 +451,11 @@ declare module suncom {
 
     class EventSystem implements IEventSystem {
 
-        addEventListener(type: string, method: Function, caller: Object, receiveOnce?: boolean, priority?: EventPriorityEnum): void;
+        addEventListener(type: string, method: Function, caller: Object, receiveOnce?: boolean, priority?: EventPriorityEnum, args?: any[]): void;
 
         removeEventListener(type: string, method: Function, caller: Object): void;
+
+        hasEventListener(name: string, method: Function, caller: Object): boolean;
 
         dispatchEvent(type: string, data?: any, cancelable?: boolean): void;
 
