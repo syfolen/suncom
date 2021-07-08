@@ -27,7 +27,7 @@ module suncom {
          * 查询事件是否己注册
          * export
          */
-        hasEventListener(name: string, method: Function, caller: Object): boolean;
+        hasEventListener(type: string, method: Function, caller: Object): boolean;
 
         /**
          * 事件派发

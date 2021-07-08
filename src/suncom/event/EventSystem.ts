@@ -129,16 +129,16 @@ module suncom {
         /**
          * export
          */
-        hasEventListener(name: string, method: Function, caller: Object): boolean {
+        hasEventListener(type: string, method: Function, caller: Object): boolean {
             if (method === void 0) { method = null; }
             if (caller === void 0) { caller = null; }
-            if (suncom.Common.isStringNullOrEmpty(name) === true) {
+            if (suncom.Common.isStringNullOrEmpty(type) === true) {
                 throw Error(`查询无效的监听`);
             }
             if (method === null) {
                 throw Error(`查询无效的事件回调！！！`);
             }
-            let events: EventInfo[] = this.$var_events[name];
+            let events: EventInfo[] = this.$var_events[type];
             if (events === void 0) {
                 return false;
             }
