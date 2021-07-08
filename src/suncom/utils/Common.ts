@@ -33,7 +33,7 @@ module suncom {
          * export
          */
         export function getClassName(cls: any): string {
-            if (cls instanceof Function && this.isStringNullOrEmpty(cls.name) === false) {
+            if (cls instanceof Function && Common.isStringNullOrEmpty(cls.name) === false) {
                 return cls.name;
             }
             const classString: string = cls.toString().trim();
@@ -54,7 +54,7 @@ module suncom {
             if (prototype === null) {
                 return type;
             }
-            return this.getClassName(prototype.constructor);
+            return Common.getClassName(prototype.constructor);
         }
 
         /**
@@ -64,7 +64,7 @@ module suncom {
          */
         export function getMethodName(method: Function, caller: Object = null): string {
             if (caller === null) {
-                return this.getClassName(method);
+                return Common.getClassName(method);
             }
             for (const key in caller) {
                 if (caller[key] === method) {
@@ -81,7 +81,7 @@ module suncom {
          * export
          */
         export function trim(str: string): string {
-            if (this.isNullOrUndefined(str) === true) {
+            if (Common.isNullOrUndefined(str) === true) {
                 return null;
             }
             const chrs: string[] = ["\r", "\n", "\t", " "];
@@ -194,7 +194,7 @@ module suncom {
          * export
          */
         export function dateAdd(datepart: string, increment: number, time: NumberOrString | Date): number {
-            const date: Date = this.convertToDate(time);
+            const date: Date = Common.convertToDate(time);
 
             //计算增量毫秒数
             if (datepart === "yy") {
@@ -251,8 +251,8 @@ module suncom {
          * export
          */
         export function dateDiff(datepart: string, date: NumberOrString | Date, date2: NumberOrString | Date): number {
-            const d1: Date = this.convertToDate(date);
-            const d2: Date = this.convertToDate(date2);
+            const d1: Date = Common.convertToDate(date);
+            const d2: Date = Common.convertToDate(date2);
 
             let t1: number = d1.valueOf();
             let t2: number = d2.valueOf();
@@ -303,7 +303,7 @@ module suncom {
          * export
          */
         export function formatDate(str: string, time: NumberOrString | Date): string {
-            const date: Date = this.convertToDate(time);
+            const date: Date = Common.convertToDate(time);
             str = str.replace("MS", ("00" + (date.getMilliseconds()).toString()).substr(-3));
             str = str.replace("ms", (date.getMilliseconds()).toString());
             str = str.replace("yyyy", date.getFullYear().toString());
@@ -333,25 +333,6 @@ module suncom {
         }
 
         /**
-         * 生成HTTP签名
-         * @sign: 密钥
-         * @signKey: 忽略签名字段，默认为："sign"
-         * export
-         */
-        export function createHttpSign(params: Object, sign: string, signKey: string = "sign"): string {
-            const array: string[] = [];
-
-            for (const key in params) {
-                if (key !== signKey) {
-                    array.push(`${key}=${params[key]}`);
-                }
-            }
-            array.push(`${signKey}=${sign}`);
-
-            return this.md5(array.join("&"));
-        }
-
-        /**
          * 获取文件名（不包括扩展名）
          * export
          */
@@ -360,7 +341,7 @@ module suncom {
             if (index > -1) {
                 path = path.substr(index + 1);
             }
-            const suffix: string = this.getFileExtension(path);
+            const suffix: string = Common.getFileExtension(path);
             if (suffix === null) {
                 return path;
             }
@@ -431,7 +412,7 @@ module suncom {
          */
         export function removeItemsFromArray<T>(items: T[], array: T[]): void {
             for (let i: number = 0; i < items.length; i++) {
-                this.removeItemFromArray(items[i], array);
+                Common.removeItemFromArray(items[i], array);
             }
         }
 
@@ -448,7 +429,7 @@ module suncom {
                 else {
                     const array: any[] = [];
                     for (let i: number = 0; i < data.length; i++) {
-                        array.push(this.copy(data[i], deep));
+                        array.push(Common.copy(data[i], deep));
                     }
                     return array;
                 }
@@ -462,7 +443,7 @@ module suncom {
                 }
                 else {
                     for (const key in data) {
-                        newData[key] = this.copy(data[key], deep);
+                        newData[key] = Common.copy(data[key], deep);
                     }
                 }
                 return newData;
@@ -518,7 +499,7 @@ module suncom {
                 }
                 // 类型为数组并且数组长度相同
                 for (let i: number = 0; i < oldData.length; i++) {
-                    if (this.isEqual(oldData[i], newData[i], strict) === false) {
+                    if (Common.isEqual(oldData[i], newData[i], strict) === false) {
                         return false;
                     }
                 }
@@ -529,7 +510,7 @@ module suncom {
                     return false;
                 }
                 for (const key in oldData) {
-                    if (oldData.hasOwnProperty(key) === true && this.isEqual(oldData[key], newData[key], strict) === false) {
+                    if (oldData.hasOwnProperty(key) === true && Common.isEqual(oldData[key], newData[key], strict) === false) {
                         return false;
                     }
                 }
@@ -556,7 +537,7 @@ module suncom {
             if (data instanceof Array) {
                 const array: string[] = [];
                 for (let i: number = 0; i < data.length; i++) {
-                    array.push(this.toDisplayString(data[i]));
+                    array.push(Common.toDisplayString(data[i]));
                 }
                 return `[${array.join(",")}]`;
             }
@@ -565,7 +546,7 @@ module suncom {
                     str = JSON.stringify(data);
                 }
                 catch (error) {
-                    str = `[${this.getQualifiedClassName(data)}]`;
+                    str = `[${Common.getQualifiedClassName(data)}]`;
                 }
             }
 

@@ -30,10 +30,10 @@ module suncom {
             if (Global.debugMode > 0) {
                 return new Expect(description).expect(value);
             }
-            if (this.$expect === null) {
-                this.$expect = new Expect();
+            if (Test.$expect === null) {
+                Test.$expect = new Expect();
             }
-            return this.$expect;
+            return Test.$expect;
         }
 
         /**
@@ -42,7 +42,7 @@ module suncom {
          */
         export function notExpected(message?: string): void {
             if (Global.debugMode > 0) {
-                this.expect(true).interpret(`Test.notExpected 期望之外的`).toBe(false);
+                Test.expect(true).interpret(`Test.notExpected 期望之外的`).toBe(false);
             }
         }
 
@@ -52,7 +52,7 @@ module suncom {
          */
         export function assertTrue(value: boolean, message?: string): void {
             if (Global.debugMode > 0) {
-                this.expect(value).interpret(message || `Test.assertTrue error，实际值：${Common.toDisplayString(value)}`).toBe(true);
+                Test.expect(value).interpret(message || `Test.assertTrue error，实际值：${Common.toDisplayString(value)}`).toBe(true);
             }
         }
 
@@ -62,7 +62,7 @@ module suncom {
          */
         export function assertFalse(value: boolean, message?: string): void {
             if (Global.debugMode > 0) {
-                this.expect(value).interpret(message || `Test.assertFalse error，实际值：${Common.toDisplayString(value)}`).toBe(false);
+                Test.expect(value).interpret(message || `Test.assertFalse error，实际值：${Common.toDisplayString(value)}`).toBe(false);
             }
         }
     }

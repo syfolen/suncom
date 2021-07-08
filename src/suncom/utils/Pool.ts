@@ -15,7 +15,7 @@ module suncom {
          * export
          */
         export function getItem(sign: string): any {
-            const array: any[] = this.$pool[sign];
+            const array: any[] = Pool.$pool[sign];
             if (array === void 0 || array.length === 0) {
                 return null;
             }
@@ -31,7 +31,7 @@ module suncom {
          * export
          */
         export function getItemByClass(sign: string, cls: any, args?: any): any {
-            let item: any = this.getItem(sign);
+            let item: any = Pool.getItem(sign);
             if (item === null) {
                 if (Laya.Prefab !== void 0 && cls === Laya.Prefab) {
                     const prefab: Laya.Prefab = new Laya.Prefab();
@@ -62,9 +62,9 @@ module suncom {
                 return false;
             }
             item["__suncom__$__inPool__"] = true;
-            const array: any[] = this.$pool[sign];
+            const array: any[] = Pool.$pool[sign];
             if (array === void 0) {
-                this.$pool[sign] = [item];
+                Pool.$pool[sign] = [item];
             }
             else {
                 array.push(item);
@@ -77,8 +77,8 @@ module suncom {
          * export
          */
         export function clear(sign: string): void {
-            if (this.$pool[sign] !== void 0) {
-                delete this.$pool[sign];
+            if (Pool.$pool[sign] !== void 0) {
+                delete Pool.$pool[sign];
             }
         }
     }
